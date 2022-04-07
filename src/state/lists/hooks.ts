@@ -4,7 +4,6 @@ import { useAppSelector } from 'state/hooks'
 import sortByListPriority from 'utils/listSort'
 
 import BROKEN_LIST from '../../constants/tokenLists/broken.tokenlist.json'
-import ANIMAL_TOKENS_LIST from '../../constants/tokenLists/token-list.json'
 import UNSUPPORTED_TOKEN_LIST from '../../constants/tokenLists/unsupported.tokenlist.json'
 import { AppState } from '../index'
 import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
@@ -88,8 +87,9 @@ export function useInactiveListUrls(): string[] {
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  const animalTokens = useMemo(() => tokensToChainTokenMap(ANIMAL_TOKENS_LIST), [])
-  return useMemo(() => combineMaps(animalTokens, activeTokens), [animalTokens, activeTokens])
+  // const animalTokens = useMemo(() => tokensToChainTokenMap(ANIMAL_TOKENS_LIST), [])
+  // return useMemo(() => combineMaps(animalTokens, activeTokens), [animalTokens, activeTokens])
+  return activeTokens
 }
 
 // list of tokens not supported on interface for various reasons, used to show warnings and prevent swaps and adds
