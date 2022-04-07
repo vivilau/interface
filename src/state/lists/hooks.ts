@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useAppSelector } from 'state/hooks'
 import sortByListPriority from 'utils/listSort'
 
+import ANIMAL_TOKENS_LIST from '../../constants/tokenLists/animal-default.tokenlist.json'
 import BROKEN_LIST from '../../constants/tokenLists/broken.tokenlist.json'
 import UNSUPPORTED_TOKEN_LIST from '../../constants/tokenLists/unsupported.tokenlist.json'
 import { AppState } from '../index'
@@ -83,10 +84,13 @@ export function useInactiveListUrls(): string[] {
 }
 
 // get all the tokens from active lists, combine with local default tokens
+//activeListUrls STRING[]
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  return activeTokens
+  const animalTokens = tokensToChainTokenMap(ANIMAL_TOKENS_LIST)
+  const allTokens = combineMaps(animalTokens, activeTokens)
+  return allTokens
 }
 
 // list of tokens not supported on interface for various reasons, used to show warnings and prevent swaps and adds
