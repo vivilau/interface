@@ -4,14 +4,18 @@ import { Currency, Token } from '@uniswap/sdk-core'
 import { SupportedChainId } from './chains'
 import {
   AMPL,
+  BEAR_POLYGON_MUMBAI,
+  CAT_POLYGON_MUMBAI,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_OPTIMISM,
   DAI_POLYGON,
+  DOG_POLYGON_MUMBAI,
   ETH2X_FLI,
   FEI,
   FRAX,
   FXS,
+  GOO_POLYGON_MUMBAI,
   nativeOnChain,
   renBTC,
   rETH2,
@@ -162,6 +166,10 @@ export const COMMON_BASES: ChainCurrencyList = {
     nativeOnChain(SupportedChainId.POLYGON_MUMBAI),
     WRAPPED_NATIVE_CURRENCY[SupportedChainId.POLYGON_MUMBAI] as Token,
     WETH_POLYGON_MUMBAI,
+    CAT_POLYGON_MUMBAI,
+    DOG_POLYGON_MUMBAI,
+    BEAR_POLYGON_MUMBAI,
+    GOO_POLYGON_MUMBAI,
   ],
 }
 

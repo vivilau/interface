@@ -81,7 +81,35 @@ export const USDC_POLYGON_MUMBAI = new Token(
   'USDC',
   'USD//C'
 )
+export const DOG_POLYGON_MUMBAI = new Token(
+  SupportedChainId.POLYGON_MUMBAI,
+  '0x372C557EF20967eD80cac06094dbF84838c7c7bd',
+  18,
+  'DOG',
+  'DogToken'
+)
 
+export const CAT_POLYGON_MUMBAI = new Token(
+  SupportedChainId.POLYGON_MUMBAI,
+  '0xc5521d1e3a5d5F34391F8bbd845c4c35903c17bD',
+  18,
+  'CAT',
+  'CatToken'
+)
+export const GOO_POLYGON_MUMBAI = new Token(
+  SupportedChainId.POLYGON_MUMBAI,
+  '0xC7797bB3b702FDbA81C7f9f9E72FcCc68ce6b93b',
+  18,
+  'GOO',
+  'GooseToken'
+)
+export const BEAR_POLYGON_MUMBAI = new Token(
+  SupportedChainId.POLYGON_MUMBAI,
+  '0x277D53268C5e0136d210626279C4466DeBa70811',
+  18,
+  'BEAR',
+  'BearToken'
+)
 export const AMPL = new Token(
   SupportedChainId.MAINNET,
   '0xD46bA6D942050d489DBd938a2C909A5d5039A161',
