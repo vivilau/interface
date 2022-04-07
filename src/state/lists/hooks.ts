@@ -88,9 +88,8 @@ export function useInactiveListUrls(): string[] {
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  const animalTokens = tokensToChainTokenMap(ANIMAL_TOKENS_LIST)
-  const allTokens = combineMaps(animalTokens, activeTokens)
-  return allTokens
+  const animalTokens = useMemo(() => tokensToChainTokenMap(ANIMAL_TOKENS_LIST), [])
+  return useMemo(() => combineMaps(animalTokens, activeTokens), [animalTokens, activeTokens])
 }
 
 // list of tokens not supported on interface for various reasons, used to show warnings and prevent swaps and adds

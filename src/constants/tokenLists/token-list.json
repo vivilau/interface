@@ -1,65 +1,62 @@
 {
-    "name": "GPU Labs List",
-    "timestamp": "2022-03-18T19:49:26.225Z",
-    "version": {
-      "major": 3,
-      "minor": 1,
-      "patch": 0
+  "name": "GPU Labs List",
+  "timestamp": "2022-03-18T19:49:26.225Z",
+  "version": {
+    "major": 3,
+    "minor": 1,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "ipfs://QmXbytXb6QuVEs5sTSJRXBzZUj7NdYexPPi1qjFiu62phJ",
+  "keywords": ["SPACE TOKEN", "default"],
+  "tokens": [
+    {
+      "chainId": 137,
+      "address": "0xd3761724c06263edCCcF9F5AAf11A5711373efEf",
+      "name": "CatToken",
+      "symbol": "CAT",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/00d9951d1b659eb7.png"
     },
-    "tags": {},
-    "logoURI": "ipfs://QmXbytXb6QuVEs5sTSJRXBzZUj7NdYexPPi1qjFiu62phJ",
-    "keywords": [
-      "SPACE TOKEN",
-      "default"
-    ],
-    "tokens": [
-      {
-        "chainId": 137,
-        "address": "0xd3761724c06263edCCcF9F5AAf11A5711373efEf",
-        "name": "CatToken",
-        "symbol": "CAT",
-        "decimals": 18,
-        "logoURI": "ipfs://QmSfBX8DyBCDFdeJjGKwtSLZtpz7X71VesEpLNrjrKmjuZ"
-      },
-      {
-        "chainId": 137,
-        "address": "0x4bdD95007a0f3726c7EB2C47271412b68694b9F2",
-        "name": "DogToken",
-        "symbol": "DOG",
-        "decimals": 18,
-        "logoURI": "ipfs://QmXbDuVkH1zmggiAf8G4f6jqRZieqWJCmGRthx7FiXsUMy"
-      },
-      {
-        "chainId": 80001,
-        "address": "0xc5521d1e3a5d5F34391F8bbd845c4c35903c17bD",
-        "name": "CatToken",
-        "symbol": "CAT",
-        "decimals": 18,
-        "logoURI": "ipfs://QmSfBX8DyBCDFdeJjGKwtSLZtpz7X71VesEpLNrjrKmjuZ"
-      },
-      {
-        "chainId": 80001,
-        "address": "0x372C557EF20967eD80cac06094dbF84838c7c7bd",
-        "name": "DogToken",
-        "symbol": "DOG",
-        "decimals": 18,
-        "logoURI": "ipfs://QmXbDuVkH1zmggiAf8G4f6jqRZieqWJCmGRthx7FiXsUMy"
-      },
-      {
-        "chainId": 80001,
-        "address": "0xC7797bB3b702FDbA81C7f9f9E72FcCc68ce6b93b",
-        "name": "GooseToken",
-        "symbol": "GOO",
-        "decimals": 18,
-        "logoURI": "ipfs://QmTTEeTSREGEkdcGxtZZLgMT8zfB1iDQaE5kKQCsKCtpkU"
-      },
-      {
-        "chainId": 80001,
-        "address": "0x277D53268C5e0136d210626279C4466DeBa70811",
-        "name": "BearToken",
-        "symbol": "BEAR",
-        "decimals": 18,
-        "logoURI": "https://ipfs.io/ipfs/QmdRNGxpkSh9hEDRXZge92GmyPyC51i9VNmHntGgEsaatM?filename=bear.png"
-      }
-    ]
-  }
+    {
+      "chainId": 137,
+      "address": "0x4bdD95007a0f3726c7EB2C47271412b68694b9F2",
+      "name": "DogToken",
+      "symbol": "DOG",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/1a395bee22bf7d5c.png"
+    },
+    {
+      "chainId": 80001,
+      "address": "0xc5521d1e3a5d5F34391F8bbd845c4c35903c17bD",
+      "name": "CatToken",
+      "symbol": "CAT",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/00d9951d1b659eb7.png"
+    },
+    {
+      "chainId": 80001,
+      "address": "0x372C557EF20967eD80cac06094dbF84838c7c7bd",
+      "name": "DogToken",
+      "symbol": "DOG",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/1a395bee22bf7d5c.png"
+    },
+    {
+      "chainId": 80001,
+      "address": "0xC7797bB3b702FDbA81C7f9f9E72FcCc68ce6b93b",
+      "name": "GooseToken",
+      "symbol": "GOO",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/bde3ed57a3bfe357.jpg"
+    },
+    {
+      "chainId": 80001,
+      "address": "0x277D53268C5e0136d210626279C4466DeBa70811",
+      "name": "BearToken",
+      "symbol": "BEAR",
+      "decimals": 18,
+      "logoURI": "https://s3.bmp.ovh/imgs/2022/04/07/0d846331a295264e.png"
+    }
+  ]
+}
