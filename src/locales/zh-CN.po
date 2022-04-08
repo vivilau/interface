@@ -2039,7 +2039,7 @@ msgstr "Upswap Labs 的服务条款"
 
 #: src/components/SwitchLocaleLink/index.tsx
 msgid "Upswap available in: <0>{0}</0>"
-msgstr "Uniswap可用：<0>{0}</0>"
+msgstr "Upswap可用：<0>{0}</0>"
 
 #: src/components/vote/ProposalEmptyState.tsx
 msgid "Upswap governance is only available on Layer 1. Switch your network to Ethereum Mainnet to view Proposals and Vote."
