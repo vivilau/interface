@@ -230,7 +230,7 @@ msgstr "数额"
 
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note: fee on transfer and rebase tokens are incompatible with Upswap V3."
-msgstr "尝试执行此兑换时发生错误。您可能需要增加滑点限制。如果还是不行，则可能是您正在交易的代币与Uniswap不兼容。注：Uniswap V3不兼容转账时带扣除费用（fee-on-transfer）的代币和弹性供应（rebase）代币。"
+msgstr "尝试执行此兑换时发生错误。您可能需要增加滑点限制。如果还是不行，则可能是您正在交易的代币与Upswap不兼容。注：Upswap V3不兼容转账时带扣除费用（fee-on-transfer）的代币和弹性供应（rebase）代币。"
 
 #: src/lib/components/Swap/SwapButton/useApprovalData.tsx
 msgid "Approval pending"
@@ -296,7 +296,7 @@ msgstr "您确定吗？"
 
 #: src/components/claim/ClaimModal.tsx
 msgid "As a member of the Upswap community you may claim UNI to be used for voting and governance.<0/><1/><2>Read more about UNI</2>"
-msgstr "作为Uniswap社区的成员，您可以认领 UNI 代币，用于投票和治理。<0/><1/><2>阅读更多关于 UNI 代币信息</2>"
+msgstr "作为Upswap社区的成员，您可以认领 UNI 代币，用于投票和治理。<0/><1/><2>阅读更多关于 UNI 代币信息</2>"
 
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
 msgid "At least {0} {1} and {2} {3} will be refunded to your wallet due to selected price range."
@@ -680,7 +680,7 @@ msgstr "将代币存入 {label} 网络。"
 
 #: src/pages/Earn/index.tsx
 msgid "Deposit your Liquidity Provider tokens to receive UNI, the Upswap protocol governance token."
-msgstr "充入您的流动池代币以领取 UNI（Uniswap 的治理代币）。"
+msgstr "充入您的流动池代币以领取 UNI（Upswap 的治理代币）。"
 
 #: src/components/earn/UnstakingModal.tsx
 msgid "Deposited liquidity:"
@@ -848,7 +848,7 @@ msgstr "查看 Upswap 分析。"
 
 #: src/components/Popups/FailedNetworkSwitchPopup.tsx
 msgid "Failed to switch networks from the Upswap Interface. In order to use Upswap on {0}, you must change the network in your wallet."
-msgstr "无法从 Upswap 界面切换网络。为了在 {0} 上使用 Uniswap，您必须更改钱包中的网络。"
+msgstr "无法从 Upswap 界面切换网络。为了在 {0} 上使用 Upswap，您必须更改钱包中的网络。"
 
 #: src/components/PositionPreview/index.tsx
 msgid "Fee Tier"
@@ -1509,7 +1509,7 @@ msgstr "阅读更多关于 UNI 代币的信息"
 
 #: src/pages/Vote/Landing.tsx
 msgid "Read more about Upswap governance"
-msgstr "阅读有关Uniswap治理的更多信息"
+msgstr "阅读有关Upswap治理的更多信息"
 
 #: src/pages/Pool/v2.tsx
 msgid "Read more about providing liquidity"
@@ -1839,7 +1839,7 @@ msgstr "输出代币无法进行转账。输出代币可能有些问题。"
 
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "The output token cannot be transferred. There may be an issue with the output token. Note: fee on transfer and rebase tokens are incompatible with Upswap V3."
-msgstr "无法对输出代币进行转账。输出代币可能有些问题。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Uniswap V3不兼容。"
+msgstr "无法对输出代币进行转账。输出代币可能有些问题。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Upswap V3不兼容。"
 
 #: src/components/Badge/RangeBadge.tsx
 msgid "The price of this pool is outside of your selected range. Your position is not currently earning fees."
@@ -1887,7 +1887,7 @@ msgstr "该工具将安全地将您的 {0} 流动资金迁移到 V3。该过程�
 
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance. Note: fee on transfer and rebase tokens are incompatible with Upswap V3."
-msgstr "由于兑换率变动，此交易将不会成功。尝试增加您的滑点容差。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Uniswap V3不兼容。"
+msgstr "由于兑换率变动，此交易将不会成功。尝试增加您的滑点容差。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Upswap V3不兼容。"
 
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
@@ -1982,7 +1982,7 @@ msgstr "再试一次"
 
 #: src/lib/components/Swap/Status/StatusDialog.tsx
 msgid "Try increasing your slippage tolerance.<0/>NOTE: Fee on transfer and rebase tokens are incompatible with Upswap V3."
-msgstr "可以尝试增加滑点容差。<0/>注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Uniswap V3不兼容。"
+msgstr "可以尝试增加滑点容差。<0/>注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Upswap V3不兼容。"
 
 #: src/components/Settings/index.tsx
 msgid "Turn On Expert Mode"
@@ -1994,7 +1994,7 @@ msgstr "UNI 代币已到账"
 
 #: src/pages/Vote/Landing.tsx
 msgid "UNI tokens represent voting shares in Upswap governance. You can vote on each proposal yourself or delegate your votes to a third party."
-msgstr "UNI代币代表了Uniswap治理中的投票份额。您可以自行为提案进行投票，或将您的投票权委托给第三方。"
+msgstr "UNI代币代表了Upswap治理中的投票份额。您可以自行为提案进行投票，或将您的投票权委托给第三方。"
 
 #: src/pages/RemoveLiquidity/index.tsx
 msgid "UNI {0}/{1} Burned"
@@ -2031,7 +2031,7 @@ msgstr "估计 gas 时遇到问题。请再试一次。"
 
 #: src/pages/Vote/Landing.tsx
 msgid "Upswap Governance"
-msgstr "Uniswap治理"
+msgstr "Upswap治理"
 
 #: src/components/PrivacyPolicy/index.tsx
 msgid "Upswap Labs' Terms of Service"
@@ -2059,7 +2059,7 @@ msgstr "未知来源"
 
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "Unknown error{0}. Try increasing your slippage tolerance. Note: fee on transfer and rebase tokens are incompatible with Upswap V3."
-msgstr "未知错误{0}。可以尝试增加滑点容差。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Uniswap V3不兼容。"
+msgstr "未知错误{0}。可以尝试增加滑点容差。注：转账时额外抽取费用（fee-on-transfer）的代币和弹性供应（rebase）代币都与Upswap V3不兼容。"
 
 #: src/pages/Vote/Landing.tsx
 #: src/pages/Vote/VotePage.tsx
