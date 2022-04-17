@@ -345,7 +345,7 @@ export default function Manage({
             <ThemedText.Body fontSize={24} fontWeight={500}>
               {stakingInfo ? (
                 <Trans>
-                  {stakingInfo?.outputDaily} {stakingInfo?.rewardToken.symbol} / day
+                  {stakingInfo?.outputDaily} {stakingInfo?.rewardToken?.symbol} / day
                 </Trans>
               ) : (
                 <Trans>0 </Trans>
@@ -484,7 +484,7 @@ export default function Manage({
 
                   {stakingInfo ? (
                     <Trans>
-                      {stakingInfo.outputDaily} {stakingInfo.rewardToken.symbol} / day
+                      {stakingInfo.outputDaily} {stakingInfo.rewardToken?.symbol} / day
                     </Trans>
                   ) : (
                     <Trans>0 / day</Trans>
@@ -549,7 +549,7 @@ export default function Manage({
                 ⚡
               </span>
               <ProposalTitle>
-                {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken.symbol}
+                {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
               </ProposalTitle>
               <ButtonPrimary
                 padding="8px"
