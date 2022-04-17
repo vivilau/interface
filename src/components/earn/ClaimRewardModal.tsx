@@ -1,12 +1,11 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
-import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import { useContract } from '../../hooks/useContract'
-import { StakingInfo } from '../../state/stake/hooks'
+import { useStakingContract } from '../../hooks/useContract'
+import { StakingInfo } from '../../state/stake/hooks copy'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
@@ -15,12 +14,6 @@ import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
 import { RowBetween } from '../Row'
-
-const { abi: STAKING_REWARDS_ABI } = StakingRewardsJson
-
-function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
-  return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
-}
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -31,9 +24,11 @@ interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
+  rewards: number
+  liquidity: number
 }
 
-export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
+export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, rewards, liquidity }: StakingModalProps) {
   const { account } = useActiveWeb3React()
 
   // monitor call to help UI loading state
@@ -47,13 +42,13 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const stakingContract = useStakingContract(stakingInfo.stakeAddress)
 
   async function onClaimReward() {
-    if (stakingContract && stakingInfo?.stakedAmount && account) {
+    if (stakingContract && rewards && account) {
       setAttempting(true)
       await stakingContract
-        .getReward({ gasLimit: 350000 })
+        .claimReward(stakingInfo.rewardToken.address, account, rewards)
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,
@@ -72,8 +67,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   if (!account) {
     error = <Trans>Connect Wallet</Trans>
   }
-  if (!stakingInfo?.stakedAmount) {
-    error = error ?? <Trans>Enter an amount</Trans>
+  if (!rewards) {
+    error = error ?? <Trans>No available Rewards </Trans>
   }
 
   return (
@@ -86,20 +81,20 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {stakingInfo?.earnedAmount && (
+          {rewards && (
             <AutoColumn justify="center" gap="md">
               <ThemedText.Body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(6)}
+                {rewards?.toFixed(4)}
               </ThemedText.Body>
               <ThemedText.Body>
-                <Trans>Unclaimed UNI</Trans>
+                <Trans>Unclaimed OPC</Trans>
               </ThemedText.Body>
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
             <Trans>When you claim without withdrawing your liquidity remains in the mining pool.</Trans>
           </ThemedText.SubHeader>
-          <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onClaimReward}>
+          <ButtonError disabled={!!error} error={!!error && !!rewards} onClick={onClaimReward}>
             {error ?? <Trans>Claim</Trans>}
           </ButtonError>
         </ContentWrapper>
@@ -108,7 +103,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} UNI</Trans>
+              <Trans>Claiming {liquidity?.toFixed(6)} OPC</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -120,7 +115,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed UNI!</Trans>
+              <Trans>Claimed OPC!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

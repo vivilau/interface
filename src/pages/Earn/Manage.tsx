@@ -11,10 +11,7 @@ import { CountUp } from 'use-count-up'
 import { ButtonEmpty, ButtonPrimary } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import ClaimRewardModal from '../../components/earn/ClaimRewardModal'
-import StakingModal from '../../components/earn/StakingModal'
 import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'
-import UnstakingModal from '../../components/earn/UnstakingModal'
 import { RowBetween } from '../../components/Row'
 import { BIG_INT_SECONDS_IN_WEEK, BIG_INT_ZERO } from '../../constants/misc'
 import { useCurrency } from '../../hooks/Tokens'
@@ -234,7 +231,7 @@ export default function Manage({
 
       {stakingInfo && (
         <>
-          <StakingModal
+          {/* <StakingModal
             isOpen={showStakingModal}
             onDismiss={() => setShowStakingModal(false)}
             stakingInfo={stakingInfo}
@@ -249,7 +246,7 @@ export default function Manage({
             isOpen={showClaimRewardModal}
             onDismiss={() => setShowClaimRewardModal(false)}
             stakingInfo={stakingInfo}
-          />
+          /> */}
         </>
       )}
 

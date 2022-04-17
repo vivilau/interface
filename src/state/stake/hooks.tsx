@@ -11,7 +11,7 @@ import { NEVER_RELOAD, useMultipleContractSingleData } from 'lib/hooks/multicall
 import tryParseCurrencyAmount from 'lib/utils/tryParseCurrencyAmount'
 import { ReactNode, useMemo } from 'react'
 
-import { DAI, UNI, USDC_MAINNET, USDT, WBTC, WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
+import { DAI, OPK_POLYGON_MUMBAI, UNI, USDC_MAINNET, USDT, WBTC, WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
 
 const STAKING_REWARDS_INTERFACE = new Interface(STAKING_REWARDS_ABI)
 
@@ -40,6 +40,12 @@ export const STAKING_REWARDS_INFO: {
     },
     {
       tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token, WBTC],
+      stakingRewardAddress: '0xCA35e32e7926b96A9988f61d510E038108d8068e',
+    },
+  ],
+  80001: [
+    {
+      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.POLYGON_MUMBAI] as Token, OPK_POLYGON_MUMBAI],
       stakingRewardAddress: '0xCA35e32e7926b96A9988f61d510E038108d8068e',
     },
   ],

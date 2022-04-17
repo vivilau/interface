@@ -22,6 +22,7 @@ import {
   SubmitProposalTransactionInfo,
   TransactionInfo,
   TransactionType,
+  UnStakeTransactionInfo,
   VoteTransactionInfo,
   WithdrawLiquidityStakingTransactionInfo,
   WrapTransactionInfo,
@@ -84,7 +85,9 @@ function ClaimSummary({ info: { recipient, uniAmountRaw } }: { info: ClaimTransa
 function SubmitProposalTransactionSummary(_: { info: SubmitProposalTransactionInfo }) {
   return <Trans>Submit new proposal</Trans>
 }
-
+function UnStakeTransactionSummary(_: { info: UnStakeTransactionInfo }) {
+  return <Trans>UnStake </Trans>
+}
 function ApprovalSummary({ info }: { info: ApproveTransactionInfo }) {
   const token = useToken(info.tokenAddress)
 
@@ -341,5 +344,8 @@ export function TransactionSummary({ info }: { info: TransactionInfo }) {
 
     case TransactionType.SUBMIT_PROPOSAL:
       return <SubmitProposalTransactionSummary info={info} />
+
+    case TransactionType.UNSTAKE_TOKEN:
+      return <UnStakeTransactionSummary info={info} />
   }
 }

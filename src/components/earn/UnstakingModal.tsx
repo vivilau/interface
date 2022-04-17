@@ -1,27 +1,19 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
-import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useStakingContract } from 'hooks/useContract'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import { useContract } from '../../hooks/useContract'
-import { StakingInfo } from '../../state/stake/hooks'
+import { StakingInfo } from '../../state/stake/hooks copy'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
 import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
-import FormattedCurrencyAmount from '../FormattedCurrencyAmount'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
 import { RowBetween } from '../Row'
-
-const { abi: STAKING_REWARDS_ABI } = StakingRewardsJson
-
-function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
-  return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
-}
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -32,9 +24,19 @@ interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
+  tokenId: number | undefined
+  liquidity: number | undefined
+  rewards: number | undefined
 }
 
-export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
+export default function UnstakingModal({
+  isOpen,
+  onDismiss,
+  stakingInfo,
+  tokenId,
+  liquidity,
+  rewards,
+}: StakingModalProps) {
   const { account } = useActiveWeb3React()
 
   // monitor call to help UI loading state
@@ -48,71 +50,62 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
-
-  async function onWithdraw() {
-    if (stakingContract && stakingInfo?.stakedAmount) {
-      setAttempting(true)
+  const stakingContract = useStakingContract(stakingInfo.stakeAddress)
+  async function Unstake() {
+    if (stakingContract && account && tokenId) {
+      // setAttempting(true)
       await stakingContract
-        .exit({ gasLimit: 300000 })
+        .unstakeToken(tokenId, '0x0000000000000000000000000000000000000000000000000000000000000000')
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            type: TransactionType.WITHDRAW_LIQUIDITY_STAKING,
-            token0Address: stakingInfo.tokens[0].address,
-            token1Address: stakingInfo.tokens[1].address,
+            type: TransactionType.UNSTAKE_TOKEN,
+            tokenId: tokenId.toString(),
           })
-          setHash(response.hash)
         })
         .catch((error: any) => {
-          setAttempting(false)
           console.log(error)
         })
     }
   }
-
   let error: ReactNode | undefined
   if (!account) {
     error = <Trans>Connect a wallet</Trans>
   }
-  if (!stakingInfo?.stakedAmount) {
-    error = error ?? <Trans>Enter an amount</Trans>
-  }
-
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOndismiss} maxHeight={90}>
       {!attempting && !hash && (
         <ContentWrapper gap="lg">
           <RowBetween>
             <ThemedText.MediumHeader>
-              <Trans>Withdraw</Trans>
+              <Trans>Unstake</Trans>
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOndismiss} />
           </RowBetween>
-          {stakingInfo?.stakedAmount && (
+          {liquidity && (
             <AutoColumn justify="center" gap="md">
               <ThemedText.Body fontWeight={600} fontSize={36}>
-                {<FormattedCurrencyAmount currencyAmount={stakingInfo.stakedAmount} />}
+                {liquidity}
               </ThemedText.Body>
               <ThemedText.Body>
                 <Trans>Deposited liquidity:</Trans>
               </ThemedText.Body>
             </AutoColumn>
           )}
-          {stakingInfo?.earnedAmount && (
+          {rewards && (
             <AutoColumn justify="center" gap="md">
               <ThemedText.Body fontWeight={600} fontSize={36}>
-                {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
+                {rewards}
               </ThemedText.Body>
               <ThemedText.Body>
-                <Trans>Unclaimed UNI</Trans>
+                <Trans>Unclaimed OPC</Trans>
               </ThemedText.Body>
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>When you withdraw, your UNI is claimed and your liquidity is removed from the mining pool.</Trans>
+            <Trans>When you unstake, your liquidity is removed from the mining pool.</Trans>
           </ThemedText.SubHeader>
-          <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
-            {error ?? <Trans>Withdraw & Claim</Trans>}
+          <ButtonError disabled={!!error} error={!!error && !!liquidity} onClick={Unstake}>
+            {error ?? <Trans>UNSTAKE</Trans>}
           </ButtonError>
         </ContentWrapper>
       )}
@@ -120,10 +113,10 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} UNI-V2</Trans>
+              <Trans>Withdrawing {liquidity} </Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} UNI</Trans>
+              <Trans>Claiming {rewards} OPC</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -135,10 +128,10 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Withdrew UNI-V2!</Trans>
+              <Trans>Withdrew !</Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed UNI!</Trans>
+              <Trans>Claimed OPC!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

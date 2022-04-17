@@ -17,8 +17,6 @@ import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 import AddLiquidity from './AddLiquidity'
 import { RedirectDuplicateTokenIds } from './AddLiquidity/redirects'
 import { RedirectDuplicateTokenIdsV2 } from './AddLiquidityV2/redirects'
-import Earn from './Earn'
-import Manage from './Earn/Manage'
 import MigrateV2 from './MigrateV2'
 import MigrateV2Pair from './MigrateV2/MigrateV2Pair'
 import Pool from './Pool'
@@ -27,6 +25,8 @@ import PoolV2 from './Pool/v2'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import RemoveLiquidityV3 from './RemoveLiquidity/V3'
+import Stake from './Stake'
+import Manage from './Stake/Manage'
 import Swap from './Swap'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 
@@ -93,9 +93,8 @@ export default function App() {
                   <Redirect to="/vote/create-proposal" />
                 </Route>
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
-                <Route exact strict path="/uni" component={Earn} />
-                <Route exact strict path="/uni/:currencyIdA/:currencyIdB" component={Manage} />
-
+                <Route exact strict path="/stake/:currencyIdA/:currencyIdB" component={Manage} />
+                <Route exact strict path="/stake" component={Stake} />
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/swap" component={Swap} />

@@ -34,6 +34,7 @@ export enum TransactionType {
   COLLECT_FEES = 12,
   REMOVE_LIQUIDITY_V3 = 13,
   SUBMIT_PROPOSAL = 14,
+  UNSTAKE_TOKEN = 15,
 }
 
 export interface BaseTransactionInfo {
@@ -153,6 +154,10 @@ export interface SubmitProposalTransactionInfo {
   type: TransactionType.SUBMIT_PROPOSAL
 }
 
+export interface UnStakeTransactionInfo {
+  type: TransactionType.UNSTAKE_TOKEN
+  tokenId: string
+}
 export type TransactionInfo =
   | ApproveTransactionInfo
   | ExactOutputSwapTransactionInfo
@@ -170,6 +175,7 @@ export type TransactionInfo =
   | CollectFeesTransactionInfo
   | RemoveLiquidityV3TransactionInfo
   | SubmitProposalTransactionInfo
+  | UnStakeTransactionInfo
 
 export const addTransaction = createAction<{
   chainId: number
