@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
 
@@ -31,7 +31,11 @@ interface StakingModalProps {
 
 export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, claimRewards }: StakingModalProps) {
   const { account } = useActiveWeb3React()
-  const rewards = numFixed(claimRewards, stakingInfo.rewardToken?.decimals)
+  const rewards = useMemo(() => {
+    if (stakingInfo.rewardToken) numFixed(claimRewards, stakingInfo.rewardToken?.decimals)
+    return 0
+  }, [claimRewards, stakingInfo.rewardToken])
+
   // monitor call to help UI loading state
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
