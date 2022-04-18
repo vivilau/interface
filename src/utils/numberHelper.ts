@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import JSBI from 'jsbi'
 export function Big2number(bignumber: BigNumber, decimal: number) {
-  if (bignumber) return bignumber?.div(BigNumber.from(10).pow(decimal)).toNumber()
+  if (bignumber) return bignumber?.div(BigNumber.from(10).pow(decimal ?? 1)).toNumber()
   return bignumber
 }
 export function numFixed(bignumber: BigNumber | undefined, decimal: number) {
