@@ -7,6 +7,7 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { StakingInfo } from 'state/stake/hooks copy'
 import styled from 'styled-components/macro'
+import { numFixed } from 'utils/numberHelper'
 import { unwrappedToken } from 'utils/unwrappedToken'
 
 import { useColor } from '../../hooks/useColor'
@@ -137,7 +138,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <ThemedText.White>
             {stakingInfo ? (
               <Trans>
-                Pool Rate {'  '}: {'  '} {stakingInfo?.outputDaily}/day
+                Pool Rate {'  '}: {'  '} {numFixed(stakingInfo?.outputDaily, 18)}/day
               </Trans>
             ) : (
               '-'
