@@ -1465,6 +1465,10 @@ msgid "Pool Rate"
 msgstr "流动池费率"
 
 #: src/components/stake/PoolCard.tsx
+msgid "Minimum Duration  :   {minDuration} day"
+msgstr "锁定期限  :   {minDuration} day"
+
+#: src/components/stake/PoolCard.tsx
 msgid "Pool Rate   :    {0}/day"
 msgstr "激励池产出   :    {0}/day"
 

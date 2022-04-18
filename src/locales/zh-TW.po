@@ -45,8 +45,12 @@ msgid "Staked {tokenId}"
 msgstr "已抵押 {tokenId}"
 
 #: src/components/stake/PoolCard.tsx
-msgid "Pool Rate   :    {0}/day"
-msgstr "激勵池產出   :    {0}/day"
+msgid "Minimum Duration  :   {minDuration} day"
+msgstr "鎖定限期  :   {minDuration} day"
+
+#: src/components/stake/PoolCard.tsx
+msgid "Pool Rate   :    {0} / day"
+msgstr "激勵池產出   :    {0} / day"
 
 #: src/components/earn/StakingModal.tsx
 msgid "Token Rate"
