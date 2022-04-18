@@ -71,14 +71,14 @@ msgstr "{0} {1} / 天"
 #: src/pages/Stake/Manage.tsx
 msgid "0 / day"
 msgstr "0 / 天"
-
+#: src/components/stake/PoolCard.tsx
 #: src/pages/Stake/Manage.tsx
 msgid "Day"
 msgstr "天"
 
 #: src/components/stake/PoolCard.tsx
-msgid "MinDuration  :   {minDuration} day"
-msgstr "鎖定限期  :   {minDuration} 天"
+msgid "MinDuration"
+msgstr "鎖定限期"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx

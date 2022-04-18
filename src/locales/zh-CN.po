@@ -76,6 +76,7 @@ msgstr "{0} {1} / 天"
 msgid "0 / day"
 msgstr "0 / 天"
 
+#: src/components/stake/PoolCard.tsx
 #: src/pages/Stake/Manage.tsx
 msgid "Day"
 msgstr "天"
@@ -1465,8 +1466,8 @@ msgid "Pool Rate"
 msgstr "流动池费率"
 
 #: src/components/stake/PoolCard.tsx
-msgid "Minimum Duration  :   {minDuration} day"
-msgstr "锁定期限  :   {minDuration} day"
+msgid "Minimum Duration"
+msgstr "锁定期限"
 
 #: src/components/stake/PoolCard.tsx
 msgid "Pool Rate   :    {0}/day"

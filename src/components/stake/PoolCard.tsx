@@ -123,10 +123,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             </ThemedText.White>
           </StyledDiv>
           <ThemedText.White>
-            <Trans>
-              Minimum Duration{'  '}: {'  '}
-              {minDuration} day
-            </Trans>
+            <Trans>Minimum Duration</Trans>
+            {'  '}:{'  '}
+            <Trans>day</Trans>
           </ThemedText.White>
         </RowBetween>
         <RowBetween>
