@@ -5,10 +5,8 @@ import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useV3Positions } from 'hooks/useV3Positions'
 import { StakingInfo } from 'state/stake/hooks copy'
 import styled from 'styled-components/macro'
-import { PositionDetails } from 'types/position'
 import { unwrappedToken } from 'utils/unwrappedToken'
 
 import { useColor } from '../../hooks/useColor'
@@ -25,8 +23,8 @@ const StatContainer = styled.div`
   margin-bottom: 1rem;
   margin-right: 1rem;
   margin-left: 1rem;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-  display: none;
+  // ${({ theme }) => theme.mediaWidth.upToSmall`
+  // display: none;
 `};
 `
 
@@ -54,7 +52,7 @@ const TopSection = styled.div`
   padding: 1rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 48px 1fr 2fr 96px;
+    grid-template-columns: 30px 1fr 80px 60px;
   `};
 `
 
@@ -72,6 +70,11 @@ const StyledDiv = styled.div`
   align-items: center;
   text-align: center;
 `
+const StatText = styled(ThemedText.White)`
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+display: none;
+`};
+`
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
   const { account, chainId, library } = useActiveWeb3React()
   const token0 = stakingInfo.token0
@@ -82,44 +85,27 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const fee = stakingInfo.fee.toFixed(1)
   const numberOfStakes = stakingInfo.numberOfStakes
   const minDuration = stakingInfo.minDuration
-  const outputDaily = stakingInfo.outputDaily
   // get the color of the token
   const token = currency0.isNative ? token1 : token0
   const backgroundColor = useColor(token)
-  const isStaking = false
-  // function getPositions
-  const { positions, loading: positionsLoading } = useV3Positions(account)
-
-  const openPositions =
-    positions?.reduce<PositionDetails[]>((acc, p) => {
-      !p.liquidity?.isZero() && acc.push(p)
-      return acc
-    }, []) ?? []
-  console.error('positions', positions?.length)
-  const filteredPositions = openPositions.filter(
-    (ps) =>
-      ps.liquidity &&
-      [token0.address, token1.address].indexOf(ps.token0) !== -1 &&
-      [token0.address, token1.address].indexOf(ps.token1) !== -1
-  )
-  const tokenid = filteredPositions.length ? filteredPositions[0].tokenId.toNumber() : undefined
-  console.error('tokenid', filteredPositions.length)
   return (
-    <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
+    <Wrapper showBackground={false} bgColor={backgroundColor}>
       <CardBGImage desaturate />
       <CardNoise />
 
       <TopSection>
-        <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
+        <div style={{ marginLeft: '10px' }}>
+          <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
+        </div>
         <ThemedText.White fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
           {currency0.symbol}-{currency1.symbol}
         </ThemedText.White>
-        <ThemedText.White fontWeight={500} fontSize={14}>
+        <ThemedText.White fontWeight={500} fontSize={24}>
           {fee}%
         </ThemedText.White>
         <StyledInternalLink to={`/stake/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" $borderRadius="8px">
-            {isStaking ? <Trans>Manage</Trans> : <Trans>Deposit</Trans>}
+            <Trans>Deposit</Trans>
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>
@@ -127,25 +113,43 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       <StatContainer>
         <RowBetween>
           <StyledDiv>
+            <StatText style={{ textAlign: 'center', float: left, fontSize: '20px', marginRight: '8px' }}>
+              <Trans>Reward:{'  '}</Trans>
+            </StatText>
             <CurrencyLogo style={{ marginRight: '0.5rem', float: left }} currency={rewardToken} size={'24px'} />
-            <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '16px' }}>
+            <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '20px' }}>
               <Trans>{rewardToken ? rewardToken?.symbol : stakingInfo.rewardToken}</Trans>
             </ThemedText.White>
           </StyledDiv>
-          <ThemedText.White>{true ? <Trans>{minDuration} day</Trans> : <Trans> ETH</Trans>}</ThemedText.White>
+          <ThemedText.White>
+            <Trans>
+              Minimum Duration{'  '}: {'  '}
+              {minDuration} day
+            </Trans>
+          </ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
-            <Trans>{numberOfStakes}</Trans>
+            <Trans>
+              Staked {'  '}: {'  '} {numberOfStakes}
+            </Trans>
           </ThemedText.White>
-          <ThemedText.White>{stakingInfo ? <Trans>{stakingInfo?.outputDaily}/day</Trans> : '-'}</ThemedText.White>
+          <ThemedText.White>
+            {stakingInfo ? (
+              <Trans>
+                Pool Rate {'  '}: {'  '} {stakingInfo?.outputDaily}/day
+              </Trans>
+            ) : (
+              '-'
+            )}
+          </ThemedText.White>
         </RowBetween>
       </StatContainer>
 
-      {isStaking && (
+      {false && (
         <>
           <Break />
-          <BottomSection showBackground={true}>
+          <BottomSection showBackground={false}>
             <ThemedText.Black color={'white'} fontWeight={500}>
               <span>
                 <Trans>Your rate</Trans>
@@ -156,14 +160,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                 ⚡
               </span>
-              {stakingInfo ? (
-                <Trans>
-                  {stakingInfo.numberOfStakes}
-                  UNI / week
-                </Trans>
-              ) : (
-                '-'
-              )}
+              {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPC/day</Trans> : '-'}
             </ThemedText.Black>
           </BottomSection>
         </>

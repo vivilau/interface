@@ -27,6 +27,7 @@ interface StakingModalProps {
   tokenId: number | undefined
   liquidity: number | undefined
   rewards: number | undefined
+  reload: () => void
 }
 
 export default function UnstakingModal({
@@ -36,6 +37,7 @@ export default function UnstakingModal({
   tokenId,
   liquidity,
   rewards,
+  reload,
 }: StakingModalProps) {
   const { account } = useActiveWeb3React()
 
@@ -45,6 +47,7 @@ export default function UnstakingModal({
   const [attempting, setAttempting] = useState(false)
 
   function wrappedOndismiss() {
+    if (hash) reload()
     setHash(undefined)
     setAttempting(false)
     onDismiss()
@@ -53,7 +56,7 @@ export default function UnstakingModal({
   const stakingContract = useStakingContract(stakingInfo.stakeAddress)
   async function Unstake() {
     if (stakingContract && account && tokenId) {
-      // setAttempting(true)
+      setAttempting(true)
       await stakingContract
         .unstakeToken(tokenId, '0x0000000000000000000000000000000000000000000000000000000000000000')
         .then((response: TransactionResponse) => {
@@ -61,8 +64,11 @@ export default function UnstakingModal({
             type: TransactionType.UNSTAKE_TOKEN,
             tokenId: tokenId.toString(),
           })
+          setAttempting(false)
+          setHash(response.hash)
         })
         .catch((error: any) => {
+          setAttempting(false)
           console.log(error)
         })
     }
@@ -71,6 +77,10 @@ export default function UnstakingModal({
   if (!account) {
     error = <Trans>Connect a wallet</Trans>
   }
+  if (attempting) {
+    error = error ?? <Trans>Unstaking... </Trans>
+  }
+
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOndismiss} maxHeight={90}>
       {!attempting && !hash && (
@@ -81,7 +91,7 @@ export default function UnstakingModal({
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOndismiss} />
           </RowBetween>
-          {liquidity && (
+          {liquidity ? (
             <AutoColumn justify="center" gap="md">
               <ThemedText.Body fontWeight={600} fontSize={36}>
                 {liquidity}
@@ -90,8 +100,8 @@ export default function UnstakingModal({
                 <Trans>Deposited liquidity:</Trans>
               </ThemedText.Body>
             </AutoColumn>
-          )}
-          {rewards && (
+          ) : undefined}
+          {rewards ? (
             <AutoColumn justify="center" gap="md">
               <ThemedText.Body fontWeight={600} fontSize={36}>
                 {rewards}
@@ -100,9 +110,9 @@ export default function UnstakingModal({
                 <Trans>Unclaimed OPC</Trans>
               </ThemedText.Body>
             </AutoColumn>
-          )}
+          ) : undefined}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>When you unstake, your liquidity is removed from the mining pool.</Trans>
+            {/* <Trans>When you unstake, your liquidity is removed from the mining pool.</Trans> */}
           </ThemedText.SubHeader>
           <ButtonError disabled={!!error} error={!!error && !!liquidity} onClick={Unstake}>
             {error ?? <Trans>UNSTAKE</Trans>}
@@ -113,7 +123,7 @@ export default function UnstakingModal({
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Withdrawing {liquidity} </Trans>
+              <Trans>unstake #{tokenId} </Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
               <Trans>Claiming {rewards} OPC</Trans>

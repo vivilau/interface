@@ -93,23 +93,17 @@ export default function Stake() {
                 <AutoColumn gap="md">
                   <RowBetween>
                     <ThemedText.White fontWeight={600}>
-                      <Trans>Uniswap liquidity mining</Trans>
+                      <Trans>Upswap liquidity mining</Trans>
                     </ThemedText.White>
                   </RowBetween>
                   <RowBetween>
                     <ThemedText.White fontSize={14}>
-                      <Trans>
-                        Deposit your Liquidity Provider tokens to receive UNI, the Uniswap protocol governance token.
-                      </Trans>
+                      <Trans>Deposit your Liquidity Provider tokens to receive OPC.</Trans>
                     </ThemedText.White>
                   </RowBetween>{' '}
-                  <ExternalLink
-                    style={{ color: 'white', textDecoration: 'underline' }}
-                    href="https://uniswap.org/blog/uni/"
-                    target="_blank"
-                  >
+                  <ExternalLink style={{ color: 'white', textDecoration: 'underline' }} href="" target="_blank">
                     <ThemedText.White fontSize={14}>
-                      <Trans>Read more about UNI</Trans>
+                      <Trans>Read more about OPC</Trans>
                     </ThemedText.White>
                   </ExternalLink>
                 </AutoColumn>
@@ -125,7 +119,6 @@ export default function Stake() {
             <ThemedText.MediumHeader style={{ marginTop: '0.5rem' }}>
               <Trans>Participating pools</Trans>
             </ThemedText.MediumHeader>
-            {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
           </DataRow>
 
           <PoolSection>

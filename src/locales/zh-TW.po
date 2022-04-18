@@ -16,6 +16,79 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/components/earn/StakingModal.tsx
+#: src/components/earn/StakingModal.tsx
+#: src/components/Header/index.tsx
+#: src/pages/Stake/Manage.tsx
+msgid "Stake"
+msgstr "抵押"
+
+#: src/components/earn/StakingModal.tsx
+msgid "Stake Token"
+msgstr "抵押 Token"
+
+#: src/components/earn/UnstakingModal.tsx
+#: src/pages/Stake/Manage.tsx
+msgid "Unstake"
+msgstr "贖回"
+
+#: src/components/stake/PoolCard.tsx
+msgid "Reward:"
+msgstr "獎勵:"
+
+#: src/components/stake/PoolCard.tsx
+msgid "Staked   :    {numberOfStakes}"
+msgstr "已抵押   :    {numberOfStakes}"
+
+#: src/components/earn/StakingModal.tsx
+msgid "Staked {tokenId}"
+msgstr "已抵押 {tokenId}"
+
+#: src/components/stake/PoolCard.tsx
+msgid "Pool Rate   :    {0}/day"
+msgstr "激勵池產出   :    {0}/day"
+
+#: src/components/earn/StakingModal.tsx
+msgid "Token Rate"
+msgstr "Token 產出"
+
+#: src/components/earn/StakingModal.tsx
+msgid "{0} OPC / day"
+msgstr "{0} OPC / 天"
+
+#: src/components/stake/PoolCard.tsx
+msgid "{0} OPC/day"
+msgstr "{0} OPC/天"
+
+#: src/pages/Stake/Manage.tsx
+msgid "{0} {1} / day"
+msgstr "{0} {1} / 天"
+
+#: src/pages/Stake/Manage.tsx
+msgid "0 / day"
+msgstr "0 / 天"
+
+#: src/pages/Stake/Manage.tsx
+msgid "Day"
+msgstr "天"
+
+#: src/components/stake/PoolCard.tsx
+msgid "MinDuration  :   {minDuration} day"
+msgstr "鎖定限期  :   {minDuration} 天"
+
+#: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/UnstakingModal.tsx
+msgid "Unclaimed OPC"
+msgstr "未領取 OPC"
+
+#: src/pages/Stake/Manage.tsx
+msgid "Your Total liquidity"
+msgstr "已抵押流動性"
+
+#: src/pages/Stake/Manage.tsx
+msgid "Your unclaimed OPC"
+msgstr "未領取收益"
+
 #: src/pages/Pool/PositionPage.tsx
 #: src/pages/Pool/PositionPage.tsx
 msgid "$-"
@@ -660,11 +733,11 @@ msgstr "委托投票"
 #: src/components/earn/StakingModal.tsx
 #: src/pages/Earn/Manage.tsx
 msgid "Deposit"
-msgstr "充值"
+msgstr "抵押"
 
 #: src/pages/AddLiquidity/index.tsx
 msgid "Deposit Amounts"
-msgstr "充值數額"
+msgstr "抵押數額"
 
 #: src/pages/Earn/Manage.tsx
 msgid "Deposit UNI-V2 LP Tokens"
@@ -684,7 +757,7 @@ msgstr "存入您的流動池代幣以領取 UNI（Upswap 的治理代幣）。"
 
 #: src/components/earn/UnstakingModal.tsx
 msgid "Deposited liquidity:"
-msgstr "已存入的流動資金："
+msgstr "已抵押流動性："
 
 #: src/components/earn/StakingModal.tsx
 msgid "Deposited {0} UNI-V2"
@@ -1344,7 +1417,7 @@ msgstr "擁有者"
 
 #: src/pages/Earn/index.tsx
 msgid "Participating pools"
-msgstr "參與的流動池"
+msgstr "進行中的激勵池"
 
 #: src/pages/Vote/styled.tsx
 msgid "Pending"
@@ -1389,11 +1462,11 @@ msgstr "已找到流動池！"
 
 #: src/pages/Earn/Manage.tsx
 msgid "Pool Rate"
-msgstr "流動池費率"
+msgstr "激勵池產出"
 
 #: src/components/earn/PoolCard.tsx
 msgid "Pool rate"
-msgstr "流動池費率"
+msgstr "激勵池產出"
 
 #: src/components/PositionCard/V2.tsx
 #: src/components/PositionCard/index.tsx
@@ -2637,6 +2710,10 @@ msgstr "選擇 {0}%"
 #: src/pages/Earn/Manage.tsx
 msgid "{0}-{1} Liquidity Mining"
 msgstr "{0}-{1} 流動資金采礦"
+
+#: src/pages/Stake/Manage.tsx
+msgid "{0}-{1} ({2}%) Liquidity Mining"
+msgstr "{0}-{1} ({2}%) 流動性采礦"
 
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
 msgid "{0}/{1} LP NFT"

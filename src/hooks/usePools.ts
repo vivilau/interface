@@ -150,6 +150,5 @@ export function usePool(
     () => [[currencyA, currencyB, feeAmount]],
     [currencyA, currencyB, feeAmount]
   )
-
   return usePools(poolKeys)[0]
 }

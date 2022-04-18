@@ -1,8 +1,10 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
+import { numFixed } from 'utils/numberHelper'
 
 import { useStakingContract } from '../../hooks/useContract'
 import { StakingInfo } from '../../state/stake/hooks copy'
@@ -24,36 +26,36 @@ interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
-  rewards: number
-  liquidity: number
+  claimRewards: BigNumber
 }
 
-export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, rewards, liquidity }: StakingModalProps) {
+export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, claimRewards }: StakingModalProps) {
   const { account } = useActiveWeb3React()
-
+  const rewards = numFixed(claimRewards, stakingInfo.rewardToken?.decimals)
   // monitor call to help UI loading state
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
   function wrappedOnDismiss() {
+    onDismiss()
     setHash(undefined)
     setAttempting(false)
-    onDismiss()
   }
 
   const stakingContract = useStakingContract(stakingInfo.stakeAddress)
 
   async function onClaimReward() {
-    if (stakingContract && rewards && account) {
+    if (stakingContract && claimRewards && account) {
       setAttempting(true)
       await stakingContract
-        .claimReward(stakingInfo.rewardToken.address, account, rewards)
+        .claimReward(stakingInfo.rewardToken.address, account, claimRewards)
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,
             recipient: account,
           })
+          setAttempting(false)
           setHash(response.hash)
         })
         .catch((error: any) => {
@@ -67,8 +69,11 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, rewar
   if (!account) {
     error = <Trans>Connect Wallet</Trans>
   }
-  if (!rewards) {
+  if (!claimRewards) {
     error = error ?? <Trans>No available Rewards </Trans>
+  }
+  if (attempting) {
+    error = error ?? <Trans>Claming... </Trans>
   }
 
   return (
@@ -81,20 +86,20 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, rewar
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {rewards && (
+          {rewards ? (
             <AutoColumn justify="center" gap="md">
-              <ThemedText.Body fontWeight={600} fontSize={36}>
-                {rewards?.toFixed(4)}
-              </ThemedText.Body>
               <ThemedText.Body>
                 <Trans>Unclaimed OPC</Trans>
               </ThemedText.Body>
+              <ThemedText.Body fontWeight={600} fontSize={36}>
+                {rewards}
+              </ThemedText.Body>
             </AutoColumn>
-          )}
+          ) : undefined}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>When you claim without withdrawing your liquidity remains in the mining pool.</Trans>
+            {/* <Trans>When you claim your wallet will receive the claimRewards.</Trans> */}
           </ThemedText.SubHeader>
-          <ButtonError disabled={!!error} error={!!error && !!rewards} onClick={onClaimReward}>
+          <ButtonError disabled={!!error} error={!!error && !!claimRewards} onClick={onClaimReward}>
             {error ?? <Trans>Claim</Trans>}
           </ButtonError>
         </ContentWrapper>
@@ -103,7 +108,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, rewar
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {liquidity?.toFixed(6)} OPC</Trans>
+              <Trans>Claiming {rewards} OPC</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>

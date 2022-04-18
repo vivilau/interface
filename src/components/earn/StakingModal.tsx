@@ -37,10 +37,10 @@ interface StakingModalProps {
   onDismiss: () => void
   stakingInfo: StakingInfo
   tokenId: number | undefined
-  liquidity: number
+  tokenRate: string | number | undefined
 }
 
-export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, liquidity }: StakingModalProps) {
+export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, tokenRate }: StakingModalProps) {
   const { chainId, account, library } = useActiveWeb3React()
   //get
   const stakeAddress = stakingInfo.stakeAddress
@@ -60,10 +60,8 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
 
   const data1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
   function deposit() {
-    console.error('deposit')
     setAttempting(true)
     if (!positionManager || !tokenId || !account || !chainId || !stakeAddress || !library || !tokenA || !tokenB) {
-      console.error('deposit')
       return
     }
     const { calldata, value } = NonfungiblePositionManager.safeTransferFromParameters({
@@ -98,6 +96,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
               label: tokenId.toString(),
             })
             setAttempting(false)
+            setHash(response.hash)
             addTransaction(response, {
               type: TransactionType.DEPOSIT_LIQUIDITY_STAKING,
               token0Address: tokenA.address,
@@ -114,33 +113,35 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
   if (!account) {
     error = <Trans>Connect Wallet</Trans>
   }
-  if (!liquidity || liquidity === 0) {
-    error = error ?? <Trans>no available{liquidity}</Trans>
+  if (attempting) {
+    error = error ?? <Trans>Staking... </Trans>
   }
+
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
       {!attempting && !hash && (
         <ContentWrapper gap="lg">
           <RowBetween>
             <ThemedText.MediumHeader>
-              <Trans>Deposit</Trans>
+              <Trans>Stake</Trans>
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          <HypotheticalRewardRate dim={!stakingInfo.outputDaily}>
+          <HypotheticalRewardRate dim={false}>
             <div>
               <ThemedText.Black fontWeight={600}>
-                <Trans>Daily Rewards</Trans>
+                <Trans>Token Rate</Trans>
               </ThemedText.Black>
             </div>
 
             <ThemedText.Black>
-              <Trans>{stakingInfo.outputDaily} OPC / day</Trans>
+              {tokenRate}
+              <Trans> OPC / day</Trans>
             </ThemedText.Black>
           </HypotheticalRewardRate>
           <RowBetween>
-            <ButtonError disabled={!!error} error={!!error && !!liquidity} onClick={deposit}>
-              {error ?? <Trans>Deposit</Trans>}
+            <ButtonError disabled={!!error} error={!!error} onClick={deposit}>
+              {error ?? <Trans>Stake</Trans>}
             </ButtonError>
           </RowBetween>
         </ContentWrapper>
@@ -149,22 +150,22 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.LargeHeader>
-              <Trans>Depositing Liquidity</Trans>
+              <Trans>Stake Token</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>{liquidity}</Trans>
+              <Trans>#{tokenId}</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
       )}
-      {attempting && hash && (
+      {hash && (
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Deposited {liquidity} UNI-V2</Trans>
+              <Trans>Staked {tokenId} </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

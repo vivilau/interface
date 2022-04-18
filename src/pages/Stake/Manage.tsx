@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Trans } from '@lingui/macro'
-import { Currency } from '@uniswap/sdk-core'
-import { FeeAmount, Position } from '@uniswap/v3-sdk'
+import { left, right } from '@popperjs/core'
+import { Position } from '@uniswap/v3-sdk'
 import { OutlineCard } from 'components/Card'
 import ClaimRewardModal from 'components/earn/ClaimRewardModal'
 import StakingModal from 'components/earn/StakingModal'
@@ -10,7 +10,7 @@ import UnstakingModal from 'components/earn/UnstakingModal'
 import { AutoRow, RowBetween } from 'components/Row'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useColor } from 'hooks/useColor'
-import { usePools } from 'hooks/usePools'
+import { usePool } from 'hooks/usePools'
 import usePrevious from 'hooks/usePrevious'
 import { useV3Positions } from 'hooks/useV3Positions'
 import JSBI from 'jsbi'
@@ -27,6 +27,8 @@ import { PositionDetails } from 'types/position'
 import { CountUp } from 'use-count-up'
 import { Big2number, JSBI2num, numFixed } from 'utils/numberHelper'
 
+import depositIcon from '../../assets/images/deposit.png'
+import rewardIcon from '../../assets/images/rewards.png'
 import { BaseButton, ButtonEmpty, ButtonPrimary } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
@@ -67,13 +69,6 @@ const StyledBottomCard = styled(DataCard)<{ dim: any }>`
   z-index: 1;
 `
 
-const PoolData = styled(DataCard)`
-  background: none;
-  border: 1px solid ${({ theme }) => theme.bg4};
-  padding: 1rem;
-  z-index: 1;
-`
-
 const VoteCard = styled(DataCard)`
   background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
   overflow: hidden;
@@ -92,21 +87,54 @@ const TopSection = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
 `
-const Proposal = styled.span`
+const Proposal = styled(TopSection)`
   padding: 0.75rem 1rem;
-  width: 100%;
   margin-top: 1rem;
   border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-gap: 0px;
+  align-items: center;
+  z-index: 1;
   align-items: center;
   text-align: left;
   outline: none;
+  grid-template-columns: 60px 1fr 120px;
   color: ${({ theme }) => theme.text1};
   text-decoration: none;
   background-color: ${({ theme }) => theme.bg2};
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  grid-template-columns: 60px 1fr 70px;
+  `}
 `
-
+const Clou = styled(TopSection)`
+  display: grid;
+  grid-gap: 0px;
+  z-index: 1;
+  align-items: center;
+  grid-template-columns: 130px 1fr;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+grid-template-columns:  1fr;
+`}
+`
+const Proposal2 = styled(TopSection)`
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  border-radius: 12px;
+  display: grid;
+  grid-gap: 0px;
+  align-items: center;
+  z-index: 1;
+  align-items: center;
+  text-align: left;
+  outline: none;
+  grid-template-columns: 60px 1fr 120px;
+  color: ${({ theme }) => theme.text1};
+  text-decoration: none;
+  background-color: ${({ theme }) => theme.bg2};
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  grid-template-columns: 60px 1fr  70px;
+  `}
+`
 const ProposalNumberButton = styled(Button)`
   opacity: 0.6;
   flex: 0 0 40px;
@@ -118,12 +146,12 @@ const ProposalNumber = styled(Button)`
   color: ${({ theme }) => theme.green1};
 `
 const ProposalTitle = styled.span`
-  font-weight: 600;
+  font-weight: 400;
   flex: 1;
   max-width: 420px;
   white-space: initial;
   word-wrap: break-word;
-  padding-right: 10px;
+  padding-right: 8px;
 `
 
 const WrapSmall = styled(RowBetween)`
@@ -157,6 +185,9 @@ const StyledProposalContainer = styled(Button)`
 const ButtonDeposit = styled(BaseButton)`
   background-color: ${({ theme }) => theme.green1};
   color: white;
+  padding: 8px;
+  border-radius: 8px;
+  width: 120px;
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.green1)};
     background-color: ${({ theme }) => darken(0.05, theme.green1)};
@@ -178,16 +209,35 @@ const ButtonDeposit = styled(BaseButton)`
     border: 1px solid transparent;
     outline: none;
   }
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  width:  70px;
+  `}
 `
 export const DepositIcon = styled(Spinner)<{ size: string }>`
   height: ${({ size }) => size};
   width: ${({ size }) => size};
+`
+const StatButton = styled(ButtonPrimary)`
+  padding: 8px;
+  border-radius: 8px;
+  width: 120px;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+width:  70px;
+`}
+`
+const ClaimButton = styled(ButtonEmpty)`
+  padding: 8px;
+  border-radius: 8px;
+  width: fit-content;
+  color: ${({ theme }) => darken(0.1, theme.green1)};
+  border: 1px solid ${({ theme }) => darken(0.1, theme.green1)};
 `
 
 export default function Manage({
   match: {
     params: { currencyIdA, currencyIdB },
   },
+  history,
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
   const { account } = useActiveWeb3React()
 
@@ -207,33 +257,34 @@ export default function Manage({
   //get and filter positions
   const { positions, loading: positionsLoading } = useV3Positions(account)
 
+  //get pool
+  // const poolPros: [Currency | undefined, Currency | undefined, FeeAmount | undefined][] = filteredPositions.map(
+  //   (ps) => {
+  //     return [tokenA, tokenB, ps.fee]
+  //   }
+  // )
+  const result = usePool(tokenA, tokenB, stakingInfo?.fee ? stakingInfo.fee * 10000 : undefined)
+
+  const pools = result[1]
   const openPositions =
     positions?.reduce<PositionDetails[]>((acc, p) => {
       !p.liquidity?.isZero() && acc.push(p)
       return acc
     }, []) ?? []
+
   const filteredPositions = openPositions.filter(
     (ps) =>
       ps.liquidity &&
       [tokenA?.address, tokenB?.address].indexOf(ps.token0) !== -1 &&
-      [tokenA?.address, tokenB?.address].indexOf(ps.token1) !== -1
+      [tokenA?.address, tokenB?.address].indexOf(ps.token1) !== -1 &&
+      ps.fee / 10000 === stakingInfo?.fee
   )
-
-  //get pool
-  const poolPros: [Currency | undefined, Currency | undefined, FeeAmount | undefined][] = filteredPositions.map(
-    (ps) => {
-      return [tokenA, tokenB, ps.fee]
-    }
-  )
-  const pools = usePools(poolPros)
-
   const positionInfos = useMemo(() => {
     if (filteredPositions) {
       const p = filteredPositions.map((ps, index) => {
-        const pool = pools.length && pools[index][1]
-        if (pool && ps.liquidity && typeof ps.tickLower === 'number' && typeof ps.tickUpper === 'number') {
+        if (pools && ps.liquidity && typeof ps.tickLower === 'number' && typeof ps.tickUpper === 'number') {
           return new Position({
-            pool,
+            pool: pools,
             liquidity: ps.liquidity.toString(),
             tickLower: ps.tickLower,
             tickUpper: ps.tickUpper,
@@ -244,8 +295,17 @@ export default function Manage({
       return p
     }
     return undefined
-  }, [pools, filteredPositions])
-  const liquidity = filteredPositions.map((ps) => ps.liquidity)
+  }, [filteredPositions, pools])
+
+  //get unclaim opc
+  const claimRewards = useClaimNum()
+  const rewards = Big2number(claimRewards, stakingInfo?.rewardToken?.decimals ?? 18)
+  const countUpRewards = rewards?.toFixed(6) ?? '0'
+  const countUpRewardsPrevious = usePrevious(countUpRewards) ?? '0'
+  //get and filter staked positions
+  const tokenIds = useTokens()
+  const rewardInfos = useDeposits(tokenIds).filter((rw) => rw.incentiveId.toNumber() === incentiveId)
+  const liquidity = rewardInfos.map((ps) => ps.liquidity)
   const tolLiquidity =
     liquidity.length &&
     Big2number(
@@ -254,16 +314,20 @@ export default function Manage({
       }),
       18
     )
+  //caculate your rate
+  // console.error('pool', pools?.liquidity)
+  const yourRate = useMemo(() => {
+    if (pools && tolLiquidity && stakingInfo) {
+      if (!tolLiquidity) return 0
+      if (numFixed(stakingInfo?.outputDaily, 18) === '<0.0001') return '<0.0001'
+      const rate =
+        Big2number(stakingInfo?.outputDaily, 18) * (tolLiquidity / JSBI2num(pools?.liquidity ?? JSBI.BigInt(0), 18))
+      return rate > 0.0001 ? rate : '<0.0001'
+    }
+    return 0
+  }, [pools, stakingInfo, tolLiquidity])
 
-  //get unclaim opc
-  const rewards = useClaimNum()
-  const countUpRewards = rewards?.toFixed(6) ?? '0'
-  const countUpRewardsPrevious = usePrevious(countUpRewards) ?? '0'
-  //get and filter staked positions
-  const tokenIds = useTokens()
-  const rewardInfos = useDeposits(tokenIds).filter((rw) => rw.incentiveId.toNumber() === incentiveId)
-  // toggle for staking modal and unstaking modal
-  const [showStakingModal, setShowStakingModal] = useState(false)
+  const [showStakingModal, setShowStakingModal] = useState(false) // toggle for staking modal and unstaking modal
   const [showUnstakingModal, setShowUnstakingModal] = useState(false)
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
   // fade cards if nothing staked or nothing earned yet
@@ -275,26 +339,39 @@ export default function Manage({
   function dateFormat(longTypeDate: number) {
     let dateType = ''
     const date = new Date()
-    date.setTime(longTypeDate)
-    dateType = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay() //yyyy-MM-dd格式日期
+    date.setTime(longTypeDate * 1000)
+    const month = date.getMonth() + 1
+    dateType = date.getFullYear() + '-' + month + '-' + date.getDate() //yyyy-MM-dd格式日期
     return dateType
   }
 
   const [tokenId, setTokenId] = useState<number | undefined>()
   const [stakeliquidity, setLiquidity] = useState<number | undefined>()
   const [stakedReward, setReward] = useState<number | undefined>()
+  const [tokenRate, setRate] = useState<number | string | undefined>()
 
   function deposit(tokenid: number, liquidity: JSBI) {
     setTokenId(tokenid)
-    setLiquidity(JSBI2num(liquidity, 18))
+    const rate = () => {
+      if (pools && stakingInfo) {
+        if (!liquidity) return 0
+        if (numFixed(stakingInfo?.outputDaily, 18) === '<0.0001') return '<0.0001'
+        const rate = Big2number(stakingInfo?.outputDaily, 18) * JSBI.toNumber(JSBI.divide(liquidity, pools?.liquidity))
+        return rate > 0.0001 ? rate : '<0.0001'
+      }
+      return 0
+    }
+    setRate(rate)
     setShowStakingModal(true)
   }
   function Unstake(tokenid: number, liquidity: BigNumber, reward: BigNumber) {
-    console.error('unstake')
     setTokenId(tokenid)
     setLiquidity(Big2number(liquidity, 18))
     setReward(Big2number(reward, 18))
     setShowUnstakingModal(true)
+  }
+  function claim() {
+    setShowClaimRewardModal(true)
   }
   function PositionsLoadingPlaceholder() {
     return (
@@ -315,6 +392,9 @@ export default function Manage({
     )
   }
 
+  function reload() {
+    history.push(`/stake/${currencyIdA}/${currencyIdB}`)
+  }
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
@@ -325,35 +405,6 @@ export default function Manage({
         </ThemedText.MediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
       </RowBetween>
-
-      <DataRow style={{ gap: '24px' }}>
-        <PoolData>
-          <AutoColumn gap="sm">
-            <ThemedText.Body style={{ margin: 0 }}>
-              <Trans>Minimum Duration </Trans>
-            </ThemedText.Body>
-            <ThemedText.Body fontSize={24} fontWeight={500}>
-              {stakingInfo?.minDuration} Day
-            </ThemedText.Body>
-          </AutoColumn>
-        </PoolData>
-        <PoolData>
-          <AutoColumn gap="sm">
-            <ThemedText.Body style={{ margin: 0 }}>
-              <Trans>Pool Rate</Trans>
-            </ThemedText.Body>
-            <ThemedText.Body fontSize={24} fontWeight={500}>
-              {stakingInfo ? (
-                <Trans>
-                  {stakingInfo?.outputDaily} {stakingInfo?.rewardToken?.symbol} / day
-                </Trans>
-              ) : (
-                <Trans>0 </Trans>
-              )}
-            </ThemedText.Body>
-          </AutoColumn>
-        </PoolData>
-      </DataRow>
 
       {/* //有矿池，没有对应流动时显示 */}
       {false && (
@@ -399,7 +450,7 @@ export default function Manage({
             onDismiss={() => setShowStakingModal(false)}
             stakingInfo={stakingInfo}
             tokenId={tokenId}
-            liquidity={stakeliquidity ?? 0}
+            tokenRate={tokenRate}
           />
           <UnstakingModal
             isOpen={showUnstakingModal}
@@ -408,13 +459,13 @@ export default function Manage({
             tokenId={tokenId}
             liquidity={stakeliquidity ?? 0}
             rewards={stakedReward}
+            reload={() => reload()}
           />
           <ClaimRewardModal
             isOpen={showClaimRewardModal}
             onDismiss={() => setShowClaimRewardModal(false)}
             stakingInfo={stakingInfo}
-            rewards={rewards}
-            liquidity={tolLiquidity}
+            claimRewards={claimRewards}
           />
         </>
       )}
@@ -430,15 +481,21 @@ export default function Manage({
                   <ThemedText.White fontWeight={600}>
                     <Trans>Your Total liquidity </Trans>
                   </ThemedText.White>
+                  <ThemedText.White fontWeight={500}>
+                    {stakingInfo?.minDuration} {'  '}
+                    <Trans>Day</Trans>
+                  </ThemedText.White>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
                   <ThemedText.White fontSize={36} fontWeight={600}>
                     {tolLiquidity}
                   </ThemedText.White>
                   <ThemedText.White>
-                    <Trans>
-                      {currencyA?.symbol}-{currencyB?.symbol}
-                    </Trans>
+                    <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
+                      ⚡
+                    </span>
+                    {numFixed(stakingInfo?.outputDaily, 18)} {stakingInfo?.rewardToken?.symbol}
+                    <Trans>/day</Trans>
                   </ThemedText.White>
                 </RowBetween>
               </AutoColumn>
@@ -454,16 +511,9 @@ export default function Manage({
                     <Trans>Your unclaimed OPC</Trans>
                   </ThemedText.Black>
                 </div>
-                {true && (
-                  <ButtonEmpty
-                    padding="8px"
-                    $borderRadius="8px"
-                    width="fit-content"
-                    onClick={() => setShowClaimRewardModal(true)}
-                  >
-                    <Trans>Claim</Trans>
-                  </ButtonEmpty>
-                )}
+                <ClaimButton onClick={() => claim()}>
+                  <Trans>Claim</Trans>
+                </ClaimButton>
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
                 <ThemedText.LargeHeader fontSize={36} fontWeight={600}>
@@ -481,14 +531,8 @@ export default function Manage({
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
                   </span>
-
-                  {stakingInfo ? (
-                    <Trans>
-                      {stakingInfo.outputDaily} {stakingInfo.rewardToken?.symbol} / day
-                    </Trans>
-                  ) : (
-                    <Trans>0 / day</Trans>
-                  )}
+                  {yourRate} {stakingInfo?.rewardToken?.symbol}
+                  <Trans>/ day </Trans>
                 </ThemedText.Black>
               </RowBetween>
             </AutoColumn>
@@ -518,48 +562,46 @@ export default function Manage({
               <ProposalTitle>
                 {p?.amount0.toSignificant(4)} {tokenA?.symbol} / {p?.amount1.toSignificant(4)} {tokenB?.symbol}
               </ProposalTitle>
-              {/* <StyledProposalContainer onClick={() => deposit(Number(tokenid))}>
-                <Trans>Deposit</Trans>
-              </StyledProposalContainer> */}
-              <ButtonDeposit
-                padding="8px"
-                $borderRadius="8px"
-                width="120px"
-                onClick={() => deposit(Number(tokenid), p?.liquidity ?? JSBI.BigInt(0))}
-              >
-                <Trans>Deposit</Trans>
+              <ButtonDeposit onClick={() => deposit(Number(tokenid), p?.liquidity ?? JSBI.BigInt(0))}>
+                <Trans>Stake</Trans>
               </ButtonDeposit>
             </Proposal>
           )
         })}
         {rewardInfos?.map((p, key) => {
           return (
-            <Proposal key={key}>
-              <ProposalNumber as={Link} to={`/pool/${p?.tokenid?.toString()}`}>
+            <Proposal2 key={key}>
+              <ProposalNumber as={Link} to={`/pool/${p?.tokenid?.toString()}`} style={{ marginRight: '12px ' }}>
                 #{p?.tokenid?.toString()}
               </ProposalNumber>
-              <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
-                {'    '}📥
-              </span>
-              <ProposalTitle>
-                {dateFormat(p?.startTime.toNumber() * 1000)}
-                {'  '} {numFixed(p?.liquidity, 18)}
-              </ProposalTitle>
-              <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
-                ⚡
-              </span>
-              <ProposalTitle>
-                {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
-              </ProposalTitle>
-              <ButtonPrimary
-                padding="8px"
-                $borderRadius="8px"
-                width="120px"
-                onClick={() => Unstake(p?.tokenid.toNumber(), p?.liquidity, p?.reward)}
-              >
-                <Trans>Unstake</Trans>
-              </ButtonPrimary>
-            </Proposal>
+              <Clou>
+                <div style={{ float: left }}>
+                  <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime.toNumber())}</ProposalTitle>
+                </div>
+                {/* <div>
+                  <div></div>
+                <ProposalTitle style={{ paddingRight: '2px ', float: right }}>
+                  {numFixed(p?.liquidity, 18)}
+                </ProposalTitle>
+                </div>
+                <div></div> */}
+                <div style={{ float: right }}>
+                  <img src={rewardIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <ProposalTitle style={{ float: left }}>
+                    {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
+                  </ProposalTitle>
+                </div>
+              </Clou>
+              <div>
+                <StatButton
+                  style={{ float: right }}
+                  onClick={() => Unstake(p?.tokenid.toNumber(), p?.liquidity, p?.reward)}
+                >
+                  <Trans>Unstake</Trans>
+                </StatButton>
+              </div>
+            </Proposal2>
           )
         })}
       </TopSection>

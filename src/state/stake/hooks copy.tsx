@@ -8,7 +8,6 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useStakingContract } from 'hooks/useContract'
 import { CallStateResult, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
-import { numFixed } from 'utils/numberHelper'
 export const STAKING_REWARDS_INFO: {
   [chainId: number]: {
     tokens: [Token, Token]
@@ -52,7 +51,7 @@ export interface StakingInfo {
   totalRewardUnclaimed: BigNumber
   totalSecondsClaimedX128: BigNumber
   minDuration: BigNumber
-  outputDaily: string
+  outputDaily: BigNumber
 }
 export interface DepositInfo {
   tokenid: BigNumber
@@ -104,7 +103,8 @@ export function useTokens(): BigNumber[] {
 
 export function useStakingInfo(): StakingInfo[] | undefined {
   const stakeAdd = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
-  const tokenContract = useStakingContract(stakeAdd)
+  const { chainId } = useActiveWeb3React()
+  const tokenContract = useStakingContract(chainId === 80001 ? stakeAdd : undefined)
 
   const { loading: stakeloading, result: numberOfIncentives } = useSingleCallResult(tokenContract, 'numberOfIncentives')
   // we don't expect any account balance to ever exceed the bounds of max safe int
@@ -139,12 +139,9 @@ export function useStakingInfo(): StakingInfo[] | undefined {
           totalSecondsClaimedX128: result.totalSecondsClaimedX128,
           minDuration: result.minDuration.div(60 * 60 * 24).toNumber(),
           outputDaily:
-            numFixed(
-              result.totalRewardUnclaimed.div(
-                result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))).mul(60 * 60 * 24)
-              ),
-              18
-            ) ?? '0',
+            result.totalRewardUnclaimed.div(
+              result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))).mul(60 * 60 * 24)
+            ) ?? BigNumber.from(0),
         }
       })
     }
@@ -152,15 +149,15 @@ export function useStakingInfo(): StakingInfo[] | undefined {
   }, [loading, error, results, allTokens])
   return incentiveInfos ?? undefined
 }
-export function useClaimNum(): number {
+export function useClaimNum(): BigNumber {
   const { account, chainId } = useActiveWeb3React()
   const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
   const uni = chainId && STAKING_REWARDS_INFO[chainId][0].tokens[1]
   const { result: rewards } = useSingleCallResult(tokenContract, 'rewards', [
-    account ?? undefined,
     uni ? uni.address : undefined,
+    account ?? undefined,
   ])
-  return rewards?.[0]?.toNumber()
+  return rewards?.[0]
 }
 
 export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
