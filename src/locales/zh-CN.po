@@ -1457,7 +1457,7 @@ msgstr "已找到流动池！"
 msgid "Pool Rate"
 msgstr "流动池费率"
 
-#: src/components/stake/PoolCard.tsx
+#: src/pages/Stake/Manage.tsx
 msgid "Minimum Duration"
 msgstr "锁定期限"
 

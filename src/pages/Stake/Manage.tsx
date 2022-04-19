@@ -473,8 +473,10 @@ export default function Manage({
                     <Trans>Your Total liquidity </Trans>
                   </ThemedText.White>
                   <ThemedText.White fontWeight={500}>
+                    <Trans>Minimum Duration</Trans>
                     {stakingInfo?.minDuration ?? 0}
-                    <Trans> {'  '}Day</Trans>
+                    {'  '}
+                    <Trans>Day</Trans>
                   </ThemedText.White>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
@@ -486,9 +488,8 @@ export default function Manage({
                       ⚡
                     </span>
                     {numFixed(stakingInfo?.outputDaily, 18)} {stakingInfo?.rewardToken?.symbol}
-                    <Trans>
-                      {'  '}/{'  '}day
-                    </Trans>
+                    {'  '}/{'  '}
+                    <Trans>day</Trans>
                   </ThemedText.White>
                 </RowBetween>
               </AutoColumn>
@@ -525,9 +526,8 @@ export default function Manage({
                     ⚡
                   </span>
                   {yourRate} {stakingInfo?.rewardToken?.symbol}
-                  <Trans>
-                    {'  '}/{'  '}day{' '}
-                  </Trans>
+                  {'  '}/{'  '}
+                  <Trans>day</Trans>
                 </ThemedText.Black>
               </RowBetween>
             </AutoColumn>
