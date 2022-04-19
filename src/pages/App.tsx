@@ -94,9 +94,8 @@ export default function App() {
                   <Redirect to="/vote/create-proposal" />
                 </Route>
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
-                <Route exact strict path="/stake/:currencyIdA/:currencyIdB" component={Manage} />
                 <Route exact strict path="/stake" component={Stake} />
-                <Route exact strict path="/stake/:currencyIdA/:currencyIdB" component={Manage} />
+                <Route exact strict path="/stake/:index" component={Manage} />
                 <Route exact strict path="/uni" component={Earn} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/swap" component={Swap} />

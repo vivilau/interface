@@ -32,8 +32,7 @@ import rewardIcon from '../../assets/images/rewards.png'
 import { BaseButton, ButtonEmpty, ButtonPrimary } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { useCurrency } from '../../hooks/Tokens'
-import { useClaimNum, useDeposits, useStakingInfo, useTokens } from '../../state/stake/hooks copy'
+import { useClaimNum, useDeposits, useIncentiveInfo, useTokens } from '../../state/stake/hooks copy'
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
@@ -235,25 +234,18 @@ const ClaimButton = styled(ButtonEmpty)`
 
 export default function Manage({
   match: {
-    params: { currencyIdA, currencyIdB },
+    params: { index },
   },
   history,
-}: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
+}: RouteComponentProps<{ index?: string }>) {
   const { account } = useActiveWeb3React()
-
+  const incentiveId = Number(index)
+  const stakingInfo = useIncentiveInfo(incentiveId)
   // get currencies and pair
-  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)]
+  const [currencyA, currencyB] = [stakingInfo?.token0, stakingInfo?.token1]
   const tokenA = (currencyA ?? undefined)?.wrapped
   const tokenB = (currencyB ?? undefined)?.wrapped
 
-  //get stakeinfo
-  const stakingInfos = useStakingInfo()
-  const stakingInfo = stakingInfos?.filter(
-    (ps) =>
-      [tokenA?.address, tokenB?.address].indexOf(ps.token0.address) !== -1 &&
-      [tokenA?.address, tokenB?.address].indexOf(ps.token1.address) !== -1
-  )?.[0]
-  const incentiveId = stakingInfo && stakingInfos?.indexOf(stakingInfo)
   //get and filter positions
   const { positions, loading: positionsLoading } = useV3Positions(account)
 
@@ -315,14 +307,13 @@ export default function Manage({
       18
     )
   //caculate your rate
-  // console.error('pool', pools?.liquidity)
   const yourRate = useMemo(() => {
     if (pools && tolLiquidity && stakingInfo) {
       if (!tolLiquidity) return 0
       if (numFixed(stakingInfo?.outputDaily, 18) === '<0.0001') return '<0.0001'
       const rate =
         Big2number(stakingInfo?.outputDaily, 18) * (tolLiquidity / JSBI2num(pools?.liquidity ?? JSBI.BigInt(0), 18))
-      return rate > 0.0001 ? rate : '<0.0001'
+      return rate > 0.0001 ? rate.toFixed(4) : '<0.0001'
     }
     return 0
   }, [pools, stakingInfo, tolLiquidity])
@@ -393,15 +384,13 @@ export default function Manage({
   }
 
   function reload() {
-    history.push(`/stake/${currencyIdA}/${currencyIdB}`)
+    history.push(`/stake/${incentiveId}`)
   }
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
         <ThemedText.MediumHeader style={{ margin: 0 }}>
-          <Trans>
-            {currencyA?.symbol}-{currencyB?.symbol} ({stakingInfo?.fee.toFixed(1)}%) Liquidity Mining
-          </Trans>
+          {currencyA?.symbol}-{currencyB?.symbol} ({stakingInfo?.fee.toFixed(1)}%) <Trans>Liquidity Mining</Trans>
         </ThemedText.MediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
       </RowBetween>
@@ -451,6 +440,7 @@ export default function Manage({
             stakingInfo={stakingInfo}
             tokenId={tokenId}
             tokenRate={tokenRate}
+            poolId={index ?? ''}
           />
           <UnstakingModal
             isOpen={showUnstakingModal}
@@ -460,6 +450,7 @@ export default function Manage({
             liquidity={stakeliquidity ?? 0}
             rewards={stakedReward}
             reload={() => reload()}
+            poolId={index ?? ''}
           />
           <ClaimRewardModal
             isOpen={showClaimRewardModal}
@@ -482,8 +473,8 @@ export default function Manage({
                     <Trans>Your Total liquidity </Trans>
                   </ThemedText.White>
                   <ThemedText.White fontWeight={500}>
-                    {stakingInfo?.minDuration} {'  '}
-                    <Trans>Day</Trans>
+                    {stakingInfo?.minDuration ?? 0}
+                    <Trans> {'  '}Day</Trans>
                   </ThemedText.White>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
@@ -495,7 +486,9 @@ export default function Manage({
                       ⚡
                     </span>
                     {numFixed(stakingInfo?.outputDaily, 18)} {stakingInfo?.rewardToken?.symbol}
-                    <Trans>/day</Trans>
+                    <Trans>
+                      {'  '}/{'  '}day
+                    </Trans>
                   </ThemedText.White>
                 </RowBetween>
               </AutoColumn>
@@ -532,7 +525,9 @@ export default function Manage({
                     ⚡
                   </span>
                   {yourRate} {stakingInfo?.rewardToken?.symbol}
-                  <Trans>/ day </Trans>
+                  <Trans>
+                    {'  '}/{'  '}day{' '}
+                  </Trans>
                 </ThemedText.Black>
               </RowBetween>
             </AutoColumn>
@@ -549,7 +544,7 @@ export default function Manage({
         {positionsLoading ? <PositionsLoadingPlaceholder /> : null}
         {!positionsLoading && filteredPositions?.length === 0 && rewardInfos?.length === 0 && (
           <OutlineCard>
-            <Trans>No active pools</Trans>
+            <Trans>No available token</Trans>
           </OutlineCard>
         )}
         {positionInfos?.map((p, key) => {

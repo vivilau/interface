@@ -1,3 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import { NonfungiblePositionManager } from '@uniswap/v3-sdk'
@@ -38,9 +40,17 @@ interface StakingModalProps {
   stakingInfo: StakingInfo
   tokenId: number | undefined
   tokenRate: string | number | undefined
+  poolId: string
 }
 
-export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, tokenRate }: StakingModalProps) {
+export default function StakingModal({
+  isOpen,
+  onDismiss,
+  stakingInfo,
+  tokenId,
+  tokenRate,
+  poolId,
+}: StakingModalProps) {
   const { chainId, account, library } = useActiveWeb3React()
   //get
   const stakeAddress = stakingInfo.stakeAddress
@@ -57,8 +67,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
     onDismiss()
   }, [onDismiss])
   const positionManager = useV3NFTPositionManagerContract()
-
-  const data1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
+  const data1 = hexZeroPad(BigNumber.from(poolId).toHexString(), 32)
   function deposit() {
     setAttempting(true)
     if (!positionManager || !tokenId || !account || !chainId || !stakeAddress || !library || !tokenA || !tokenB) {
@@ -68,7 +77,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, tokenId, 
       sender: account,
       recipient: stakeAddress,
       tokenId,
-      data: data1,
+      data: data1.toString(),
     })
 
     const txn = {

@@ -32,7 +32,7 @@ interface StakingModalProps {
 export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, claimRewards }: StakingModalProps) {
   const { account } = useActiveWeb3React()
   const rewards = useMemo(() => {
-    if (stakingInfo.rewardToken) numFixed(claimRewards, stakingInfo.rewardToken?.decimals)
+    if (stakingInfo.rewardToken) numFixed(claimRewards, 18)
     return 0
   }, [claimRewards, stakingInfo.rewardToken])
 

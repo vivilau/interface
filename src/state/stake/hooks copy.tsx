@@ -40,6 +40,7 @@ export const STAKING_REWARDS_INFO: {
   ],
 }
 export interface StakingInfo {
+  index: number
   stakeAddress: string
   rewardToken: Token
   token0: Token
@@ -62,8 +63,7 @@ export interface DepositInfo {
   reward: BigNumber
   secondsInsideX128: BigNumber
 }
-
-// gets the staking info from the network for the active chain id
+//get number of deposits
 export function useTokens(): BigNumber[] {
   const { account } = useActiveWeb3React()
   const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
@@ -100,7 +100,34 @@ export function useTokens(): BigNumber[] {
   }, [account, someTokenIdsLoading, someTokenIdserror, tokenIdResults])
   return tokenIds
 }
-
+export function useIncentiveInfo(index: number): StakingInfo | undefined {
+  const stakeAdd = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
+  const { chainId } = useActiveWeb3React()
+  const tokenContract = useStakingContract(chainId === 80001 ? stakeAdd : undefined)
+  const { result } = useSingleCallResult(tokenContract, 'incentiveInfo', [[index]])
+  const allTokens = useAllTokens()
+  return result
+    ? {
+        index,
+        stakeAddress: stakeAdd,
+        rewardToken: allTokens[result.rewardToken],
+        token0: allTokens[result.token0],
+        token1: allTokens[result.token1],
+        fee: result.fee / 10000,
+        startTime: result.startTime,
+        endTime: result.endTime,
+        numberOfStakes: result.numberOfStakes,
+        totalRewardUnclaimed: result.totalRewardUnclaimed,
+        totalSecondsClaimedX128: result.totalSecondsClaimedX128,
+        minDuration: result.minDuration.div(60 * 60 * 24).toNumber(),
+        outputDaily:
+          result.totalRewardUnclaimed
+            .div(result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))))
+            .mul(60 * 60 * 24) ?? BigNumber.from(0),
+      }
+    : undefined
+}
+// gets the all the  staking(incentiveInfo) info from the network for the active chain id
 export function useStakingInfo(): StakingInfo[] | undefined {
   const stakeAdd = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
   const { chainId } = useActiveWeb3React()
@@ -127,6 +154,7 @@ export function useStakingInfo(): StakingInfo[] | undefined {
       return results.map((call, i) => {
         const result = call.result as CallStateResult
         return {
+          index: i,
           stakeAddress: stakeAdd,
           rewardToken: allTokens[result.rewardToken],
           token0: allTokens[result.token0],
@@ -139,9 +167,9 @@ export function useStakingInfo(): StakingInfo[] | undefined {
           totalSecondsClaimedX128: result.totalSecondsClaimedX128,
           minDuration: result.minDuration.div(60 * 60 * 24).toNumber(),
           outputDaily:
-            result.totalRewardUnclaimed.div(
-              result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))).mul(60 * 60 * 24)
-            ) ?? BigNumber.from(0),
+            result.totalRewardUnclaimed
+              .div(result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))))
+              .mul(60 * 60 * 24) ?? BigNumber.from(0),
         }
       })
     }
@@ -149,6 +177,12 @@ export function useStakingInfo(): StakingInfo[] | undefined {
   }, [loading, error, results, allTokens])
   return incentiveInfos ?? undefined
 }
+
+/**
+ * @description: get the user's unclaimed rewards
+ * @param {*}
+ * @return {*}
+ */
 export function useClaimNum(): BigNumber {
   const { account, chainId } = useActiveWeb3React()
   const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
@@ -160,6 +194,11 @@ export function useClaimNum(): BigNumber {
   return rewards?.[0]
 }
 
+/**
+ * @description: get all Deposits
+ * @param {BigNumber} tokenIds
+ * @return {*}
+ */
 export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
   const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
   const tokenIdsArgs = useMemo(() => {
@@ -217,23 +256,4 @@ export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
     }
   })
   return claimInfos ?? []
-}
-
-export function useUnStake(tokenid: number) {
-  const { account, chainId, library } = useActiveWeb3React()
-  const stke_address = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
-  const tokenContract = useStakingContract(stke_address)
-
-  // setAttemptingTxn(true)
-  const tokenIdsArgs = [tokenid, '0x0000000000000000000000000000000000000000000000000000000000000000']
-
-  const { loading: unStakeLoading, result: unStokeResult } = useSingleCallResult(
-    tokenContract,
-    'unstakeToken',
-    tokenIdsArgs
-  )
-  if (!tokenContract || !tokenid || !account || !chainId || !library) {
-    return
-  }
-  return unStokeResult
 }

@@ -1,3 +1,5 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -28,6 +30,7 @@ interface StakingModalProps {
   liquidity: number | undefined
   rewards: number | undefined
   reload: () => void
+  poolId: string
 }
 
 export default function UnstakingModal({
@@ -38,6 +41,7 @@ export default function UnstakingModal({
   liquidity,
   rewards,
   reload,
+  poolId,
 }: StakingModalProps) {
   const { account } = useActiveWeb3React()
 
@@ -58,7 +62,7 @@ export default function UnstakingModal({
     if (stakingContract && account && tokenId) {
       setAttempting(true)
       await stakingContract
-        .unstakeToken(tokenId, '0x0000000000000000000000000000000000000000000000000000000000000000')
+        .unstakeToken(tokenId, hexZeroPad(BigNumber.from(poolId).toHexString(), 32))
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.UNSTAKE_TOKEN,

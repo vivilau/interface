@@ -72,7 +72,7 @@ const UNIbutton = styled(ButtonPrimary)`
   background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
   border: none;
 `
-const ButtonExternalLink = styled(ExternalLink)`
+const ButtonExternalLink = styled(Link)`
   text-decoration: none;
   color: white;
 `
@@ -293,7 +293,7 @@ export default function Menu() {
                     </ToggleMenuItem>
                     {showUNIClaimOption && (
                       <UNIbutton padding="8px 16px" width="100%" $borderRadius="12px" mt="0.5rem">
-                        <ButtonExternalLink color="white" href="https://stake.upswap.org">
+                        <ButtonExternalLink color="white" to={'/stake'}>
                           <Trans>Claim UNI</Trans>
                         </ButtonExternalLink>
                       </UNIbutton>

@@ -4,7 +4,6 @@ import { ButtonPrimary } from 'components/Button'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { StakingInfo } from 'state/stake/hooks copy'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
@@ -12,7 +11,6 @@ import { unwrappedToken } from 'utils/unwrappedToken'
 
 import { useColor } from '../../hooks/useColor'
 import { StyledInternalLink, ThemedText } from '../../theme'
-import { currencyId } from '../../utils/currencyId'
 import { Break, CardBGImage, CardNoise } from '../earn/styled'
 import { RowBetween } from '../Row'
 
@@ -53,7 +51,7 @@ const TopSection = styled.div`
   padding: 1rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 30px 1fr 80px 60px;
+    grid-template-columns: 30px 150px 2fr 60px;
   `};
 `
 
@@ -77,7 +75,6 @@ display: none;
 `};
 `
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
-  const { account, chainId, library } = useActiveWeb3React()
   const token0 = stakingInfo.token0
   const token1 = stakingInfo.token1
   const rewardToken = stakingInfo.rewardToken
@@ -89,6 +86,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   // get the color of the token
   const token = currency0.isNative ? token1 : token0
   const backgroundColor = useColor(token)
+  const index = stakingInfo.index
   return (
     <Wrapper showBackground={false} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -104,7 +102,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         <ThemedText.White fontWeight={500} fontSize={24}>
           {fee}%
         </ThemedText.White>
-        <StyledInternalLink to={`/stake/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/stake/${index.toString()}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" $borderRadius="8px">
             <Trans>Deposit</Trans>
           </ButtonPrimary>
@@ -115,7 +113,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         <RowBetween>
           <StyledDiv>
             <StatText style={{ textAlign: 'center', float: left, fontSize: '20px', marginRight: '8px' }}>
-              <Trans>Reward:{'  '}</Trans>
+              <Trans>Reward:</Trans>
             </StatText>
             <CurrencyLogo style={{ marginRight: '0.5rem', float: left }} currency={rewardToken} size={'24px'} />
             <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '20px' }}>
@@ -123,22 +121,23 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             </ThemedText.White>
           </StyledDiv>
           <ThemedText.White>
-            <Trans>Minimum Duration</Trans>
-            {'  '}:{'  '}
+            {stakingInfo.minDuration}
             <Trans>day</Trans>
           </ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
-            <Trans>
-              Staked {'  '}: {'  '} {numberOfStakes}
-            </Trans>
+            <Trans>Staked</Trans>
+            {'  '}: {'  '}
+            {numberOfStakes.toNumber()}
           </ThemedText.White>
           <ThemedText.White>
             {stakingInfo ? (
-              <Trans>
-                Pool Rate {'  '}: {'  '} {numFixed(stakingInfo?.outputDaily, 18)}/day
-              </Trans>
+              <>
+                <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
+                {'  '}/{'  '}
+                <Trans>day</Trans>
+              </>
             ) : (
               '-'
             )}
