@@ -129,7 +129,7 @@ msgstr "天"
 
 #: src/components/stake/PoolCard.tsx
 msgid "MinDuration"
-msgstr "鎖定限期"
+msgstr "鎖定期"
 
 #: src/components/earn/UnstakingModal.tsx
 msgid "UNSTAKE"

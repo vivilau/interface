@@ -1504,7 +1504,7 @@ msgstr "激励池产出"
 
 #: src/pages/Stake/Manage.tsx
 msgid "Minimum Duration"
-msgstr "锁定限"
+msgstr "锁定期"
 
 #: src/components/stake/PoolCard.tsx
 msgid "Pool Rate   :    {0}/day"
