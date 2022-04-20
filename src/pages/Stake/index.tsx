@@ -12,12 +12,18 @@ import { RowBetween } from '../../components/Row'
 import PoolCard from '../../components/stake/PoolCard'
 import { ExternalLink, ThemedText } from '../../theme'
 const PageWrapper = styled(AutoColumn)`
-  max-width: 640px;
+  max-width: 870px;
   width: 100%;
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+  max-width: 800px;
+`};
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+max-width: 500px;
+`};
 `
 
 const TopSection = styled(AutoColumn)`
-  max-width: 720px;
+  max-width: 870px;
   width: 100%;
 `
 

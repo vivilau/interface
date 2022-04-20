@@ -2,12 +2,15 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
+import { RowBetween, RowFixed } from 'components/Row'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useStakingContract } from 'hooks/useContract'
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
+import { dateFormat, numFixed } from 'utils/numberHelper'
 
-import { StakingInfo } from '../../state/stake/hooks copy'
+import { DepositInfo, StakingInfo } from '../../state/stake/hooks copy'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
@@ -15,7 +18,6 @@ import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
-import { RowBetween } from '../Row'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -26,32 +28,24 @@ interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
-  tokenId: number | undefined
-  liquidity: number | undefined
-  rewards: number | undefined
-  reload: () => void
-  poolId: string
+  depositInfo: DepositInfo | undefined
 }
 
-export default function UnstakingModal({
-  isOpen,
-  onDismiss,
-  stakingInfo,
-  tokenId,
-  liquidity,
-  rewards,
-  reload,
-  poolId,
-}: StakingModalProps) {
+export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, depositInfo }: StakingModalProps) {
   const { account } = useActiveWeb3React()
-
+  const tokenId = depositInfo?.tokenid
+  const poolId = depositInfo?.incentiveId
+  const liquidity = numFixed(depositInfo?.liquidity, 18)
+  const rewards = numFixed(depositInfo?.reward, 18)
+  // const blockTime = useCurrentBlockTimestamp()
+  // console.error('time', blockTime)
+  // const expired =
   // monitor call to help UI loading state
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
   function wrappedOndismiss() {
-    if (hash) reload()
     setHash(undefined)
     setAttempting(false)
     onDismiss()
@@ -84,7 +78,13 @@ export default function UnstakingModal({
   if (attempting) {
     error = error ?? <Trans>Unstaking... </Trans>
   }
-
+  const blockTime = useCurrentBlockTimestamp()
+  const date =
+    stakingInfo &&
+    depositInfo &&
+    depositInfo?.startTime.add(BigNumber.from(stakingInfo.minDuration ?? 0).mul(60 * 60 * 24))
+  const expire = date && blockTime && blockTime.gt(date)
+  const expireDate = !expire && date && dateFormat(date)
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOndismiss} maxHeight={90}>
       {!attempting && !hash && (
@@ -95,25 +95,48 @@ export default function UnstakingModal({
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOndismiss} />
           </RowBetween>
-          {liquidity ? (
-            <AutoColumn justify="center" gap="md">
-              <ThemedText.Body fontWeight={600} fontSize={36}>
-                {liquidity}
-              </ThemedText.Body>
+          {liquidity && expire ? (
+            <RowBetween>
               <ThemedText.Body>
                 <Trans>Deposited liquidity:</Trans>
               </ThemedText.Body>
-            </AutoColumn>
+              <RowFixed>
+                <ThemedText.Body>{liquidity}</ThemedText.Body>
+              </RowFixed>
+            </RowBetween>
           ) : undefined}
-          {rewards ? (
-            <AutoColumn justify="center" gap="md">
-              <ThemedText.Body fontWeight={600} fontSize={36}>
-                {rewards}
-              </ThemedText.Body>
+          {rewards && expire ? (
+            <RowBetween>
               <ThemedText.Body>
                 <Trans>Unclaimed OPC</Trans>
+                {':'}
               </ThemedText.Body>
-            </AutoColumn>
+              <RowFixed>
+                <ThemedText.Body>{rewards}</ThemedText.Body>
+              </RowFixed>
+            </RowBetween>
+          ) : undefined}
+          {!expire ? (
+            <>
+              <RowBetween>
+                <ThemedText.Body>
+                  <Trans>Status:</Trans>
+                </ThemedText.Body>
+                <RowFixed>
+                  <ThemedText.Body>
+                    <Trans>not expired</Trans>
+                  </ThemedText.Body>
+                </RowFixed>
+              </RowBetween>
+              <RowBetween>
+                <ThemedText.Body>
+                  <Trans>Expire date:</Trans>
+                </ThemedText.Body>
+                <RowFixed>
+                  <ThemedText.Body>{expireDate}</ThemedText.Body>
+                </RowFixed>
+              </RowBetween>
+            </>
           ) : undefined}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
             {/* <Trans>When you unstake, your liquidity is removed from the mining pool.</Trans> */}
@@ -141,9 +164,6 @@ export default function UnstakingModal({
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
-              <Trans>Withdrew !</Trans>
-            </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
               <Trans>Claimed OPC!</Trans>
             </ThemedText.Body>

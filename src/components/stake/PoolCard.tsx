@@ -1,16 +1,16 @@
 import { Trans } from '@lingui/macro'
 import { left, right } from '@popperjs/core'
-import { ButtonPrimary } from 'components/Button'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { Link } from 'react-router-dom'
 import { StakingInfo } from 'state/stake/hooks copy'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
 import { unwrappedToken } from 'utils/unwrappedToken'
 
 import { useColor } from '../../hooks/useColor'
-import { StyledInternalLink, ThemedText } from '../../theme'
+import { ThemedText } from '../../theme'
 import { Break, CardBGImage, CardNoise } from '../earn/styled'
 import { RowBetween } from '../Row'
 
@@ -88,82 +88,96 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const backgroundColor = useColor(token)
   const index = stakingInfo.index
   return (
-    <Wrapper showBackground={false} bgColor={backgroundColor}>
-      <CardBGImage desaturate />
-      <CardNoise />
+    <Link to={`/stake/${index.toString()}`} style={{ textDecoration: 'none' }}>
+      <Wrapper showBackground={false} bgColor={backgroundColor}>
+        <CardBGImage desaturate />
+        <CardNoise />
 
-      <TopSection>
-        <div style={{ marginLeft: '10px' }}>
-          <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
-        </div>
-        <ThemedText.White fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-          {currency0.symbol}-{currency1.symbol}
-        </ThemedText.White>
-        <ThemedText.White fontWeight={500} fontSize={24}>
-          {fee}%
-        </ThemedText.White>
-        <StyledInternalLink to={`/stake/${index.toString()}`} style={{ width: '100%' }}>
-          <ButtonPrimary padding="8px" $borderRadius="8px">
-            <Trans>Deposit</Trans>
-          </ButtonPrimary>
-        </StyledInternalLink>
-      </TopSection>
+        <TopSection>
+          <div style={{ marginLeft: '10px' }}>
+            <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
+          </div>
+          <ThemedText.White style={{ marginLeft: '8px' }}>
+            {currency0.symbol}-{currency1.symbol}
+          </ThemedText.White>
+          <ThemedText.White>{fee}%</ThemedText.White>
+          <></>
+        </TopSection>
 
-      <StatContainer>
-        <RowBetween>
-          <StyledDiv>
-            <StatText style={{ textAlign: 'center', float: left, fontSize: '20px', marginRight: '8px' }}>
-              <Trans>Reward:</Trans>
-            </StatText>
-            <CurrencyLogo style={{ marginRight: '0.5rem', float: left }} currency={rewardToken} size={'24px'} />
-            <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '20px' }}>
-              <Trans>{rewardToken ? rewardToken?.symbol : stakingInfo.rewardToken}</Trans>
+        <StatContainer>
+          <RowBetween>
+            <StyledDiv>
+              <StatText style={{ textAlign: 'center', float: left, marginRight: '8px' }}>
+                <Trans>Reward:</Trans>
+              </StatText>
+              <CurrencyLogo style={{ marginRight: '0.5rem', float: left }} currency={rewardToken} size={'18px'} />
+              <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '20px' }}>
+                <Trans>{rewardToken ? rewardToken?.symbol : stakingInfo.rewardToken}</Trans>
+              </ThemedText.White>
+            </StyledDiv>
+            <ThemedText.White>
+              <Trans>Minimum Duration</Trans>
+              {'  :  '}
+              {stakingInfo.minDuration}
+              <Trans>day</Trans>
             </ThemedText.White>
-          </StyledDiv>
-          <ThemedText.White>
-            {stakingInfo.minDuration}
-            <Trans>day</Trans>
-          </ThemedText.White>
-        </RowBetween>
-        <RowBetween>
-          <ThemedText.White>
-            <Trans>Staked</Trans>
-            {'  '}: {'  '}
-            {numberOfStakes.toNumber()}
-          </ThemedText.White>
-          <ThemedText.White>
-            {stakingInfo ? (
-              <>
-                <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
-                {'  '}/{'  '}
-                <Trans>day</Trans>
-              </>
-            ) : (
-              '-'
-            )}
-          </ThemedText.White>
-        </RowBetween>
-      </StatContainer>
+            <ThemedText.White>
+              <Trans>Staked</Trans>
+              {'  '}: {'  '}
+              {numberOfStakes.toNumber()}
+            </ThemedText.White>
+            <ThemedText.White>
+              {stakingInfo ? (
+                <>
+                  <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
+                  {'  '}/{'  '}
+                  <Trans>day</Trans>
+                </>
+              ) : (
+                '-'
+              )}
+            </ThemedText.White>
+          </RowBetween>
+          {/* <RowBetween>
+            <ThemedText.White>
+              <Trans>Staked</Trans>
+              {'  '}: {'  '}
+              {numberOfStakes.toNumber()}
+            </ThemedText.White>
+            <ThemedText.White>
+              {stakingInfo ? (
+                <>
+                  <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
+                  {'  '}/{'  '}
+                  <Trans>day</Trans>
+                </>
+              ) : (
+                '-'
+              )}
+            </ThemedText.White>
+          </RowBetween> */}
+        </StatContainer>
 
-      {false && (
-        <>
-          <Break />
-          <BottomSection showBackground={false}>
-            <ThemedText.Black color={'white'} fontWeight={500}>
-              <span>
-                <Trans>Your rate</Trans>
-              </span>
-            </ThemedText.Black>
+        {false && (
+          <>
+            <Break />
+            <BottomSection showBackground={false}>
+              <ThemedText.Black color={'white'} fontWeight={500}>
+                <span>
+                  <Trans>Your rate</Trans>
+                </span>
+              </ThemedText.Black>
 
-            <ThemedText.Black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
-              <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
-                ⚡
-              </span>
-              {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPC/day</Trans> : '-'}
-            </ThemedText.Black>
-          </BottomSection>
-        </>
-      )}
-    </Wrapper>
+              <ThemedText.Black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+                <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
+                  ⚡
+                </span>
+                {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPC/day</Trans> : '-'}
+              </ThemedText.Black>
+            </BottomSection>
+          </>
+        )}
+      </Wrapper>
+    </Link>
   )
 }

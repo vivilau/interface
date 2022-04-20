@@ -3,7 +3,7 @@ import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import { NonfungiblePositionManager } from '@uniswap/v3-sdk'
-import { RowBetween } from 'components/Row'
+import { RowBetween, RowFixed } from 'components/Row'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useV3NFTPositionManagerContract } from 'hooks/useContract'
 import { ReactNode, useCallback, useState } from 'react'
@@ -125,7 +125,6 @@ export default function StakingModal({
   if (attempting) {
     error = error ?? <Trans>Staking... </Trans>
   }
-
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
       {!attempting && !hash && (
@@ -137,16 +136,20 @@ export default function StakingModal({
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
           <HypotheticalRewardRate dim={false}>
-            <div>
-              <ThemedText.Black fontWeight={600}>
-                <Trans>Token Rate</Trans>
-              </ThemedText.Black>
-            </div>
-
-            <ThemedText.Black>
-              {tokenRate}
-              <Trans> OPC / day</Trans>
-            </ThemedText.Black>
+            <RowBetween>
+              <div>
+                <ThemedText.Black>
+                  <Trans>Token Rate</Trans>
+                  {':'}
+                </ThemedText.Black>
+              </div>
+              <RowFixed>
+                <ThemedText.Black>
+                  {tokenRate}
+                  <Trans> OPC / day</Trans>
+                </ThemedText.Black>
+              </RowFixed>
+            </RowBetween>
           </HypotheticalRewardRate>
           <RowBetween>
             <ButtonError disabled={!!error} error={!!error} onClick={deposit}>

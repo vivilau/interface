@@ -1,13 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
 
 import { useStakingContract } from '../../hooks/useContract'
-import { StakingInfo } from '../../state/stake/hooks copy'
+import { StakingInfo, useClaimNum } from '../../state/stake/hooks copy'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
@@ -15,7 +14,7 @@ import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
-import { RowBetween } from '../Row'
+import { RowBetween, RowFixed } from '../Row'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -26,16 +25,13 @@ interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
-  claimRewards: BigNumber
 }
 
-export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, claimRewards }: StakingModalProps) {
+export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
   const { account } = useActiveWeb3React()
-  const rewards = useMemo(() => {
-    if (stakingInfo.rewardToken) numFixed(claimRewards, 18)
-    return 0
-  }, [claimRewards, stakingInfo.rewardToken])
-
+  const claimRewards = useClaimNum()
+  const rewards = numFixed(claimRewards, 18)
+  // console.error('rewards', rewards)
   // monitor call to help UI loading state
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
@@ -90,15 +86,16 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo, claim
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {rewards ? (
-            <AutoColumn justify="center" gap="md">
+          {claimRewards ? (
+            <RowBetween>
               <ThemedText.Body>
                 <Trans>Unclaimed OPC</Trans>
+                {':'}
               </ThemedText.Body>
-              <ThemedText.Body fontWeight={600} fontSize={36}>
-                {rewards}
-              </ThemedText.Body>
-            </AutoColumn>
+              <RowFixed>
+                <ThemedText.Body>{rewards}</ThemedText.Body>
+              </RowFixed>
+            </RowBetween>
           ) : undefined}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
             {/* <Trans>When you claim your wallet will receive the claimRewards.</Trans> */}
