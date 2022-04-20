@@ -16,6 +16,22 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/components/earn/UnstakingModal.tsx
+msgid "Status:"
+msgstr "状态："
+
+#: src/components/earn/UnstakingModal.tsx
+msgid "not expired"
+msgstr "未到期"
+
+#: src/components/earn/UnstakingModal.tsx
+msgid "Expire date:"
+msgstr "到期时间"
+
+#: src/pages/Swap/index.tsx
+msgid "Allow the Uniswap Protocol to use your {0}"
+msgstr "请授权合约使用你的 {0}代币"
+
 #: src/components/earn/StakingModal.tsx
 #: src/components/earn/StakingModal.tsx
 #: src/components/Header/index.tsx
@@ -24,7 +40,7 @@ msgid "Stake"
 msgstr "抵押"
 
 #: src/pages/Stake/Manage.tsx
-msgid "Your Total liquidity"
+msgid "Your Total Liquidity"
 msgstr "已抵押流动性"
 
 #: src/pages/Stake/Manage.tsx
@@ -39,6 +55,26 @@ msgstr "抵押 Token"
 #: src/pages/Stake/Manage.tsx
 msgid "Unstake"
 msgstr "赎回"
+
+#: src/components/earn/UnstakingModal.tsx
+msgid "unstake #{tokenId}"
+msgstr "赎回#{tokenId}"
+
+#: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/UnstakingModal.tsx
+msgid "Claiming {rewards} OPC"
+msgstr "收获 {rewards} OPC"
+
+
+#: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/UnstakingModal.tsx
+msgid "Claimed OPC!"
+msgstr "成功领取 OPC!"
+
+#: src/components/AccountDetails/TransactionSummary.tsx
+msgid "Claim OPC reward"
+msgstr "领取OPC奖励"
+
 
 #: src/components/stake/PoolCard.tsx
 msgid "Staked"
@@ -75,7 +111,7 @@ msgstr "天"
 
 #: src/components/stake/PoolCard.tsx
 msgid "MinDuration  :   {minDuration} day"
-msgstr "锁定限期  :   {minDuration} 天"
+msgstr "锁定期  :   {minDuration} 天"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
@@ -510,6 +546,11 @@ msgstr "正在领取UNI"
 msgid "Claiming {0} UNI"
 msgstr "正在领取 {0} UNI 代币"
 
+#: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/UnstakingModal.tsx
+msgid "Claiming "
+msgstr "正在领取"
+
 #: src/pages/AddLiquidity/index.tsx
 msgid "Clear All"
 msgstr "全部清除"
@@ -737,8 +778,12 @@ msgid "Deposit UNI-V2 LP Tokens"
 msgstr "充入 UNI-V2 流动池代币"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
+msgid "UnStake"
+msgstr "赎回流动性Token"
+
+#: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Deposit liquidity"
-msgstr "充入流动资金"
+msgstr "抵押流动性Token"
 
 #: src/components/NetworkAlert/NetworkAlert.tsx
 msgid "Deposit tokens to the {label} network."
@@ -758,7 +803,7 @@ msgstr "已充入 {0} UNI-V2 流动池代币"
 
 #: src/components/earn/StakingModal.tsx
 msgid "Depositing Liquidity"
-msgstr "充入流动资金"
+msgstr "成功抵押流动性Token"
 
 #: src/pages/Vote/VotePage.tsx
 msgid "Description"
@@ -1455,11 +1500,11 @@ msgstr "已找到流动池！"
 
 #: src/pages/Earn/Manage.tsx
 msgid "Pool Rate"
-msgstr "流动池费率"
+msgstr "激励池产出"
 
 #: src/pages/Stake/Manage.tsx
 msgid "Minimum Duration"
-msgstr "锁定期限"
+msgstr "锁定限"
 
 #: src/components/stake/PoolCard.tsx
 msgid "Pool Rate   :    {0}/day"

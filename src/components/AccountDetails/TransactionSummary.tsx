@@ -71,15 +71,16 @@ function FormattedCurrencyAmountManaged({
 }
 
 function ClaimSummary({ info: { recipient, uniAmountRaw } }: { info: ClaimTransactionInfo }) {
-  const { ENSName } = useENSName()
-  return typeof uniAmountRaw === 'string' ? (
-    <Trans>
-      Claim <FormattedCurrencyAmount rawAmount={uniAmountRaw} symbol={'UNI'} decimals={18} sigFigs={4} /> for{' '}
-      {ENSName ?? recipient}
-    </Trans>
-  ) : (
-    <Trans>Claim UNI reward for {ENSName ?? recipient}</Trans>
-  )
+  // const { ENSName } = useENSName()
+  // return typeof uniAmountRaw === 'string' ? (
+  //   <Trans>
+  //     Claim <FormattedCurrencyAmount rawAmount={uniAmountRaw} symbol={'UNI'} decimals={18} sigFigs={4} /> for{' '}
+  //     {ENSName ?? recipient}
+  //   </Trans>
+  // ) : (
+  //   <Trans>Claim OPC reward for {ENSName ?? recipient}</Trans>
+  // )
+  return <Trans>Claim OPC reward </Trans>
 }
 
 function SubmitProposalTransactionSummary(_: { info: SubmitProposalTransactionInfo }) {
