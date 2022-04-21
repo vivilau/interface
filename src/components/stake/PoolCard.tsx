@@ -3,7 +3,9 @@ import { left, right } from '@popperjs/core'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { RowBetween } from 'components/Row'
 import { Link } from 'react-router-dom'
+import { Text } from 'rebass'
 import { StakingInfo } from 'state/stake/hooks copy'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
@@ -12,16 +14,13 @@ import { unwrappedToken } from 'utils/unwrappedToken'
 import { useColor } from '../../hooks/useColor'
 import { ThemedText } from '../../theme'
 import { Break, CardBGImage, CardNoise } from '../earn/styled'
-import { RowBetween } from '../Row'
 
 const StatContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  margin: 1rem;
   // ${({ theme }) => theme.mediaWidth.upToSmall`
   // display: none;
 `};
@@ -45,13 +44,26 @@ const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
 
 const TopSection = styled.div`
   display: grid;
-  grid-template-columns: 48px 1fr 2fr 120px;
+  grid-template-columns: 48px 1fr 4rem;
   grid-gap: 0px;
   align-items: center;
   padding: 1rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 30px 150px 2fr 60px;
+    grid-template-columns: 30px 1fr 70px;
+  `};
+`
+
+const CustomRow = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr 2fr;
+  grid-gap: 0px;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  z-index: 1;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    grid-template-columns: 130px 1fr 150px;
   `};
 `
 
@@ -66,14 +78,36 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
   z-index: 1;
 `
 const StyledDiv = styled.div`
-  align-items: center;
+  align-items: left;
   text-align: center;
-`
-const StatText = styled(ThemedText.White)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
-display: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  `};
+`
+const StatText = styled(Text)`
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  opacity: 0.8;
+  float: left;
+  height: 1.2rem;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  font-size: 14px;
+  height:1.6rem;
 `};
 `
+const Symbol = styled(Text)`
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  float: left;
+  opacity: 0.7;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  display: none;
+`};
+`
+
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
   const token0 = stakingInfo.token0
   const token1 = stakingInfo.token1
@@ -97,65 +131,57 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <div style={{ marginLeft: '10px' }}>
             <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
           </div>
-          <ThemedText.White style={{ marginLeft: '8px' }}>
+          <ThemedText.White style={{ marginLeft: '8px' }} fontSize="18px">
             {currency0.symbol}-{currency1.symbol}
+            {'  '}
+            {'  '}
+            {fee}%
           </ThemedText.White>
-          <ThemedText.White>{fee}%</ThemedText.White>
-          <></>
+          <div style={{ marginRight: '8px' }}>
+            <CurrencyLogo style={{ marginRight: '0.2rem', float: left }} currency={rewardToken} size={'18px'} />
+            <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '16px' }}>
+              <Trans>{rewardToken?.symbol}</Trans>
+            </ThemedText.White>
+          </div>
         </TopSection>
 
         <StatContainer>
           <RowBetween>
             <StyledDiv>
-              <StatText style={{ textAlign: 'center', float: left, marginRight: '8px' }}>
-                <Trans>Reward:</Trans>
+              <StatText>
+                <Trans>Staked</Trans>
               </StatText>
-              <CurrencyLogo style={{ marginRight: '0.5rem', float: left }} currency={rewardToken} size={'18px'} />
-              <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '20px' }}>
-                <Trans>{rewardToken ? rewardToken?.symbol : stakingInfo.rewardToken}</Trans>
-              </ThemedText.White>
+              <Symbol>{':'}&nbsp; &nbsp;</Symbol>
+              <StatText>{numberOfStakes.toNumber()}</StatText>
             </StyledDiv>
-            <ThemedText.White>
-              <Trans>Minimum Duration</Trans>
-              {'  :  '}
-              {stakingInfo.minDuration}
-              <Trans>day</Trans>
-            </ThemedText.White>
-            <ThemedText.White>
-              <Trans>Staked</Trans>
-              {'  '}: {'  '}
-              {numberOfStakes.toNumber()}
-            </ThemedText.White>
-            <ThemedText.White>
-              {stakingInfo ? (
-                <>
-                  <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
-                  {'  '}/{'  '}
-                  <Trans>day</Trans>
-                </>
-              ) : (
-                '-'
-              )}
-            </ThemedText.White>
+            <StyledDiv>
+              <StatText style={{ float: left, marginLeft: '0.5rem' }}>
+                <Trans>Min Duration</Trans>
+              </StatText>
+              <Symbol>{':'}&nbsp; &nbsp;</Symbol>
+              <StatText>
+                {stakingInfo.minDuration}
+                <Trans>day</Trans>
+              </StatText>
+            </StyledDiv>
+            <StyledDiv>
+              <StatText>
+                <Trans>Pool Rate</Trans>
+              </StatText>
+              <Symbol>{':'}&nbsp; &nbsp;</Symbol>
+              <StatText>
+                {stakingInfo && (
+                  <>
+                    {numFixed(stakingInfo?.outputDaily, 18)}
+                    &nbsp;
+                    {rewardToken?.symbol}
+                    {'  '}/{'  '}
+                    <Trans>day</Trans>
+                  </>
+                )}
+              </StatText>
+            </StyledDiv>
           </RowBetween>
-          {/* <RowBetween>
-            <ThemedText.White>
-              <Trans>Staked</Trans>
-              {'  '}: {'  '}
-              {numberOfStakes.toNumber()}
-            </ThemedText.White>
-            <ThemedText.White>
-              {stakingInfo ? (
-                <>
-                  <Trans>Pool Rate</Trans> {'  '}: {'  '} <Trans>{numFixed(stakingInfo?.outputDaily, 18)}</Trans>
-                  {'  '}/{'  '}
-                  <Trans>day</Trans>
-                </>
-              ) : (
-                '-'
-              )}
-            </ThemedText.White>
-          </RowBetween> */}
         </StatContainer>
 
         {false && (

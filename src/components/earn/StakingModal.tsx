@@ -135,22 +135,31 @@ export default function StakingModal({
             </ThemedText.MediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          <HypotheticalRewardRate dim={false}>
-            <RowBetween>
-              <div>
-                <ThemedText.Black>
-                  <Trans>Token Rate</Trans>
-                  {':'}
-                </ThemedText.Black>
-              </div>
-              <RowFixed>
-                <ThemedText.Black>
-                  {tokenRate}
-                  <Trans> OPC / day</Trans>
-                </ThemedText.Black>
-              </RowFixed>
-            </RowBetween>
-          </HypotheticalRewardRate>
+          <RowBetween>
+            <div>
+              <ThemedText.Black>
+                <Trans>Stake Token</Trans>
+                {':'}
+              </ThemedText.Black>
+            </div>
+            <RowFixed>
+              <ThemedText.Black>#{tokenId}</ThemedText.Black>
+            </RowFixed>
+          </RowBetween>
+          <RowBetween>
+            <div>
+              <ThemedText.Black>
+                <Trans>Estimated Earning</Trans>
+                {':'}
+              </ThemedText.Black>
+            </div>
+            <RowFixed>
+              <ThemedText.Black>
+                {tokenRate}
+                <Trans> OPC / day</Trans>
+              </ThemedText.Black>
+            </RowFixed>
+          </RowBetween>
           <RowBetween>
             <ButtonError disabled={!!error} error={!!error} onClick={deposit}>
               {error ?? <Trans>Stake</Trans>}

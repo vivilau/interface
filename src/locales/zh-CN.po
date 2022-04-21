@@ -39,6 +39,18 @@ msgstr "请授权合约使用你的 {0}代币"
 msgid "Stake"
 msgstr "抵押"
 
+#: src/components/stake/RangeBadge.tsx
+msgid "Staked"
+msgstr "已抵押"
+
+#: src/components/stake/RangeBadge.tsx
+msgid "UnStaked"
+msgstr "未抵押"
+
+#: src/components/stake/RangeBadge.tsx
+msgid "Not expired"
+msgstr "未到期"
+
 #: src/pages/Stake/Manage.tsx
 msgid "Your Total Liquidity"
 msgstr "已抵押流动性"
@@ -49,7 +61,7 @@ msgstr "未领取收益"
 
 #: src/components/earn/StakingModal.tsx
 msgid "Stake Token"
-msgstr "抵押 Token"
+msgstr "抵押代币"
 
 #: src/components/earn/UnstakingModal.tsx
 #: src/pages/Stake/Manage.tsx
@@ -80,6 +92,7 @@ msgstr "领取OPC奖励"
 msgid "Staked"
 msgstr "已抵押"
 
+
 #: src/components/earn/StakingModal.tsx
 msgid "Staked {tokenId}"
 msgstr "已抵押 {tokenId}"
@@ -93,8 +106,8 @@ msgid "Reward:"
 msgstr "奖励:"
 
 #: src/components/earn/StakingModal.tsx
-msgid "Token Rate"
-msgstr "Token 产出"
+msgid "Estimated Earning"
+msgstr "预计收益"
 
 
 #: src/pages/Stake/Manage.tsx
@@ -1504,6 +1517,10 @@ msgstr "激励池产出"
 
 #: src/pages/Stake/Manage.tsx
 msgid "Minimum Duration"
+msgstr "锁定期"
+
+#: src/pages/Stake/PoolCard.tsx
+msgid "Min Duration"
 msgstr "锁定期"
 
 #: src/components/stake/PoolCard.tsx

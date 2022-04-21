@@ -293,8 +293,8 @@ export default function Menu() {
                     </ToggleMenuItem>
                     {showUNIClaimOption && (
                       <UNIbutton padding="8px 16px" width="100%" $borderRadius="12px" mt="0.5rem">
-                        <ButtonExternalLink color="white" to={'/stake'}>
-                          <Trans>Claim UNI</Trans>
+                        <ButtonExternalLink color="white" to={'/bridge'}>
+                          <Trans>Wrap FIl Token</Trans>
                         </ButtonExternalLink>
                       </UNIbutton>
                     )}

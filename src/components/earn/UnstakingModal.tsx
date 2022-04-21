@@ -71,13 +71,6 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
         })
     }
   }
-  let error: ReactNode | undefined
-  if (!account) {
-    error = <Trans>Connect a wallet</Trans>
-  }
-  if (attempting) {
-    error = error ?? <Trans>Unstaking... </Trans>
-  }
   const blockTime = useCurrentBlockTimestamp()
   const date =
     stakingInfo &&
@@ -85,6 +78,15 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
     depositInfo?.startTime.add(BigNumber.from(stakingInfo.minDuration ?? 0).mul(60 * 60 * 24))
   const expire = date && blockTime && blockTime.gt(date)
   const expireDate = !expire && date && dateFormat(date)
+  let error: ReactNode | undefined
+  if (!account) {
+    error = <Trans>Connect a wallet</Trans>
+  }
+  if (attempting) {
+    error = error ?? <Trans>Unstaking... </Trans>
+  }
+  if (!expire) error = error ?? <Trans>not expired </Trans>
+
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOndismiss} maxHeight={90}>
       {!attempting && !hash && (

@@ -91,9 +91,25 @@ msgstr "獎勵:"
 msgid "Staked"
 msgstr "已抵押"
 
+#: src/components/stake/RangeBadge.tsx
+msgid "Staked"
+msgstr "已抵押"
+
+#: src/components/stake/RangeBadge.tsx
+msgid "UnStaked"
+msgstr "未抵押"
+
+#: src/components/stake/RangeBadge.tsx
+msgid "Not expired"
+msgstr "未到期"
+
 #: src/components/earn/StakingModal.tsx
 msgid "Staked {tokenId}"
 msgstr "已抵押 {tokenId}"
+
+#: src/pages/Stake/PoolCard.tsx
+msgid "Min Duration"
+msgstr "鎖定期"
 
 #: src/components/stake/PoolCard.tsx
 msgid "Minimum Duration"
@@ -103,9 +119,11 @@ msgstr "鎖定期"
 msgid "Pool Rate   :    {0} / day"
 msgstr "激勵池產出   :    {0} / day"
 
+
 #: src/components/earn/StakingModal.tsx
-msgid "Token Rate"
-msgstr "Token 產出"
+msgid "Estimated Earning"
+msgstr "預計收益"
+
 
 #: src/components/earn/StakingModal.tsx
 msgid "{0} OPC / day"
