@@ -109,7 +109,7 @@ const Proposal = styled(TopSection)`
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
   grid-template-columns: 60px 1fr 70px;
-  padding-right: 1px;
+  padding-right: 8px;
   `}
 `
 const Clou = styled(TopSection)`
@@ -140,7 +140,8 @@ const Proposal2 = styled(TopSection)`
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
   grid-template-columns: 60px 1fr  70px;  
-  padding-right: 1px;
+  padding-right: 8px;
+  margin-Top:0.5rem;
   `}
 `
 const ProposalNumberButton = styled(Button)`
@@ -160,6 +161,9 @@ const ProposalTitle = styled.span`
   white-space: initial;
   word-wrap: break-word;
   padding-right: 8px;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    font-size: 16px;
+  `};
 `
 
 const WrapSmall = styled(RowBetween)`
@@ -531,26 +535,24 @@ export default function Manage({
         })}
         {rewardInfos?.map((p, key) => {
           return (
-            <div key={key} style={{ textDecoration: 'none', height: '4rem' }} onClick={() => Unstake(p)}>
-              <Proposal2 key={key}>
-                <ProposalNumber as={Link} to={`/pool/${p?.tokenid?.toString()}`} style={{ marginRight: '12px ' }}>
-                  #{p?.tokenid?.toString()}
-                </ProposalNumber>
-                <Clou>
-                  <div style={{ float: left }}>
-                    <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
-                    <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime)}</ProposalTitle>
-                  </div>
-                  <div style={{ float: right }}>
-                    <img src={rewardIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
-                    <ProposalTitle style={{ float: left }}>
-                      {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
-                    </ProposalTitle>
-                  </div>
-                </Clou>
-                <StatusBadge staked={false} inRange={expire && expire[key]} />
-              </Proposal2>
-            </div>
+            <Proposal2 key={key} style={{ textDecoration: 'none', height: '4rem' }} onClick={() => Unstake(p)}>
+              <ProposalNumber as={Link} to={`/pool/${p?.tokenid?.toString()}`} style={{ marginRight: '12px ' }}>
+                #{p?.tokenid?.toString()}
+              </ProposalNumber>
+              <Clou>
+                <div style={{ float: left }}>
+                  <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime)}</ProposalTitle>
+                </div>
+                <div style={{ float: right }}>
+                  <img src={rewardIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <ProposalTitle style={{ float: left }}>
+                    {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
+                  </ProposalTitle>
+                </div>
+              </Clou>
+              <StatusBadge staked={false} inRange={expire && expire[key]} />
+            </Proposal2>
           )
         })}
       </TopSection>
