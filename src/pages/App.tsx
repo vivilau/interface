@@ -130,7 +130,7 @@ export default function App() {
 
                 <Route exact strict path="/migrate/v2" component={MigrateV2} />
                 <Route exact strict path="/migrate/v2/:address" component={MigrateV2Pair} />
-
+                <Route exact strict path="/bridge" />
                 <Route component={RedirectPathToSwapOnly} />
               </Switch>
             </Suspense>
