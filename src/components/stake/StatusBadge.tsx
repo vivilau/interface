@@ -58,7 +58,7 @@ export default function StatusBadge({
         <div style={{ alignItems: 'center' }}>
           <BadgeStake>
             <BadgeText>
-              <Trans>Staked</Trans>
+              <Trans>UnStaked</Trans>
             </BadgeText>
           </BadgeStake>
           <BadgeText style={{ float: 'right', paddingTop: '4px' }}>
@@ -70,7 +70,7 @@ export default function StatusBadge({
         <>
           <BadgeUnStake>
             <BadgeText>
-              <Trans>UnStaked</Trans>
+              <Trans>Staked</Trans>
             </BadgeText>
           </BadgeUnStake>
           <BadgeText style={{ float: 'right', paddingTop: '4px' }}>
