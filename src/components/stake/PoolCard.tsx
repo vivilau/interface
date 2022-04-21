@@ -87,13 +87,12 @@ const StyledDiv = styled.div`
 `
 const StatText = styled(Text)`
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   color: white;
   opacity: 0.8;
   float: left;
   height: 1.2rem;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-  font-size: 14px;
   height:1.6rem;
 `};
 `
@@ -138,7 +137,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             {fee}%
           </ThemedText.White>
           <div style={{ marginRight: '8px' }}>
-            <CurrencyLogo style={{ marginRight: '0.2rem', float: left }} currency={rewardToken} size={'18px'} />
+            <CurrencyLogo style={{ float: left }} currency={rewardToken} size={'18px'} />
             <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '16px' }}>
               <Trans>{rewardToken?.symbol}</Trans>
             </ThemedText.White>
@@ -159,10 +158,16 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 <Trans>Min Duration</Trans>
               </StatText>
               <Symbol>{':'}&nbsp; &nbsp;</Symbol>
-              <StatText>
-                {stakingInfo.minDuration}
-                <Trans>day</Trans>
-              </StatText>
+              {stakingInfo.minDuration ? (
+                <StatText>
+                  {stakingInfo.minDuration}
+                  <Trans>day</Trans>
+                </StatText>
+              ) : (
+                <StatText>
+                  <Trans>TTL</Trans>
+                </StatText>
+              )}
             </StyledDiv>
             <StyledDiv>
               <StatText>

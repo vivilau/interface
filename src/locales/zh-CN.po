@@ -16,6 +16,10 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/components/Menu/index.tsx
+msgid "Wrap FIl Token"
+msgstr "兑换Fil代币"
+
 #: src/components/earn/UnstakingModal.tsx
 msgid "Status:"
 msgstr "状态："
@@ -39,13 +43,18 @@ msgstr "请授权合约使用你的 {0}代币"
 msgid "Stake"
 msgstr "抵押"
 
+#: src/components/stake/PoolCard.tsx
+#: src/pages/Stake/Manage.tsx
+msgid "TTL"
+msgstr "活期"
+
 #: src/components/stake/RangeBadge.tsx
 msgid "Staked"
-msgstr "已抵押"
+msgstr "可赎回"
 
 #: src/components/stake/RangeBadge.tsx
 msgid "UnStaked"
-msgstr "未抵押"
+msgstr "可抵押"
 
 #: src/components/stake/RangeBadge.tsx
 msgid "Not expired"

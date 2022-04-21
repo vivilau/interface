@@ -88,10 +88,8 @@ const TopSection = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
 `
-const ButtonItem = styled(ButtonEmpty)`
-  text-align: left;
-`
-const Proposal = styled(TopSection)`
+
+const Proposal = styled(ButtonEmpty)`
   padding: 0.75rem 1rem;
   margin-top: 1rem;
   border-radius: 12px;
@@ -101,7 +99,12 @@ const Proposal = styled(TopSection)`
   z-index: 1;
   align-items: center;
   text-align: left;
+  cursor: pointer;
   outline: none;
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+  }
+
   grid-template-columns: 60px 1fr 120px;
   color: ${({ theme }) => theme.text1};
   text-decoration: none;
@@ -122,7 +125,7 @@ const Clou = styled(TopSection)`
 grid-template-columns:  1fr;
 `}
 `
-const Proposal2 = styled(TopSection)`
+const Proposal2 = styled(ButtonEmpty)`
   padding: 0.75rem 1rem;
   margin-top: 1rem;
   border-radius: 12px;
@@ -132,7 +135,12 @@ const Proposal2 = styled(TopSection)`
   z-index: 1;
   align-items: center;
   text-align: left;
+  cursor: pointer;
   outline: none;
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+  }
+
   grid-template-columns: 60px 1fr 120px;
   color: ${({ theme }) => theme.text1};
   text-decoration: none;
@@ -338,7 +346,6 @@ export default function Manage({
       depositInfo?.startTime.add(BigNumber.from(stakingInfo.minDuration ?? 0).mul(60 * 60 * 24))
     )
   const expire = date && blockTime && date.map((d) => blockTime.gt(d))
-  const expireDate = !expire?.length && date && date.map((d) => dateFormat(d))
   function PositionsLoadingPlaceholder() {
     return (
       <LoadingRows>
@@ -444,8 +451,16 @@ export default function Manage({
                   <ThemedText.White fontWeight={500} style={{ opacity: '0.6' }}>
                     <Trans>Minimum Duration</Trans>
                     {'  :  '}
-                    {stakingInfo?.minDuration ?? 0}
-                    <Trans>Day</Trans>
+                    {stakingInfo?.minDuration ? (
+                      <>
+                        {stakingInfo?.minDuration}
+                        <Trans>day</Trans>
+                      </>
+                    ) : (
+                      <>
+                        <Trans>TTL</Trans>
+                      </>
+                    )}
                   </ThemedText.White>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
@@ -487,7 +502,7 @@ export default function Manage({
                     start={parseFloat(countUpRewardsPrevious)}
                     end={parseFloat(countUpRewards)}
                     thousandsSeparator={','}
-                    duration={1}
+                    duration={0.01}
                   />
                 </ThemedText.LargeHeader>
                 <ThemedText.Black fontSize={16} fontWeight={500}>
