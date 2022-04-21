@@ -49,11 +49,11 @@ msgid "TTL"
 msgstr "活期"
 
 #: src/components/stake/RangeBadge.tsx
-msgid "Staked"
+msgid "staked"
 msgstr "可赎回"
 
 #: src/components/stake/RangeBadge.tsx
-msgid "UnStaked"
+msgid "unstaked"
 msgstr "可抵押"
 
 #: src/components/stake/RangeBadge.tsx
