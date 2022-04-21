@@ -47,7 +47,10 @@ const TopSection = styled.div`
   grid-template-columns: 48px 1fr 4rem;
   grid-gap: 0px;
   align-items: center;
-  padding: 1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     grid-template-columns: 30px 1fr 65px;

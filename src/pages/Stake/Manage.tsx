@@ -128,7 +128,6 @@ const Clou = styled(TopSection)`
   align-items: center;
   grid-template-columns: 130px 1fr;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-grid-template-columns:  1fr;
 `}
 `
 const Proposal2 = styled(ButtonEmpty)`
@@ -570,13 +569,11 @@ export default function Manage({
               <Clou>
                 <div style={{ float: left }}>
                   <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
-                  <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime)}</ProposalTitle>
+                  <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime).substring(2)}</ProposalTitle>
                 </div>
                 <div style={{ float: right }}>
                   <img src={rewardIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
-                  <ProposalTitle style={{ float: left }}>
-                    {numFixed(p?.reward, 18)} {stakingInfo?.rewardToken?.symbol}
-                  </ProposalTitle>
+                  <ProposalTitle style={{ float: left }}>{numFixed(p?.reward, 18)}</ProposalTitle>
                 </div>
               </Clou>
               <StatusBadge staked={false} inRange={expire && expire[key]} />
