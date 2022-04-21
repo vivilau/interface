@@ -104,14 +104,20 @@ const Proposal = styled(ButtonEmpty)`
   &:hover {
     background-color: ${({ theme }) => darken(0.05, theme.bg2)};
   }
-
+  &:focus {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    text-decoration: none;
+  }
+  &:active {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    text-decoration: none;
+  }
   grid-template-columns: 60px 1fr 120px;
   color: ${({ theme }) => theme.text1};
-  text-decoration: none;
   padding-right: 25px;
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
-  grid-template-columns: 60px 1fr 70px;
+  grid-template-columns: 60px 1fr 85px;
   padding-right: 8px;
   `}
 `
@@ -137,13 +143,20 @@ const Proposal2 = styled(ButtonEmpty)`
   text-align: left;
   cursor: pointer;
   outline: none;
+  text-decoration: none;
   &:hover {
     background-color: ${({ theme }) => darken(0.05, theme.bg2)};
   }
-
+  &:focus {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    text-decoration: none;
+  }
+  &:active {
+    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    text-decoration: none;
+  }
   grid-template-columns: 60px 1fr 120px;
   color: ${({ theme }) => theme.text1};
-  text-decoration: none;
   padding-right: 25px;
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
