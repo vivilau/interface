@@ -3,11 +3,12 @@ import { Trans } from '@lingui/macro'
 import { left, right } from '@popperjs/core'
 import { Position } from '@uniswap/v3-sdk'
 import { OutlineCard } from 'components/Card'
+import CurrencyLogo from 'components/CurrencyLogo'
 import ClaimRewardModal from 'components/earn/ClaimRewardModal'
 import StakingModal from 'components/earn/StakingModal'
 import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/earn/styled'
 import UnstakingModal from 'components/earn/UnstakingModal'
-import { AutoRow, RowBetween } from 'components/Row'
+import { AutoRow, RowBetween, RowFixed } from 'components/Row'
 import StatusBadge from 'components/stake/StatusBadge'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useColor } from 'hooks/useColor'
@@ -22,6 +23,7 @@ import darken from 'polished/lib/color/darken'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router-dom'
+import { Text } from 'rebass'
 import { Button } from 'rebass/styled-components'
 import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
@@ -161,18 +163,27 @@ const Proposal2 = styled(ButtonEmpty)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
   grid-template-columns: 55px 1fr  70px;  
   padding-right: 8px;
-  margin-Top:0.5rem;
   `}
 `
 const ProposalNumberButton = styled(Button)`
   opacity: 0.6;
   flex: 0 0 40px;
-  color: ${({ theme }) => theme.green1};
+  color: ${({ theme }) => theme.text2};
 `
-const ProposalNumber = styled(Button)`
-  opacity: 0.6;
-  flex: 0 0 40px;
-  color: ${({ theme }) => theme.green1};
+const Symbol = styled(Text)`
+  font-weight: 500;
+  flex: 1;
+  max-width: 420px;
+  white-space: initial;
+  word-wrap: break-word;
+  padding-right: 4px;
+  align-items: center;
+  float: left;
+  color: #b2b9d2;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+  font-weight: 400;
+  font-size: 14px;
+`};
 `
 const ProposalTitle = styled.span`
   font-weight: 400;
@@ -181,8 +192,11 @@ const ProposalTitle = styled.span`
   white-space: initial;
   word-wrap: break-word;
   padding-right: 8px;
+  align-items: center;
+  float: left;
+  color: ${({ theme }) => theme.text2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    font-size: 16px;
+    font-size: 14px;
   `};
 `
 
@@ -550,30 +564,37 @@ export default function Manage({
               <ProposalNumberButton as={Link} to={`/pool/${tokenid}`}>
                 #{tokenid}
               </ProposalNumberButton>
-              <ProposalTitle>
-                {p?.amount0.toSignificant(4)} {tokenA?.symbol} / {p?.amount1.toSignificant(4)} {tokenB?.symbol}
-              </ProposalTitle>
-              {/* <ButtonDeposit onClick={() => deposit(Number(tokenid), p?.liquidity ?? JSBI.BigInt(0))}>
-                <Trans>Stake</Trans>
-              </ButtonDeposit> */}
+              <RowBetween>
+                <RowFixed>
+                  <CurrencyLogo currency={tokenA} size={'18px'} style={{ marginRight: '0.2rem' }} />
+                  <ProposalTitle style={{ paddingRight: '3px' }}>{p?.amount0.toSignificant(4)}</ProposalTitle>
+                  <Symbol>{'|'}</Symbol>
+                  <CurrencyLogo currency={tokenB} size={'18px'} style={{ marginRight: '0.2rem' }} />
+                  <ProposalTitle>{p?.amount1.toSignificant(4)}</ProposalTitle>
+                </RowFixed>
+              </RowBetween>
               <StatusBadge staked={true} inRange={true} />
             </Proposal>
           )
         })}
         {rewardInfos?.map((p, key) => {
           return (
-            <Proposal2 key={key} style={{ textDecoration: 'none', height: '4rem' }} onClick={() => Unstake(p)}>
-              <ProposalNumber as={Link} to={`/pool/${p?.tokenid?.toString()}`} style={{ marginRight: '12px ' }}>
+            <Proposal2 key={key} style={{ textDecoration: 'none' }} onClick={() => Unstake(p)}>
+              <ProposalNumberButton as={Link} to={`/pool/${p?.tokenid?.toString()}`} style={{ marginRight: '12px ' }}>
                 #{p?.tokenid?.toString()}
-              </ProposalNumber>
+              </ProposalNumberButton>
               <Clou>
                 <div style={{ float: left }}>
-                  <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '5px ', float: left }} />
-                  <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime).substring(2)}</ProposalTitle>
+                  <img
+                    src={depositIcon}
+                    alt={'Icon'}
+                    style={{ width: '19px', float: left, marginTop: '1px', marginRight: '5px' }}
+                  />
+                  <ProposalTitle>{dateFormat(p?.startTime).substring(2)}</ProposalTitle>
                 </div>
                 <div style={{ float: right }}>
-                  <img src={rewardIcon} alt={'Icon'} style={{ width: '16px', marginRight: '5px ', float: left }} />
-                  <ProposalTitle style={{ float: left }}>{numFixed(p?.reward, 18)}</ProposalTitle>
+                  <img src={rewardIcon} alt={'Icon'} style={{ width: '16px', float: left, marginRight: '5px' }} />
+                  <ProposalTitle>{numFixed(p?.reward, 18)}</ProposalTitle>
                 </div>
               </Clou>
               <StatusBadge staked={false} inRange={expire && expire[key]} />
