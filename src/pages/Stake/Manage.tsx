@@ -117,7 +117,7 @@ const Proposal = styled(ButtonEmpty)`
   padding-right: 25px;
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
-  grid-template-columns: 60px 1fr 85px;
+  grid-template-columns: 55px 1fr 85px;
   padding-right: 8px;
   `}
 `
@@ -126,7 +126,7 @@ const Clou = styled(TopSection)`
   grid-gap: 0px;
   z-index: 1;
   align-items: center;
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 100px 1fr;
   ${({ theme }) => theme.mediaWidth.upToSmall`
 `}
 `
@@ -159,7 +159,7 @@ const Proposal2 = styled(ButtonEmpty)`
   padding-right: 25px;
   background-color: ${({ theme }) => theme.bg2};
   ${({ theme }) => theme.mediaWidth.upToSmall`
-  grid-template-columns: 60px 1fr  70px;  
+  grid-template-columns: 55px 1fr  70px;  
   padding-right: 8px;
   margin-Top:0.5rem;
   `}
@@ -568,11 +568,11 @@ export default function Manage({
               </ProposalNumber>
               <Clou>
                 <div style={{ float: left }}>
-                  <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <img src={depositIcon} alt={'Icon'} style={{ width: '18px', marginRight: '5px ', float: left }} />
                   <ProposalTitle style={{ float: left }}>{dateFormat(p?.startTime).substring(2)}</ProposalTitle>
                 </div>
                 <div style={{ float: right }}>
-                  <img src={rewardIcon} alt={'Icon'} style={{ width: '18px', marginRight: '8px ', float: left }} />
+                  <img src={rewardIcon} alt={'Icon'} style={{ width: '16px', marginRight: '5px ', float: left }} />
                   <ProposalTitle style={{ float: left }}>{numFixed(p?.reward, 18)}</ProposalTitle>
                 </div>
               </Clou>
