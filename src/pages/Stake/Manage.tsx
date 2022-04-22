@@ -168,7 +168,7 @@ const Proposal2 = styled(ButtonEmpty)`
 const ProposalNumberButton = styled(Button)`
   opacity: 0.6;
   flex: 0 0 40px;
-  color: ${({ theme }) => theme.text2};
+  color: ${({ theme }) => theme.green1};
 `
 const Symbol = styled(Text)`
   font-weight: 500;
