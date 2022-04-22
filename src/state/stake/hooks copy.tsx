@@ -119,7 +119,7 @@ export function useIncentiveInfo(index: number): StakingInfo | undefined {
         numberOfStakes: result.numberOfStakes,
         totalRewardUnclaimed: result.totalRewardUnclaimed,
         totalSecondsClaimedX128: result.totalSecondsClaimedX128,
-        minDuration: result.minDuration.div(60 * 60 * 24).toNumber(),
+        minDuration: result.minDuration,
         outputDaily:
           result.totalRewardUnclaimed
             .div(result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))))
@@ -165,7 +165,7 @@ export function useStakingInfo(): StakingInfo[] | undefined {
           numberOfStakes: result.numberOfStakes,
           totalRewardUnclaimed: result.totalRewardUnclaimed,
           totalSecondsClaimedX128: result.totalSecondsClaimedX128,
-          minDuration: result.minDuration.div(60 * 60 * 24).toNumber(),
+          minDuration: result.minDuration,
           outputDaily:
             result.totalRewardUnclaimed
               .div(result.endTime.sub(result.startTime.sub(result.totalSecondsClaimedX128.shr(128))))

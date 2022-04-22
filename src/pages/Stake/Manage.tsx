@@ -186,7 +186,7 @@ const Symbol = styled(Text)`
 `};
 `
 const ProposalTitle = styled.span`
-  font-weight: 400;
+  font-weight: 500;
   flex: 1;
   max-width: 420px;
   white-space: initial;
@@ -368,9 +368,7 @@ export default function Manage({
   const date =
     stakingInfo &&
     rewardInfos &&
-    rewardInfos.map((depositInfo) =>
-      depositInfo?.startTime.add(BigNumber.from(stakingInfo.minDuration ?? 0).mul(60 * 60 * 24))
-    )
+    rewardInfos.map((depositInfo) => depositInfo?.startTime.add(stakingInfo.minDuration ?? 0))
   const expire = date && blockTime && date.map((d) => blockTime.gt(d))
   function PositionsLoadingPlaceholder() {
     return (
@@ -479,7 +477,7 @@ export default function Manage({
                     {'  :  '}
                     {stakingInfo?.minDuration ? (
                       <>
-                        {stakingInfo?.minDuration}
+                        {stakingInfo?.minDuration?.div(60 * 60 * 24)?.toNumber()}
                         <Trans>day</Trans>
                       </>
                     ) : (

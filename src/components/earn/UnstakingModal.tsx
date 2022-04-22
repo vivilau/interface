@@ -72,10 +72,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
     }
   }
   const blockTime = useCurrentBlockTimestamp()
-  const date =
-    stakingInfo &&
-    depositInfo &&
-    depositInfo?.startTime.add(BigNumber.from(stakingInfo.minDuration ?? 0).mul(60 * 60 * 24))
+  const date = stakingInfo && depositInfo && depositInfo?.startTime.add(stakingInfo?.minDuration)
   const expire = date && blockTime && blockTime.gt(date)
   const expireDate = !expire && date && dateFormat(date)
   let error: ReactNode | undefined

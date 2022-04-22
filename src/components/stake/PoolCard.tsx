@@ -118,7 +118,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const currency1 = unwrappedToken(stakingInfo.token1)
   const fee = stakingInfo.fee.toFixed(1)
   const numberOfStakes = stakingInfo.numberOfStakes
-  const minDuration = stakingInfo.minDuration
+  const minDuration = stakingInfo.minDuration?.div(60 * 60 * 24)?.toNumber()
   // get the color of the token
   const token = currency0.isNative ? token1 : token0
   const backgroundColor = useColor(token)
@@ -163,7 +163,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               <Symbol>{':'}&nbsp; &nbsp;</Symbol>
               {stakingInfo.minDuration ? (
                 <StatText>
-                  {stakingInfo.minDuration}
+                  {minDuration}
                   <Trans>day</Trans>
                 </StatText>
               ) : (
