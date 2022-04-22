@@ -43,25 +43,6 @@ export default function Stake() {
     typeof chainId === 'number' && chainId === 80001 && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0
   )
 
-  // const [num, setNum] = useState<number | undefined>(0)
-  // const [incentive, setIncentive] = useState<StakingInfo | undefined>()
-  // const incentives: StakingInfo[] = useMemo(() => [], [])
-  // const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
-  // useEffect(() => {
-  //   if (stakingRewardsExist && tokenContract) {
-  //     tokenContract.numberOfIncentives().then((rs) => {
-  //       setNum(rs.toNumber())
-  //     })
-  //   }
-  // }, [stakingRewardsExist, tokenContract])
-  // useEffect(() => {
-  //   for (let index = 0; index < (num ? num : 0); index++) {
-  //     tokenContract?.incentiveInfo(index).then((rs) => {
-  //       incentives[index] = rs
-  //       setIncentive(rs)
-  //     })
-  //   }
-  // }, [incentives, num, tokenContract])
   const incentives = useStakingInfo()
   function PositionsLoadingPlaceholder() {
     return (

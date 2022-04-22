@@ -2,7 +2,6 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Trans } from '@lingui/macro'
 import { left, right } from '@popperjs/core'
 import { Position } from '@uniswap/v3-sdk'
-import { OutlineCard } from 'components/Card'
 import CurrencyLogo from 'components/CurrencyLogo'
 import ClaimRewardModal from 'components/earn/ClaimRewardModal'
 import StakingModal from 'components/earn/StakingModal'
@@ -29,6 +28,7 @@ import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
 import { PositionDetails } from 'types/position'
 import { CountUp } from 'use-count-up'
+import { currencyId } from 'utils/currencyId'
 import { Big2number, dateFormat, JSBI2num, numFixed } from 'utils/numberHelper'
 
 import depositIcon from '../../assets/images/deposit.png'
@@ -400,43 +400,6 @@ export default function Manage({
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
       </RowBetween>
 
-      {/* //有矿池，没有对应流动时显示 */}
-      {false && (
-        <VoteCard>
-          <CardBGImage />
-          <CardNoise />
-          <CardSection>
-            <AutoColumn gap="md">
-              <RowBetween>
-                <ThemedText.White fontWeight={600}>
-                  <Trans>Step 1. Get UNI-V2 Liquidity tokens</Trans>
-                </ThemedText.White>
-              </RowBetween>
-              <RowBetween style={{ marginBottom: '1rem' }}>
-                <ThemedText.White fontSize={14}>
-                  <Trans>
-                    UNI-V2 LP tokens are required. Once you&apos;ve added liquidity to the {currencyA?.symbol}-
-                    {currencyB?.symbol} pool you can stake your liquidity tokens on this page.
-                  </Trans>
-                </ThemedText.White>
-              </RowBetween>
-              <ButtonPrimary
-                padding="8px"
-                $borderRadius="8px"
-                width={'fit-content'}
-                // as={Link}
-                // to={`//${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
-              >
-                <Trans>
-                  Add {currencyA?.symbol}-{currencyB?.symbol} liquidity
-                </Trans>
-              </ButtonPrimary>
-            </AutoColumn>
-          </CardSection>
-          <CardBGImage />
-          <CardNoise />
-        </VoteCard>
-      )}
       {stakingInfo && (
         <>
           <StakingModal
@@ -549,12 +512,47 @@ export default function Manage({
           </ThemedText.MediumHeader>
           <AutoRow gap="6px" justify="flex-end"></AutoRow>
         </WrapSmall>
-        {positionsLoading ? <PositionsLoadingPlaceholder /> : null}
-        {!positionsLoading && filteredPositions?.length === 0 && rewardInfos?.length === 0 && (
-          <OutlineCard>
-            <Trans>No available token</Trans>
-          </OutlineCard>
-        )}
+        <>
+          {stakingInfo ? (
+            positionsLoading ? (
+              <PositionsLoadingPlaceholder />
+            ) : filteredPositions?.length !== 0 || rewardInfos?.length !== 0 ? null : (
+              <VoteCard>
+                <CardSection>
+                  <AutoColumn gap="md">
+                    <RowBetween>
+                      <ThemedText.White fontWeight={600}>
+                        <Trans>Get Liquidity tokens</Trans>
+                      </ThemedText.White>
+                    </RowBetween>
+                    <RowBetween style={{ marginBottom: '1rem' }}>
+                      <ThemedText.White fontSize={14}>
+                        <Trans>
+                          LP tokens are required. Once you&apos;ve added liquidity to the {currencyA?.symbol}-
+                          {currencyB?.symbol} pool you can stake your liquidity tokens on this page.
+                        </Trans>
+                      </ThemedText.White>
+                    </RowBetween>
+                    <ButtonPrimary
+                      padding="8px"
+                      $borderRadius="8px"
+                      width={'fit-content'}
+                      as={Link}
+                      to={`/add/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
+                    >
+                      <Trans>
+                        Add {currencyA?.symbol}-{currencyB?.symbol} liquidity
+                      </Trans>
+                    </ButtonPrimary>
+                  </AutoColumn>
+                </CardSection>
+                <CardBGImage />
+                <CardNoise />
+              </VoteCard>
+            )
+          ) : null}
+        </>
+
         {positionInfos?.map((p, key) => {
           const tokenid = filteredPositions[key].tokenId.toString()
           return (

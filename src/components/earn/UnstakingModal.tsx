@@ -107,7 +107,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
           {rewards && expire ? (
             <RowBetween>
               <ThemedText.Body>
-                <Trans>Unclaimed OPC</Trans>
+                <Trans>Generated OPC</Trans>
                 {':'}
               </ThemedText.Body>
               <RowFixed>

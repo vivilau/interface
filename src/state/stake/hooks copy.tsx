@@ -1,44 +1,14 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Token } from '@uniswap/sdk-core'
-import { WRAPPED_NATIVE_CURRENCY } from '@uniswap/smart-order-router'
-import { SupportedChainId } from 'constants/chains'
-import { DAI, OPK_POLYGON_MUMBAI, USDC_MAINNET, USDT, WBTC } from 'constants/tokens'
+import { OPK_POLYGON_MUMBAI } from 'constants/tokens'
 import { useAllTokens } from 'hooks/Tokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useStakingContract } from 'hooks/useContract'
 import { CallStateResult, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
 export const STAKING_REWARDS_INFO: {
-  [chainId: number]: {
-    tokens: [Token, Token]
-    stakingRewardAddress: string
-  }[]
-} = {
-  1: [
-    {
-      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token, DAI],
-      stakingRewardAddress: '0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711',
-    },
-    {
-      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token, USDC_MAINNET],
-      stakingRewardAddress: '0x7FBa4B8Dc5E7616e59622806932DBea72537A56b',
-    },
-    {
-      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token, USDT],
-      stakingRewardAddress: '0x6C3e4cb2E96B01F4b866965A91ed4437839A121a',
-    },
-    {
-      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token, WBTC],
-      stakingRewardAddress: '0xCA35e32e7926b96A9988f61d510E038108d8068e',
-    },
-  ],
-  80001: [
-    {
-      tokens: [WRAPPED_NATIVE_CURRENCY[SupportedChainId.POLYGON_MUMBAI] as Token, OPK_POLYGON_MUMBAI],
-      stakingRewardAddress: '0xCA35e32e7926b96A9988f61d510E038108d8068e',
-    },
-  ],
-}
+  [chainId: number]: { stakingAddress: string; rewardToken: Token }
+} = { 80001: { stakingAddress: '0x72055D6677c98d1B67F65aF21074a737a3C64b52', rewardToken: OPK_POLYGON_MUMBAI } }
 export interface StakingInfo {
   index: number
   stakeAddress: string
@@ -65,8 +35,9 @@ export interface DepositInfo {
 }
 //get number of deposits
 export function useTokens(): BigNumber[] {
-  const { account } = useActiveWeb3React()
-  const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
+  const { account, chainId } = useActiveWeb3React()
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
 
   const { loading: balanceLoading, result: balanceResult } = useSingleCallResult(tokenContract, 'depositBalance', [
     account ?? undefined,
@@ -101,15 +72,15 @@ export function useTokens(): BigNumber[] {
   return tokenIds
 }
 export function useIncentiveInfo(index: number): StakingInfo | undefined {
-  const stakeAdd = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
   const { chainId } = useActiveWeb3React()
-  const tokenContract = useStakingContract(chainId === 80001 ? stakeAdd : undefined)
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
   const { result } = useSingleCallResult(tokenContract, 'incentiveInfo', [[index]])
   const allTokens = useAllTokens()
-  return result
+  return stakingAdress && result
     ? {
         index,
-        stakeAddress: stakeAdd,
+        stakeAddress: stakingAdress,
         rewardToken: allTokens[result.rewardToken],
         token0: allTokens[result.token0],
         token1: allTokens[result.token1],
@@ -129,9 +100,9 @@ export function useIncentiveInfo(index: number): StakingInfo | undefined {
 }
 // gets the all the  staking(incentiveInfo) info from the network for the active chain id
 export function useStakingInfo(): StakingInfo[] | undefined {
-  const stakeAdd = '0x72055D6677c98d1B67F65aF21074a737a3C64b52'
   const { chainId } = useActiveWeb3React()
-  const tokenContract = useStakingContract(chainId === 80001 ? stakeAdd : undefined)
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
 
   const { loading: stakeloading, result: numberOfIncentives } = useSingleCallResult(tokenContract, 'numberOfIncentives')
   // we don't expect any account balance to ever exceed the bounds of max safe int
@@ -150,12 +121,12 @@ export function useStakingInfo(): StakingInfo[] | undefined {
   const error = useMemo(() => results.some(({ error }) => error), [results])
   const allTokens = useAllTokens()
   const incentiveInfos = useMemo(() => {
-    if (!loading && !error) {
+    if (!loading && !error && stakingAdress) {
       return results.map((call, i) => {
         const result = call.result as CallStateResult
         return {
           index: i,
-          stakeAddress: stakeAdd,
+          stakeAddress: stakingAdress,
           rewardToken: allTokens[result.rewardToken],
           token0: allTokens[result.token0],
           token1: allTokens[result.token1],
@@ -174,7 +145,7 @@ export function useStakingInfo(): StakingInfo[] | undefined {
       })
     }
     return undefined
-  }, [loading, error, results, allTokens])
+  }, [loading, error, stakingAdress, results, allTokens])
   return incentiveInfos ?? undefined
 }
 
@@ -185,8 +156,10 @@ export function useStakingInfo(): StakingInfo[] | undefined {
  */
 export function useClaimNum(): BigNumber {
   const { account, chainId } = useActiveWeb3React()
-  const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
-  const uni = chainId && STAKING_REWARDS_INFO[chainId][0].tokens[1]
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
+
+  const uni = chainId && STAKING_REWARDS_INFO[chainId]?.rewardToken
   const { result: rewards } = useSingleCallResult(tokenContract, 'rewards', [
     uni ? uni.address : undefined,
     account ?? undefined,
@@ -200,7 +173,10 @@ export function useClaimNum(): BigNumber {
  * @return {*}
  */
 export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
-  const tokenContract = useStakingContract('0x72055D6677c98d1B67F65aF21074a737a3C64b52')
+  const { chainId } = useActiveWeb3React()
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
+
   const tokenIdsArgs = useMemo(() => {
     if (tokenIds) {
       const tokenRequests = []

@@ -179,8 +179,8 @@ msgstr "成功领取OPC"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Unclaimed OPC"
-msgstr "未領取 OPC"
+msgid "Generated OPC"
+msgstr "預計獲得OPC"
 
 #: src/pages/Stake/Manage.tsx
 msgid "Your Total Liquidity"
@@ -1864,8 +1864,8 @@ msgid "Something went wrong."
 msgstr "出問題了。"
 
 #: src/pages/Earn/Manage.tsx
-msgid "Step 1. Get UNI-V2 Liquidity tokens"
-msgstr "第 1 步：獲取 UNI-V2 流動池代幣"
+msgid "Get Liquidity tokens"
+msgstr "獲取流動性代幣"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Submit new proposal"
@@ -2175,8 +2175,8 @@ msgid "UNI {0}/{1} Burned"
 msgstr "UNI {0}/{1} 已銷毀"
 
 #: src/pages/Earn/Manage.tsx
-msgid "UNI-V2 LP tokens are required. Once you've added liquidity to the {0}-{1} pool you can stake your liquidity tokens on this page."
-msgstr "需要 UNI-V2 LP 代幣。在您注入流動性到 {0}-{1} 池後，您就可以在此頁面上抵押您的流動性代幣。"
+msgid "LP tokens are required. Once you've added liquidity to the {0}-{1} pool you can stake your liquidity tokens on this page."
+msgstr "需要流動性代幣。在您注入流動性到 {0}-{1} 池後，您就可以在此頁面上抵押您的流動性代幣。"
 
 #: src/pages/Earn/Manage.tsx
 msgid "UNI-V2 {0}-{1}"
