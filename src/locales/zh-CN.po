@@ -16,6 +16,18 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/pages/Stake/Manage.tsx
+msgid "No liquidity token, create a liquidity token first."
+msgstr "无可用的流动性Token，请先创建流动性Token"
+
+#: src/components/earn/ClaimRewardModal.tsx
+msgid "No unclaimed OPK"
+msgstr "没有未领取的OPK"
+
+#: src/components/earn/ClaimRewardModal.tsx
+msgid "Unclaimed OPK"
+msgstr "领取OPK"
+
 #: src/components/Menu/index.tsx
 msgid "Wrap FIl Token"
 msgstr "兑换Fil代币"
@@ -65,7 +77,7 @@ msgid "Your Total Liquidity"
 msgstr "已抵押流动性"
 
 #: src/pages/Stake/Manage.tsx
-msgid "Your unclaimed OPC"
+msgid "Your unclaimed OPK"
 msgstr "未领取收益"
 
 #: src/components/earn/StakingModal.tsx
@@ -83,17 +95,17 @@ msgstr "赎回#{tokenId}"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claiming {rewards} OPC"
-msgstr "收获 {rewards} OPC"
+msgid "Claiming {rewards} OPK"
+msgstr "收获 {rewards} OPK"
 
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claimed OPC!"
-msgstr "成功领取 OPC!"
+msgid "Claimed OPK!"
+msgstr "成功领取 OPK!"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
-msgid "Claim OPC reward"
+msgid "Claim OPK reward"
 msgstr "领取OPC奖励"
 
 
@@ -137,7 +149,7 @@ msgstr "锁定期  :   {minDuration} 天"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Generated OPC"
+msgid "Generated OPK"
 msgstr "预计获得OPC"
 
 #: src/pages/Pool/PositionPage.tsx

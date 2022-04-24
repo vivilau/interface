@@ -10,7 +10,7 @@ import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 import { dateFormat, numFixed } from 'utils/numberHelper'
 
-import { DepositInfo, StakingInfo } from '../../state/stake/hooks copy'
+import { DepositInfo, StakingInfo } from '../../state/stake/hooks'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
@@ -107,7 +107,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
           {rewards && expire ? (
             <RowBetween>
               <ThemedText.Body>
-                <Trans>Generated OPC</Trans>
+                <Trans>Generated OPK</Trans>
                 {':'}
               </ThemedText.Body>
               <RowFixed>
@@ -152,7 +152,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
               <Trans>unstake #{tokenId} </Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {rewards} OPC</Trans>
+              <Trans>Claiming {rewards} OPK</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -164,7 +164,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed OPC!</Trans>
+              <Trans>Claimed OPK!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

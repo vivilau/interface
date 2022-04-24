@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { LoadingRows } from 'pages/Pool/styleds'
 import { STAKING_REWARDS_INFO } from 'state/stake/hooks'
-import { useStakingInfo } from 'state/stake/hooks copy'
+import { useStakingInfo } from 'state/stake/hooks'
 import styled from 'styled-components/macro'
 
 import { OutlineCard } from '../../components/Card'
@@ -39,9 +39,7 @@ flex-direction: column;
 //TODO:use ContrctCall
 export default function Stake() {
   const { chainId } = useActiveWeb3React()
-  const stakingRewardsExist = Boolean(
-    typeof chainId === 'number' && chainId === 80001 && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0
-  )
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && STAKING_REWARDS_INFO[chainId])
 
   const incentives = useStakingInfo()
   function PositionsLoadingPlaceholder() {
@@ -79,12 +77,12 @@ export default function Stake() {
                   </RowBetween>
                   <RowBetween>
                     <ThemedText.White fontSize={14}>
-                      <Trans>Deposit your Liquidity Provider tokens to receive OPC.</Trans>
+                      <Trans>Deposit your Liquidity Provider tokens to receive OPK.</Trans>
                     </ThemedText.White>
                   </RowBetween>{' '}
                   <ExternalLink style={{ color: 'white', textDecoration: 'underline' }} href="" target="_blank">
                     <ThemedText.White fontSize={14}>
-                      <Trans>Read more about OPC</Trans>
+                      <Trans>Read more about OPK</Trans>
                     </ThemedText.White>
                   </ExternalLink>
                 </AutoColumn>

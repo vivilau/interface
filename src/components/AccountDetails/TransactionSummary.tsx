@@ -78,9 +78,9 @@ function ClaimSummary({ info: { recipient, uniAmountRaw } }: { info: ClaimTransa
   //     {ENSName ?? recipient}
   //   </Trans>
   // ) : (
-  //   <Trans>Claim OPC reward for {ENSName ?? recipient}</Trans>
+  //   <Trans>Claim OPK reward for {ENSName ?? recipient}</Trans>
   // )
-  return <Trans>Claim OPC reward </Trans>
+  return <Trans>Claim OPK reward </Trans>
 }
 
 function SubmitProposalTransactionSummary(_: { info: SubmitProposalTransactionInfo }) {

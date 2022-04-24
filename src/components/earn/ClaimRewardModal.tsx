@@ -6,7 +6,7 @@ import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
 
 import { useStakingContract } from '../../hooks/useContract'
-import { StakingInfo, useClaimNum } from '../../state/stake/hooks copy'
+import { StakingInfo, useClaimNum } from '../../state/stake/hooks'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
@@ -46,10 +46,10 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   const stakingContract = useStakingContract(stakingInfo.stakeAddress)
 
   async function onClaimReward() {
-    if (stakingContract && claimRewards && account) {
+    if (stakingContract && claimRewards && account && stakingInfo.rewardToken) {
       setAttempting(true)
       await stakingContract
-        .claimReward(stakingInfo.rewardToken.address, account, claimRewards)
+        .claimReward(stakingInfo.rewardToken, account, claimRewards)
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,
@@ -69,8 +69,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   if (!account) {
     error = <Trans>Connect Wallet</Trans>
   }
-  if (!claimRewards) {
-    error = error ?? <Trans>No available Rewards </Trans>
+  if (!claimRewards || claimRewards.eq('0')) {
+    error = error ?? <Trans>No unclaimed OPK </Trans>
   }
   if (attempting) {
     error = error ?? <Trans>Claming... </Trans>
@@ -89,7 +89,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           {claimRewards ? (
             <RowBetween>
               <ThemedText.Body>
-                <Trans>Unclaimed OPC</Trans>
+                <Trans>Unclaimed OPK</Trans>
                 {':'}
               </ThemedText.Body>
               <RowFixed>
@@ -109,7 +109,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {rewards} OPC</Trans>
+              <Trans>Claiming {rewards} OPK</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -121,7 +121,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed OPC!</Trans>
+              <Trans>Claimed OPK!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

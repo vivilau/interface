@@ -1,15 +1,17 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Trans } from '@lingui/macro'
 import { left, right } from '@popperjs/core'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { RowBetween } from 'components/Row'
+import { useCurrency } from 'hooks/Tokens'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Text } from 'rebass'
-import { StakingInfo } from 'state/stake/hooks copy'
+import { StakingInfo } from 'state/stake/hooks'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
-import { unwrappedToken } from 'utils/unwrappedToken'
 
 import { useColor } from '../../hooks/useColor'
 import { ThemedText } from '../../theme'
@@ -57,19 +59,6 @@ const TopSection = styled.div`
   `};
 `
 
-const CustomRow = styled.div`
-  display: grid;
-  grid-template-columns: 120px 1fr 2fr;
-  grid-gap: 0px;
-  align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  z-index: 1;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 130px 1fr 150px;
-  `};
-`
-
 const BottomSection = styled.div<{ showBackground: boolean }>`
   padding: 12px 16px;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '0.4')};
@@ -111,17 +100,21 @@ const Symbol = styled(Text)`
 `
 
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
-  const token0 = stakingInfo.token0
-  const token1 = stakingInfo.token1
-  const rewardToken = stakingInfo.rewardToken
-  const currency0 = unwrappedToken(stakingInfo.token0)
-  const currency1 = unwrappedToken(stakingInfo.token1)
+  const token0 = useCurrency(stakingInfo.token0) ?? undefined
+  const token1 = useCurrency(stakingInfo.token1) ?? undefined
+  const rewardToken = useCurrency(stakingInfo.rewardToken)
   const fee = stakingInfo.fee.toFixed(1)
   const numberOfStakes = stakingInfo.numberOfStakes
-  const minDuration = stakingInfo.minDuration?.div(60 * 60 * 24)?.toNumber()
+  const minDuration = useMemo(() => {
+    const duration = stakingInfo.minDuration?.div(60 * 60 * 24)
+    return stakingInfo.minDuration > BigNumber.from(duration.toNumber() * (60 * 60 * 24))
+      ? duration.toNumber() + 1
+      : duration.toNumber()
+  }, [stakingInfo.minDuration])
+
   // get the color of the token
-  const token = currency0.isNative ? token1 : token0
-  const backgroundColor = useColor(token)
+  const token = token0?.isNative ? token1 : token0
+  const backgroundColor = useColor(token?.wrapped)
   const index = stakingInfo.index
   return (
     <Link to={`/stake/${index.toString()}`} style={{ textDecoration: 'none' }}>
@@ -131,10 +124,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
         <TopSection>
           <div style={{ marginLeft: '10px' }}>
-            <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
+            <DoubleCurrencyLogo currency0={token0} currency1={token1} size={24} />
           </div>
           <ThemedText.White style={{ marginLeft: '8px' }} fontSize="18px">
-            {currency0.symbol}-{currency1.symbol}
+            {token0?.symbol}-{token1?.symbol}
             {'  '}
             {'  '}
             {fee}%
@@ -161,7 +154,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 <Trans>Min Duration</Trans>
               </StatText>
               <Symbol>{':'}&nbsp; &nbsp;</Symbol>
-              {stakingInfo.minDuration ? (
+              {minDuration ? (
                 <StatText>
                   {minDuration}
                   <Trans>day</Trans>
@@ -206,7 +199,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                   ⚡
                 </span>
-                {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPC/day</Trans> : '-'}
+                {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPK/day</Trans> : '-'}
               </ThemedText.Black>
             </BottomSection>
           </>

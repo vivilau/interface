@@ -16,6 +16,14 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/components/earn/ClaimRewardModal.tsx
+msgid "Unclaimed OPK"
+msgstr "領取OPK"
+
+#: src/components/earn/ClaimRewardModal.tsx
+msgid "No unclaimed OPK"
+msgstr "沒有未領取的OPK"
+
 #: src/components/Menu/index.tsx
 msgid "Wrap FIl Token"
 msgstr "兌換Fil代幣"
@@ -46,7 +54,7 @@ msgstr "抵押流動性Token"
 
 
 #: src/components/AccountDetails/TransactionSummary.tsx
-msgid "Claim OPC reward"
+msgid "Claim OPK reward"
 msgstr "領取OPC獎勵"
 
 #: src/components/stake/Manage.tsx
@@ -134,12 +142,12 @@ msgstr "預計收益"
 
 
 #: src/components/earn/StakingModal.tsx
-msgid "{0} OPC / day"
-msgstr "{0} OPC / 天"
+msgid "{0} OPK / day"
+msgstr "{0} OPK / 天"
 
 #: src/components/stake/PoolCard.tsx
-msgid "{0} OPC/day"
-msgstr "{0} OPC/天"
+msgid "{0} OPK/day"
+msgstr "{0} OPK/天"
 
 #: src/pages/Stake/Manage.tsx
 msgid "{0} {1} / day"
@@ -167,19 +175,19 @@ msgstr "贖回"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claiming {rewards} OPC"
-msgstr "收穫 {rewards} OPC"
+msgid "Claiming {rewards} OPK"
+msgstr "收穫 {rewards} OPK"
 
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "Claimed OPC!"
+msgid "Claimed OPK!"
 msgstr "成功领取OPC"
 
 
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Generated OPC"
+msgid "Generated OPK"
 msgstr "預計獲得OPC"
 
 #: src/pages/Stake/Manage.tsx
@@ -187,7 +195,7 @@ msgid "Your Total Liquidity"
 msgstr "已抵押流動性"
 
 #: src/pages/Stake/Manage.tsx
-msgid "Your unclaimed OPC"
+msgid "Your unclaimed OPK"
 msgstr "未領取收益"
 
 #: src/pages/Pool/PositionPage.tsx
@@ -348,7 +356,7 @@ msgstr "將 {0} 添加到 Metamask <0/>"
 
 #: src/pages/Earn/Manage.tsx
 msgid "Add {0}-{1} liquidity"
-msgstr "註入 {0}-{1} 流動資金"
+msgstr "註入 {0}-{1} 流動性"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Add {0}/{1} V3 liquidity"

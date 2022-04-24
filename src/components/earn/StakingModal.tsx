@@ -15,19 +15,11 @@ import { ThemedText } from 'theme'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
 
 import { AutoColumn } from '../../components/Column'
-import { StakingInfo } from '../../state/stake/hooks copy'
+import { StakingInfo } from '../../state/stake/hooks'
 import { CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
-const HypotheticalRewardRate = styled.div<{ dim: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 20px;
-  padding-left: 20px;
-
-  opacity: ${({ dim }) => (dim ? 0.5 : 1)};
-`
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -77,7 +69,7 @@ export default function StakingModal({
       sender: account,
       recipient: stakeAddress,
       tokenId,
-      data: data1.toString(),
+      data: data1,
     })
 
     const txn = {
@@ -108,8 +100,8 @@ export default function StakingModal({
             setHash(response.hash)
             addTransaction(response, {
               type: TransactionType.DEPOSIT_LIQUIDITY_STAKING,
-              token0Address: tokenA.address,
-              token1Address: tokenB.address,
+              token0Address: tokenA,
+              token1Address: tokenB,
             })
           })
       })
@@ -156,7 +148,7 @@ export default function StakingModal({
             <RowFixed>
               <ThemedText.Black>
                 {tokenRate}
-                <Trans> OPC / day</Trans>
+                <Trans> OPK / day</Trans>
               </ThemedText.Black>
             </RowFixed>
           </RowBetween>
