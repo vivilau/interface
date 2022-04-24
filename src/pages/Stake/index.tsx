@@ -41,7 +41,7 @@ export default function Stake() {
   const { chainId } = useActiveWeb3React()
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && STAKING_REWARDS_INFO[chainId])
 
-  const incentives = useStakingInfo()
+  const { loading, stakingInfo: incentives } = useStakingInfo()
   function PositionsLoadingPlaceholder() {
     return (
       <LoadingRows>
@@ -101,21 +101,22 @@ export default function Stake() {
           </DataRow>
 
           <PoolSection>
-            {stakingRewardsExist && incentives?.length === 0 ? (
-              <PositionsLoadingPlaceholder />
-            ) : !incentives ? (
-              <OutlineCard>
-                <Trans>No active pools</Trans>
-              </OutlineCard>
-            ) : incentives.length === 0 ? (
-              <OutlineCard>
-                <Trans>No active pools</Trans>
-              </OutlineCard>
+            {stakingRewardsExist ? (
+              loading ? (
+                <PositionsLoadingPlaceholder />
+              ) : incentives?.length === 0 ? (
+                <OutlineCard>
+                  <Trans>No active pools</Trans>
+                </OutlineCard>
+              ) : (
+                incentives?.map((stakingInfo, index) => {
+                  return <PoolCard key={index} stakingInfo={stakingInfo} />
+                })
+              )
             ) : (
-              incentives?.map((stakingInfo, index) => {
-                // need to sort by added liquidity here
-                return <PoolCard key={index} stakingInfo={stakingInfo} />
-              })
+              <OutlineCard>
+                <Trans>No active pools</Trans>
+              </OutlineCard>
             )}
           </PoolSection>
         </AutoColumn>

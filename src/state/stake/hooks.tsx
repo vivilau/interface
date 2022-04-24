@@ -36,12 +36,25 @@ export interface DepositInfo {
   reward: BigNumber
   secondsInsideX128: BigNumber
 }
+interface StakingResults {
+  loading: boolean
+  stakingInfo: StakingInfo[] | undefined
+}
+interface DepositResults {
+  loading: boolean
+  depositInfo: DepositInfo[] | undefined
+}
+interface tokensResults {
+  loading: boolean
+  tokens: BigNumber[]
+}
+
 /**
  * @description: get number of deposits
  * @param {*}
  * @return {tokenIds}
  */
-export function useTokens(): BigNumber[] {
+export function useTokens(): tokensResults {
   const { account, chainId } = useActiveWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
@@ -76,7 +89,7 @@ export function useTokens(): BigNumber[] {
     }
     return []
   }, [account, someTokenIdsLoading, someTokenIdserror, tokenIdResults])
-  return tokenIds
+  return { loading: balanceLoading || someTokenIdsLoading, tokens: tokenIds }
 }
 export function useIncentiveInfo(index: number): StakingInfo | undefined {
   const { chainId } = useActiveWeb3React()
@@ -108,7 +121,7 @@ export function useIncentiveInfo(index: number): StakingInfo | undefined {
   return stakingInfo
 }
 // gets the all the  staking(incentiveInfo) info from the network for the active chain id
-export function useStakingInfo(): StakingInfo[] | undefined {
+export function useStakingInfo(): StakingResults {
   const { chainId } = useActiveWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
@@ -154,7 +167,7 @@ export function useStakingInfo(): StakingInfo[] | undefined {
     }
     return undefined
   }, [loading, error, stakingAdress, results])
-  return incentiveInfos ?? undefined
+  return { loading: loading || stakeloading, stakingInfo: incentiveInfos ?? undefined }
 }
 
 /**
@@ -180,7 +193,7 @@ export function useClaimNum(): BigNumber {
  * @param {BigNumber} tokenIds
  * @return {*}
  */
-export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
+export function useDeposits(tokenIds: BigNumber[]): DepositResults {
   const { chainId } = useActiveWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
@@ -227,7 +240,6 @@ export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
     }
     return undefined
   }, [stakes_loading, stakes_error, rewards_loading, rewards_error, stakes.length, rewards])
-  if (stakeInfos?.length === 0) return []
   const claimInfos = stakeInfos?.map((stake, index) => {
     return {
       tokenid: tokenIds[index],
@@ -239,5 +251,5 @@ export function useDeposits(tokenIds: BigNumber[]): DepositInfo[] {
       secondsInsideX128: rewardInfos ? rewardInfos[index].secondsInsideX128 : undefined,
     }
   })
-  return claimInfos ?? []
+  return { loading: stakes_loading || rewards_loading, depositInfo: claimInfos ?? [] }
 }

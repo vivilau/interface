@@ -74,11 +74,6 @@ const StyledBottomCard = styled(DataCard)<{ dim: any }>`
   z-index: 1;
 `
 
-const VoteCard = styled(DataCard)`
-  background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
-  overflow: hidden;
-`
-
 const TopSection = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
@@ -219,10 +214,9 @@ export default function Manage({
 }: RouteComponentProps<{ index?: string }>) {
   const { account } = useActiveWeb3React()
   const incentiveId = Number(index)
+  //  // get incentiveInfo
   const stakingInfo = useIncentiveInfo(incentiveId)
-  // get currencies and pair
   const [currencyA, currencyB] = [useCurrency(stakingInfo?.token0), useCurrency(stakingInfo?.token1)]
-
   const tokenA = (currencyA ?? undefined)?.wrapped
   const tokenB = (currencyB ?? undefined)?.wrapped
   const rewardToken = useToken(stakingInfo?.rewardToken)
@@ -273,22 +267,24 @@ export default function Manage({
   const rewards = Big2number(claimRewards, rewardToken?.decimals ?? 18)
   const countUpRewards = rewards?.toFixed(6) ?? '0'
   const countUpRewardsPrevious = usePrevious(countUpRewards) ?? '0'
-  //get and filter staked positions
-  const tokenIds = useTokens()
-  const rewardInfos = useDeposits(tokenIds).filter((rw) => rw.incentiveId.toNumber() === incentiveId)
 
-  const { positions: stakeTokens } = useV3PositionsFromTokenIds(tokenIds)
+  //get and filter staked tokenids and info of staked token
+  const { loading: tokenLoading, tokens: tokenIds } = useTokens()
+  const { loading: depositLoading, depositInfo: depositInfos } = useDeposits(tokenIds)
+  const rewardInfos = depositInfos?.filter((rw) => rw.incentiveId.toNumber() === incentiveId)
+
+  const { loading, positions: stakeTokens } = useV3PositionsFromTokenIds(tokenIds)
   const inRangeTokenIds =
     stakeTokens &&
     stakeTokens
       .filter((ps) => !(pool ? pool.tickCurrent < ps.tickLower || pool.tickCurrent >= ps.tickUpper : true))
       .map((ps) => ps.tokenId)
-  const liquidity = rewardInfos.map((ps) =>
+  const liquidity = rewardInfos?.map((ps) =>
     inRangeTokenIds?.indexOf(ps.tokenid) !== -1 ? ps.liquidity : BigNumber.from(0)
   )
   const tolLiquidity =
-    liquidity.length &&
-    liquidity.reduce((prev, lq) => {
+    liquidity?.length &&
+    liquidity?.reduce((prev, lq) => {
       return prev.add(lq)
     })
   //caculate your rate
@@ -360,7 +356,6 @@ export default function Manage({
       </LoadingRows>
     )
   }
-
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
@@ -488,7 +483,7 @@ export default function Manage({
         </WrapSmall>
         <>
           {stakingInfo ? (
-            positionsLoading ? (
+            positionsLoading || depositLoading || tokenLoading ? (
               <PositionsLoadingPlaceholder />
             ) : filteredPositions?.length !== 0 || rewardInfos?.length !== 0 || !account ? null : (
               <OutlineCard>
