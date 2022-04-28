@@ -94,7 +94,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.OPTIMISM]: {
     networkType: NetworkType.L2,
     blockWaitMsBeforeWarning: ms`25m`,
-    bridge: 'https://gateway.optimism.io/?chainId=1',
+    bridge: 'https://bridge.upswap.org/',
     defaultListUrl: OPTIMISM_LIST,
     docs: 'https://optimism.io/',
     explorer: 'https://optimistic.etherscan.io/',
@@ -108,7 +108,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.OPTIMISTIC_KOVAN]: {
     networkType: NetworkType.L2,
     blockWaitMsBeforeWarning: ms`25m`,
-    bridge: 'https://gateway.optimism.io/',
+    bridge: 'https://bridge.upswap.org/',
     defaultListUrl: OPTIMISM_LIST,
     docs: 'https://optimism.io/',
     explorer: 'https://optimistic.etherscan.io/',
@@ -122,7 +122,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.ARBITRUM_ONE]: {
     networkType: NetworkType.L2,
     blockWaitMsBeforeWarning: ms`10m`,
-    bridge: 'https://bridge.arbitrum.io/',
+    bridge: 'https://bridge.upswap.org/',
     docs: 'https://offchainlabs.com/',
     explorer: 'https://arbiscan.io/',
     infoLink: 'https://info.uniswap.org/#/arbitrum',
@@ -135,7 +135,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.ARBITRUM_RINKEBY]: {
     networkType: NetworkType.L2,
     blockWaitMsBeforeWarning: ms`10m`,
-    bridge: 'https://bridge.arbitrum.io/',
+    bridge: 'https://bridge.upswap.org/',
     docs: 'https://offchainlabs.com/',
     explorer: 'https://rinkeby-explorer.arbitrum.io/',
     infoLink: 'https://info.uniswap.org/#/arbitrum/',
@@ -148,7 +148,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.POLYGON]: {
     networkType: NetworkType.L1,
     blockWaitMsBeforeWarning: ms`10m`,
-    bridge: 'https://wallet.polygon.technology/bridge',
+    bridge: 'https://bridge.upswap.org/',
     docs: 'https://polygon.io/',
     explorer: 'https://polygonscan.com/',
     infoLink: 'https://info.uniswap.org/#/polygon/',
@@ -159,7 +159,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.POLYGON_MUMBAI]: {
     networkType: NetworkType.L1,
     blockWaitMsBeforeWarning: ms`10m`,
-    bridge: 'https://wallet.polygon.technology/bridge',
+    bridge: 'https://bridge.upswap.org/',
     docs: 'https://polygon.io/',
     explorer: 'https://mumbai.polygonscan.com/',
     infoLink: 'https://info.uniswap.org/#/polygon/',
