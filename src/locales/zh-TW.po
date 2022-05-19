@@ -17,8 +17,8 @@ msgstr ""
 "X-Crowdin-File-ID: 4\n"
 
 #: src/pages/Swap/index.tsx
-msgid "Buy up to {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} per wallet"
-msgstr "每個錢包最多購入 {MAXNUM}個{OPK_POLYGON_MUMBAI.symbol}"
+msgid "Buy up to {0} {1} per wallet"
+msgstr "每個錢包最多購入 {0}個{1}"
 
 #: src/components/earn/ClaimRewardModal.tsx
 msgid "Unclaimed OPK"
