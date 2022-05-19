@@ -16,6 +16,10 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+#: src/pages/Swap/index.tsx
+msgid "Buy up to {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} per wallet"
+msgstr "每个钱包最多购入 {MAXNUM}个{OPK_POLYGON_MUMBAI.symbol}"
+
 #: src/pages/Stake/Manage.tsx
 msgid "No liquidity token, create a liquidity token first."
 msgstr "无可用的流动性Token，请先创建流动性Token"

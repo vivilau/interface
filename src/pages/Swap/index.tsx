@@ -11,6 +11,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useSwapCallback } from 'hooks/useSwapCallback'
 import useTransactionDeadline from 'hooks/useTransactionDeadline'
 import JSBI from 'jsbi'
+import tryParseCurrencyAmount from 'lib/utils/tryParseCurrencyAmount'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown, CheckCircle, HelpCircle } from 'react-feather'
 import ReactGA from 'react-ga4'
@@ -33,7 +34,8 @@ import { ArrowWrapper, SwapCallbackError, Wrapper } from '../../components/swap/
 import SwapHeader from '../../components/swap/SwapHeader'
 import { SwitchLocaleLink } from '../../components/SwitchLocaleLink'
 import TokenWarningModal from '../../components/TokenWarningModal'
-import { TOKEN_SHORTHANDS } from '../../constants/tokens'
+import { MAXNUM } from '../../constants/customSettings'
+import { OPK_POLYGON_MUMBAI, TOKEN_SHORTHANDS } from '../../constants/tokens'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApprovalOptimizedTrade, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
@@ -51,6 +53,7 @@ import {
   useSwapState,
 } from '../../state/swap/hooks'
 import { useExpertModeManager } from '../../state/user/hooks'
+import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { LinkStyledButton, ThemedText } from '../../theme'
 import { computeFiatValuePriceImpact } from '../../utils/computeFiatValuePriceImpact'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -141,6 +144,22 @@ export default function Swap({ history }: RouteComponentProps) {
             [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
           },
     [independentField, parsedAmount, showWrap, trade]
+  )
+  const [OverError, setOverError] = useState<boolean | undefined>(false)
+  // set maxnum
+  const outNum = parsedAmounts[Field.OUTPUT]
+  const balanceOfOPC =
+    useCurrencyBalance(account ?? undefined, OPK_POLYGON_MUMBAI) ?? tryParseCurrencyAmount('0', OPK_POLYGON_MUMBAI)
+
+  useMemo(
+    (): void =>
+      setOverError(
+        currencies[Field.OUTPUT]?.symbol === OPK_POLYGON_MUMBAI.symbol &&
+          outNum &&
+          balanceOfOPC &&
+          MAXNUM < parseFloat(balanceOfOPC.add(outNum).toFixed(3))
+      ),
+    [balanceOfOPC, currencies, outNum]
   )
 
   const [routeNotFound, routeIsLoading, routeIsSyncing] = useMemo(
@@ -492,6 +511,14 @@ export default function Swap({ history }: RouteComponentProps) {
                 <ButtonLight onClick={toggleWalletModal}>
                   <Trans>Connect Wallet</Trans>
                 </ButtonLight>
+              ) : OverError ? (
+                <ButtonPrimary disabled={true}>
+                  <ThemedText.Main mb="4px">
+                    <Trans>
+                      Buy up to {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} per wallet
+                    </Trans>
+                  </ThemedText.Main>
+                </ButtonPrimary>
               ) : showWrap ? (
                 <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                   {wrapInputError ? (
