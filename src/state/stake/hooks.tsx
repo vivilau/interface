@@ -11,7 +11,7 @@ export const REWARDS_DURATION_DAYS = 60
 
 export const STAKING_REWARDS_INFO: {
   [chainId: number]: { stakingAddress: string; rewardToken: Token }
-} = { 80001: { stakingAddress: '0x72055D6677c98d1B67F65aF21074a737a3C64b52', rewardToken: OPK_POLYGON_MUMBAI } }
+} = { 80001: { stakingAddress: '0xaD1A6452401CD4C4C3439631918C0807BCD36899', rewardToken: OPK_POLYGON_MUMBAI } }
 export interface StakingInfo {
   index: number
   stakeAddress: string
