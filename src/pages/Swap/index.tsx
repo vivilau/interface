@@ -515,7 +515,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 <ButtonPrimary disabled={true}>
                   <ThemedText.Main mb="4px">
                     <Trans>
-                      Buy up to {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} per wallet
+                      {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} max per wallet
                     </Trans>
                   </ThemedText.Main>
                 </ButtonPrimary>
@@ -574,7 +574,7 @@ export default function Swap({ history }: RouteComponentProps) {
                           <MouseoverTooltip
                             text={
                               <Trans>
-                                You must give the Uniswap smart contracts permission to use your{' '}
+                                You must give the Upswap smart contracts permission to use your{' '}
                                 {currencies[Field.INPUT]?.symbol}. You only have to do this once per token.
                               </Trans>
                             }

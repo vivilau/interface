@@ -17,12 +17,12 @@ msgstr ""
 "X-Crowdin-File-ID: 4\n"
 
 #: src/pages/Swap/index.tsx
-msgid "Buy up to {0} {1} per wallet"
-msgstr "每个钱包最多购入 {0}个{1}"
+msgid "{MAXNUM} {0} max per wallet"
+msgstr "每个钱包最多购入 {MAXNUM}个{0} "
 
 #: src/pages/Stake/Manage.tsx
 msgid "No liquidity token, create a liquidity token first."
-msgstr "无可用的流动性Token，请先创建流动性Token"
+msgstr "无可用的流动性Token，请先创建流动性Token。"
 
 #: src/components/earn/ClaimRewardModal.tsx
 msgid "No unclaimed OPK"
