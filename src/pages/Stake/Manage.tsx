@@ -216,6 +216,7 @@ export default function Manage({
   const incentiveId = Number(index)
   //  // get incentiveInfo
   const stakingInfo = useIncentiveInfo(incentiveId)
+  const expired = stakingInfo?.endTime ? stakingInfo?.endTime?.toNumber() < new Date().getTime() / 1000 : undefined
   const [currencyA, currencyB] = [useCurrency(stakingInfo?.token0), useCurrency(stakingInfo?.token1)]
   const tokenA = (currencyA ?? undefined)?.wrapped
   const tokenB = (currencyB ?? undefined)?.wrapped
@@ -482,7 +483,11 @@ export default function Manage({
           <AutoRow gap="6px" justify="flex-end"></AutoRow>
         </WrapSmall>
         <>
-          {stakingInfo ? (
+          {expired === true ? (
+            <OutlineCard>
+              <Trans>This incentive has expired.</Trans>
+            </OutlineCard>
+          ) : stakingInfo ? (
             positionsLoading || depositLoading || tokenLoading ? (
               <PositionsLoadingPlaceholder />
             ) : filteredPositions?.length !== 0 || rewardInfos?.length !== 0 || !account ? null : (
@@ -505,27 +510,27 @@ export default function Manage({
             )
           ) : null}
         </>
-
-        {positionInfos?.map((p, key) => {
-          const tokenid = filteredPositions[key].tokenId.toString()
-          return (
-            <Proposal key={key} onClick={() => deposit(Number(tokenid), p?.liquidity ?? JSBI.BigInt(0))}>
-              <ProposalNumberButton as={Link} to={`/pool/${tokenid}`}>
-                #{tokenid}
-              </ProposalNumberButton>
-              <RowBetween>
-                <RowFixed>
-                  <CurrencyLogo currency={tokenA} size={'18px'} style={{ marginRight: '0.2rem' }} />
-                  <ProposalTitle style={{ paddingRight: '3px' }}>{p?.amount0.toSignificant(4)}</ProposalTitle>
-                  <Symbol>{'|'}</Symbol>
-                  <CurrencyLogo currency={tokenB} size={'18px'} style={{ marginRight: '0.2rem' }} />
-                  <ProposalTitle>{p?.amount1.toSignificant(4)}</ProposalTitle>
-                </RowFixed>
-              </RowBetween>
-              <StatusBadge staked={true} inRange={true} />
-            </Proposal>
-          )
-        })}
+        {expired === false &&
+          positionInfos?.map((p, key) => {
+            const tokenid = filteredPositions[key].tokenId.toString()
+            return (
+              <Proposal key={key} onClick={() => deposit(Number(tokenid), p?.liquidity ?? JSBI.BigInt(0))}>
+                <ProposalNumberButton as={Link} to={`/pool/${tokenid}`}>
+                  #{tokenid}
+                </ProposalNumberButton>
+                <RowBetween>
+                  <RowFixed>
+                    <CurrencyLogo currency={tokenA} size={'18px'} style={{ marginRight: '0.2rem' }} />
+                    <ProposalTitle style={{ paddingRight: '3px' }}>{p?.amount0.toSignificant(4)}</ProposalTitle>
+                    <Symbol>{'|'}</Symbol>
+                    <CurrencyLogo currency={tokenB} size={'18px'} style={{ marginRight: '0.2rem' }} />
+                    <ProposalTitle>{p?.amount1.toSignificant(4)}</ProposalTitle>
+                  </RowFixed>
+                </RowBetween>
+                <StatusBadge staked={true} inRange={true} />
+              </Proposal>
+            )
+          })}
         {rewardInfos?.map((p, key) => {
           return (
             <Proposal2 key={key} style={{ textDecoration: 'none' }} onClick={() => Unstake(p)}>
