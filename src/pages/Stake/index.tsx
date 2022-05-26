@@ -1,7 +1,11 @@
 import { Trans } from '@lingui/macro'
+import { ButtonEmpty, ButtonPrimary } from 'components/Button'
+import AddReferModal from 'components/earn/AddReferModal'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { LoadingRows } from 'pages/Pool/styleds'
-import { STAKING_REWARDS_INFO } from 'state/stake/hooks'
+import { useState } from 'react'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { STAKING_REWARDS_INFO, useReferrer } from 'state/stake/hooks'
 import { useStakingInfo } from 'state/stake/hooks'
 import styled from 'styled-components/macro'
 
@@ -38,9 +42,12 @@ flex-direction: column;
 
 //TODO:use ContrctCall
 export default function Stake() {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && STAKING_REWARDS_INFO[chainId])
-
+  const toggleWalletModal = useWalletModalToggle()
+  const showConnectAWallet = Boolean(!account)
+  const [showAddReferModal, setAddReferModal] = useState(false)
+  const refer = useReferrer()
   const { loading, stakingInfo: incentives } = useStakingInfo()
   function PositionsLoadingPlaceholder() {
     return (
@@ -60,9 +67,15 @@ export default function Stake() {
       </LoadingRows>
     )
   }
+  function addRefer() {
+    setAddReferModal(true)
+  }
   return (
     <>
       <PageWrapper gap="lg" justify="center">
+        <>
+          <AddReferModal isOpen={showAddReferModal} onDismiss={() => setAddReferModal(false)} />
+        </>
         {false && (
           <TopSection gap="md">
             <DataCard>
@@ -101,7 +114,23 @@ export default function Stake() {
           </DataRow>
 
           <PoolSection>
-            {stakingRewardsExist ? (
+            {!showConnectAWallet &&
+            stakingRewardsExist &&
+            refer &&
+            refer === '0x0000000000000000000000000000000000000000' ? (
+              <OutlineCard>
+                <Trans>Add referrer first.</Trans>
+                <ButtonEmpty
+                  padding="8px"
+                  $borderRadius="8px"
+                  width={'fit-content'}
+                  style={{ float: 'right', fontSize: '14px', height: '3rem' }}
+                  onClick={addRefer}
+                >
+                  {'→'}
+                </ButtonEmpty>
+              </OutlineCard>
+            ) : stakingRewardsExist && !showConnectAWallet ? (
               loading ? (
                 <PositionsLoadingPlaceholder />
               ) : incentives?.length === 0 ? (
@@ -115,7 +144,13 @@ export default function Stake() {
               )
             ) : (
               <OutlineCard>
-                <Trans>No active pools</Trans>
+                {showConnectAWallet ? (
+                  <ButtonPrimary style={{ marginTop: '2em', padding: '8px 16px' }} onClick={toggleWalletModal}>
+                    <Trans>Connect a wallet</Trans>
+                  </ButtonPrimary>
+                ) : (
+                  <Trans>No active pools</Trans>
+                )}
               </OutlineCard>
             )}
           </PoolSection>

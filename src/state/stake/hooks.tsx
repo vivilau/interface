@@ -167,7 +167,10 @@ export function useStakingInfo(): StakingResults {
     }
     return undefined
   }, [loading, error, stakingAdress, results])
-  return { loading: loading || stakeloading, stakingInfo: incentiveInfos ?? undefined }
+  const resultInfos = incentiveInfos?.filter(
+    (incentive) => incentive.startTime?.toNumber() <= new Date().getTime() / 1000
+  )
+  return { loading: loading || stakeloading, stakingInfo: resultInfos ?? undefined }
 }
 
 /**
@@ -252,4 +255,12 @@ export function useDeposits(tokenIds: BigNumber[]): DepositResults {
     }
   })
   return { loading: stakes_loading || rewards_loading, depositInfo: claimInfos ?? [] }
+}
+
+export function useReferrer() {
+  const { account, chainId } = useActiveWeb3React()
+  const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
+  const tokenContract = useStakingContract(stakingAdress)
+  const { result: rewards } = useSingleCallResult(tokenContract, 'referrer', [account ?? undefined])
+  return rewards?.[0]
 }

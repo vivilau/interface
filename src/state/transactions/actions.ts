@@ -35,6 +35,7 @@ export enum TransactionType {
   REMOVE_LIQUIDITY_V3 = 13,
   SUBMIT_PROPOSAL = 14,
   UNSTAKE_TOKEN = 15,
+  ADD_REFERRER = 16,
 }
 
 export interface BaseTransactionInfo {
@@ -158,6 +159,10 @@ export interface UnStakeTransactionInfo {
   type: TransactionType.UNSTAKE_TOKEN
   tokenId: string
 }
+export interface AddReferrerTransactionInfo {
+  type: TransactionType.ADD_REFERRER
+  referAdress: string
+}
 export type TransactionInfo =
   | ApproveTransactionInfo
   | ExactOutputSwapTransactionInfo
@@ -176,6 +181,7 @@ export type TransactionInfo =
   | RemoveLiquidityV3TransactionInfo
   | SubmitProposalTransactionInfo
   | UnStakeTransactionInfo
+  | AddReferrerTransactionInfo
 
 export const addTransaction = createAction<{
   chainId: number

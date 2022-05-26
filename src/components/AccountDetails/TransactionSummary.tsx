@@ -9,6 +9,7 @@ import { VoteOption } from '../../state/governance/types'
 import {
   AddLiquidityV2PoolTransactionInfo,
   AddLiquidityV3PoolTransactionInfo,
+  AddReferrerTransactionInfo,
   ApproveTransactionInfo,
   ClaimTransactionInfo,
   CollectFeesTransactionInfo,
@@ -88,6 +89,9 @@ function SubmitProposalTransactionSummary(_: { info: SubmitProposalTransactionIn
 }
 function UnStakeTransactionSummary(_: { info: UnStakeTransactionInfo }) {
   return <Trans>UnStake </Trans>
+}
+function AddReferrerTransactionSummary(_: { info: AddReferrerTransactionInfo }) {
+  return <Trans>Add Referrer </Trans>
 }
 function ApprovalSummary({ info }: { info: ApproveTransactionInfo }) {
   const token = useToken(info.tokenAddress)
@@ -348,5 +352,8 @@ export function TransactionSummary({ info }: { info: TransactionInfo }) {
 
     case TransactionType.UNSTAKE_TOKEN:
       return <UnStakeTransactionSummary info={info} />
+
+    case TransactionType.ADD_REFERRER:
+      return <AddReferrerTransactionSummary info={info} />
   }
 }
