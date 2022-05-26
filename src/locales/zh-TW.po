@@ -16,6 +16,33 @@ msgstr ""
 "X-Crowdin-File: en-US.po\n"
 "X-Crowdin-File-ID: 4\n"
 
+
+
+#: src/components/earn/AddReferModal.tsx
+msgid "Invalid Address"
+msgstr "無效的地址"
+
+#: src/components/earn/AddReferModal.tsx
+msgid "Added!"
+msgstr "添加成功！"
+
+#: src/components/earn/AddReferModal.tsx
+msgid "Add..."
+msgstr "添加中..."
+
+#: src/pages/Stake/index.tsx
+msgid "Add referrer first."
+msgstr "請先添加推薦人。"
+
+#: src/components/AccountDetails/TransactionSummary.tsx
+#: src/components/earn/AddReferModal.tsx
+msgid "Add Referrer"
+msgstr "添加推薦人"
+
+#: src/pages/Stake/Manage.tsx
+msgid "This incentive has expired."
+msgstr "當前激勵池已結束。"
+
 #: src/pages/Swap/index.tsx
 msgid "{MAXNUM} {0} max per wallet"
 msgstr "每個錢包最多購入 {MAXNUM}個{0} "
