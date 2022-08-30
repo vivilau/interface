@@ -17,6 +17,7 @@ import {
   FXS,
   GOO_POLYGON_MUMBAI,
   nativeOnChain,
+  RB_POLYGON,
   renBTC,
   rETH2,
   sETH2,
@@ -161,6 +162,7 @@ export const COMMON_BASES: ChainCurrencyList = {
     DAI_POLYGON,
     USDT_POLYGON,
     WBTC_POLYGON,
+    RB_POLYGON,
   ],
   [SupportedChainId.POLYGON_MUMBAI]: [
     nativeOnChain(SupportedChainId.POLYGON_MUMBAI),

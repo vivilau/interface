@@ -44,6 +44,8 @@ flex-direction: column;
 export default function Stake() {
   const { account, chainId } = useActiveWeb3React()
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && STAKING_REWARDS_INFO[chainId])
+  const rewardToken = chainId && STAKING_REWARDS_INFO[chainId].rewardToken
+  const rewardName = rewardToken && rewardToken.symbol
   const toggleWalletModal = useWalletModalToggle()
   const showConnectAWallet = Boolean(!account)
   const [showAddReferModal, setAddReferModal] = useState(false)
@@ -90,12 +92,12 @@ export default function Stake() {
                   </RowBetween>
                   <RowBetween>
                     <ThemedText.White fontSize={14}>
-                      <Trans>Deposit your Liquidity Provider tokens to receive OPK.</Trans>
+                      <Trans>Deposit your Liquidity Provider tokens to receive {{ rewardName }}.</Trans>
                     </ThemedText.White>
                   </RowBetween>{' '}
                   <ExternalLink style={{ color: 'white', textDecoration: 'underline' }} href="" target="_blank">
                     <ThemedText.White fontSize={14}>
-                      <Trans>Read more about OPK</Trans>
+                      <Trans>Read more about {{ rewardName }}</Trans>
                     </ThemedText.White>
                   </ExternalLink>
                 </AutoColumn>

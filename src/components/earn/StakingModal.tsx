@@ -48,7 +48,7 @@ export default function StakingModal({
   const stakeAddress = stakingInfo.stakeAddress
   const tokenA = stakingInfo.token0
   const tokenB = stakingInfo.token1
-
+  const rewardToken = stakingInfo.rewardToken
   // state for pending and submitted txn views
   const addTransaction = useTransactionAdder()
   const [attempting, setAttempting] = useState<boolean>(false)
@@ -148,7 +148,7 @@ export default function StakingModal({
             <RowFixed>
               <ThemedText.Black>
                 {tokenRate}
-                <Trans> OPK / day</Trans>
+                <Trans>{{ rewardToken }} / day</Trans>
               </ThemedText.Black>
             </RowFixed>
           </RowBetween>

@@ -443,7 +443,7 @@ export default function Manage({
               <RowBetween>
                 <div>
                   <ThemedText.Black>
-                    <Trans>Your unclaimed OPK</Trans>
+                    <Trans>Your unclaimed {rewardToken?.symbol}</Trans>
                   </ThemedText.Black>
                 </div>
                 <ClaimButton onClick={() => claim()}>

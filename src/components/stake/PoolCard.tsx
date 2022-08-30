@@ -103,6 +103,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const token0 = useCurrency(stakingInfo.token0) ?? undefined
   const token1 = useCurrency(stakingInfo.token1) ?? undefined
   const rewardToken = useCurrency(stakingInfo.rewardToken)
+  const rewardName = rewardToken && rewardToken.symbol
   const fee = stakingInfo.fee.toFixed(1)
   const numberOfStakes = stakingInfo.numberOfStakes
   const minDuration = useMemo(() => {
@@ -199,7 +200,13 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                   ⚡
                 </span>
-                {stakingInfo ? <Trans>{stakingInfo?.outputDaily} OPK/day</Trans> : '-'}
+                {stakingInfo ? (
+                  <Trans>
+                    {stakingInfo?.outputDaily} {{ rewardName }}/day
+                  </Trans>
+                ) : (
+                  '-'
+                )}
               </ThemedText.Black>
             </BottomSection>
           </>

@@ -299,13 +299,28 @@ export const OPK_POLYGON_MUMBAI = new Token(
   'OPK',
   'OPK Token'
 )
+export const RB_POLYGON_MUMBAI = new Token(
+  SupportedChainId.POLYGON_MUMBAI,
+  '0xAB8FeB93E4c2900eb5B1C8508314f2E1766A9fD6',
+  18,
+  'RB',
+  'Runbit Token'
+)
+export const RB_POLYGON = new Token(
+  SupportedChainId.POLYGON,
+  '0xfF20f43918C70B9fa47b6e3992b042225b17F73e',
+  18,
+  'RB',
+  'Runbit Token'
+)
 export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.MAINNET]: new Token(SupportedChainId.MAINNET, UNI_ADDRESS[1], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.RINKEBY]: new Token(SupportedChainId.RINKEBY, UNI_ADDRESS[4], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.ROPSTEN]: new Token(SupportedChainId.ROPSTEN, UNI_ADDRESS[3], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.GOERLI]: new Token(SupportedChainId.GOERLI, UNI_ADDRESS[5], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.KOVAN]: new Token(SupportedChainId.KOVAN, UNI_ADDRESS[42], 18, 'UNI', 'Uniswap'),
-  [SupportedChainId.POLYGON_MUMBAI]: OPK_POLYGON_MUMBAI,
+  [SupportedChainId.POLYGON_MUMBAI]: RB_POLYGON_MUMBAI,
+  [SupportedChainId.POLYGON]: RB_POLYGON,
 }
 
 export const WRAPPED_NATIVE_CURRENCY: { [chainId: number]: Token | undefined } = {

@@ -45,6 +45,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
+  const rewardToken = stakingInfo.rewardToken
   function wrappedOndismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -107,7 +108,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
           {rewards && expire ? (
             <RowBetween>
               <ThemedText.Body>
-                <Trans>Generated OPK</Trans>
+                <Trans>Generated {{ rewardToken }}</Trans>
                 {':'}
               </ThemedText.Body>
               <RowFixed>
@@ -152,7 +153,9 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
               <Trans>unstake #{tokenId} </Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {rewards} OPK</Trans>
+              <Trans>
+                Claiming {rewards} {{ rewardToken }}
+              </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -164,7 +167,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed OPK!</Trans>
+              <Trans>Claimed {{ rewardToken }}!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

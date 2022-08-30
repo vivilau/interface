@@ -33,6 +33,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   const rewards = numFixed(claimRewards, 18)
   // console.error('rewards', rewards)
   // monitor call to help UI loading state
+  const rewardToken = stakingInfo.rewardToken
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
@@ -70,7 +71,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     error = <Trans>Connect Wallet</Trans>
   }
   if (!claimRewards || claimRewards.eq('0')) {
-    error = error ?? <Trans>No unclaimed OPK </Trans>
+    error = error ?? <Trans>No unclaimed {{ rewardToken }} </Trans>
   }
   if (attempting) {
     error = error ?? <Trans>Claming... </Trans>
@@ -89,7 +90,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           {claimRewards ? (
             <RowBetween>
               <ThemedText.Body>
-                <Trans>Unclaimed OPK</Trans>
+                <Trans>Unclaimed {{ rewardToken }}</Trans>
                 {':'}
               </ThemedText.Body>
               <RowFixed>
@@ -109,7 +110,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {rewards} OPK</Trans>
+              <Trans>
+                Claiming {rewards} {{ rewardToken }}
+              </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -121,7 +124,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed OPK!</Trans>
+              <Trans>Claimed {{ rewardToken }}!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Token } from '@uniswap/sdk-core'
-import { OPK_POLYGON_MUMBAI } from 'constants/tokens'
+import { RB_POLYGON, RB_POLYGON_MUMBAI } from 'constants/tokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useStakingContract } from 'hooks/useContract'
 import { CallStateResult, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
@@ -11,7 +11,10 @@ export const REWARDS_DURATION_DAYS = 60
 
 export const STAKING_REWARDS_INFO: {
   [chainId: number]: { stakingAddress: string; rewardToken: Token }
-} = { 80001: { stakingAddress: '0xaD1A6452401CD4C4C3439631918C0807BCD36899', rewardToken: OPK_POLYGON_MUMBAI } }
+} = {
+  80001: { stakingAddress: '0xaD1A6452401CD4C4C3439631918C0807BCD36899', rewardToken: RB_POLYGON_MUMBAI },
+  137: { stakingAddress: ' 0x9fA416bf7BAC3D3A3B8c416B7D239e77bcd8fc1b', rewardToken: RB_POLYGON },
+}
 export interface StakingInfo {
   index: number
   stakeAddress: string
