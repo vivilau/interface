@@ -13,7 +13,7 @@ export const STAKING_REWARDS_INFO: {
   [chainId: number]: { stakingAddress: string; rewardToken: Token }
 } = {
   80001: { stakingAddress: '0xaD1A6452401CD4C4C3439631918C0807BCD36899', rewardToken: RB_POLYGON_MUMBAI },
-  137: { stakingAddress: ' 0x9fA416bf7BAC3D3A3B8c416B7D239e77bcd8fc1b', rewardToken: RB_POLYGON },
+  137: { stakingAddress: '0x9fA416bf7BAC3D3A3B8c416B7D239e77bcd8fc1b', rewardToken: RB_POLYGON },
 }
 export interface StakingInfo {
   index: number
