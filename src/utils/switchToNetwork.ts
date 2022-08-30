@@ -27,9 +27,9 @@ function getRpcUrls(chainId: SupportedChainId): [string] {
     case SupportedChainId.ARBITRUM_RINKEBY:
       return ['https://rinkeby.arbitrum.io/rpc']
     case SupportedChainId.POLYGON:
-      return ['https://polygon-rpc.com/']
+      return ['https://polygon-mainnet.infura.io/v3/c21b11048fa54ed08944c8ccc4ce7d04']
     case SupportedChainId.POLYGON_MUMBAI:
-      return ['https://rpc-endpoints.superfluid.dev/mumbai']
+      return ['https://polygon-mumbai.infura.io/v3/c21b11048fa54ed08944c8ccc4ce7d04']
     default:
   }
   // Our API-keyed URLs will fail security checks when used with external wallets.
