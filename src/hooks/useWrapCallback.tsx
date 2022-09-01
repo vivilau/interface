@@ -1,14 +1,17 @@
 import { Trans } from '@lingui/macro'
 import { Currency } from '@uniswap/sdk-core'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useWeb3React } from '@web3-react/core'
+import { sendAnalyticsEvent } from 'components/AmplitudeAnalytics'
+import { EventName } from 'components/AmplitudeAnalytics/constants'
+import { formatToDecimal, getTokenAddress } from 'components/AmplitudeAnalytics/utils'
 import useNativeCurrency from 'lib/hooks/useNativeCurrency'
 import tryParseCurrencyAmount from 'lib/utils/tryParseCurrencyAmount'
 import { useMemo } from 'react'
 
 import { WRAPPED_NATIVE_CURRENCY } from '../constants/tokens'
-import { TransactionType } from '../state/transactions/actions'
+import { useCurrencyBalance } from '../state/connection/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useCurrencyBalance } from '../state/wallet/hooks'
+import { TransactionType } from '../state/transactions/types'
 import { useWETHContract } from './useContract'
 
 export enum WrapType {
@@ -57,7 +60,7 @@ export default function useWrapCallback(
   outputCurrency: Currency | undefined | null,
   typedValue: string | undefined
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<void>); inputError?: WrapInputError } {
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId, account } = useWeb3React()
   const wethContract = useWETHContract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency ?? undefined)
   // we can always parse the amount typed as the input currency, since wrapping is 1:1
@@ -75,6 +78,15 @@ export default function useWrapCallback(
     const hasInputAmount = Boolean(inputAmount?.greaterThan('0'))
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
+    const eventProperties = {
+      token_in_address: getTokenAddress(inputCurrency),
+      token_out_address: getTokenAddress(outputCurrency),
+      token_in_symbol: inputCurrency.symbol,
+      token_out_symbol: outputCurrency.symbol,
+      chain_id: inputCurrency.chainId,
+      amount: inputAmount ? formatToDecimal(inputAmount, inputAmount?.currency.decimals) : undefined,
+    }
+
     if (inputCurrency.isNative && weth.equals(outputCurrency)) {
       return {
         wrapType: WrapType.WRAP,
@@ -89,6 +101,7 @@ export default function useWrapCallback(
                     currencyAmountRaw: inputAmount?.quotient.toString(),
                     chainId,
                   })
+                  sendAnalyticsEvent(EventName.WRAP_TOKEN_TXN_SUBMITTED, { ...eventProperties, type: WrapType.WRAP })
                 } catch (error) {
                   console.error('Could not deposit', error)
                 }
@@ -114,6 +127,7 @@ export default function useWrapCallback(
                     currencyAmountRaw: inputAmount?.quotient.toString(),
                     chainId,
                   })
+                  sendAnalyticsEvent(EventName.WRAP_TOKEN_TXN_SUBMITTED, { ...eventProperties, type: WrapType.UNWRAP })
                 } catch (error) {
                   console.error('Could not withdraw', error)
                 }

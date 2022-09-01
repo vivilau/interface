@@ -2,8 +2,8 @@ import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { createApi, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { Protocol } from '@uniswap/router-sdk'
 import { ChainId } from '@uniswap/smart-order-router'
-import { INFURA_NETWORK_URLS } from 'constants/infura'
-import { AUTO_ROUTER_SUPPORTED_CHAINS, getClientSideQuote } from 'lib/hooks/routing/clientSideSmartOrderRouter'
+import { RPC_URLS } from 'constants/networks'
+import { getClientSideQuote, toSupportedChainId } from 'lib/hooks/routing/clientSideSmartOrderRouter'
 import ms from 'ms.macro'
 import qs from 'qs'
 
@@ -14,8 +14,9 @@ function getRouterProvider(chainId: ChainId): BaseProvider {
   const provider = routerProviders.get(chainId)
   if (provider) return provider
 
-  if (AUTO_ROUTER_SUPPORTED_CHAINS.includes(chainId)) {
-    const provider = new JsonRpcProvider(INFURA_NETWORK_URLS[chainId])
+  const supportedChainId = toSupportedChainId(chainId)
+  if (supportedChainId) {
+    const provider = new JsonRpcProvider(RPC_URLS[supportedChainId])
     routerProviders.set(chainId, provider)
     return provider
   }
@@ -23,7 +24,7 @@ function getRouterProvider(chainId: ChainId): BaseProvider {
   throw new Error(`Router does not support this chain (chainId: ${chainId}).`)
 }
 
-const protocols: Protocol[] = [Protocol.V2, Protocol.V3]
+const protocols: Protocol[] = [Protocol.V2, Protocol.V3, Protocol.MIXED]
 
 const DEFAULT_QUERY_PARAMS = {
   protocols: protocols.map((p) => p.toLowerCase()).join(','),

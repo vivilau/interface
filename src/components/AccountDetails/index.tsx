@@ -1,31 +1,30 @@
 import { Trans } from '@lingui/macro'
-import { Connector } from '@web3-react/types'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useCallback, useContext } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import { getConnection, getConnectionName, getIsCoinbaseWallet, getIsMetaMask } from 'connection/utils'
+import { useCallback } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { useAppDispatch } from 'state/hooks'
-import styled, { ThemeContext } from 'styled-components/macro'
-import { AbstractConnector } from 'web3-react-abstract-connector'
+import { updateSelectedWallet } from 'state/user/reducer'
+import { removeConnectedWallet } from 'state/wallets/reducer'
+import styled, { useTheme } from 'styled-components/macro'
+import { isMobile } from 'utils/userAgent'
 
 import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { injected, portis, walletlink } from '../../connectors'
-import { SUPPORTED_WALLETS } from '../../constants/wallet'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { ExternalLink, LinkStyledButton, ThemedText } from '../../theme'
+import { clearAllTransactions } from '../../state/transactions/reducer'
+import { CopyHelper, ExternalLink, LinkStyledButton, ThemedText } from '../../theme'
 import { shortenAddress } from '../../utils'
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
 import { ButtonSecondary } from '../Button'
 import StatusIcon from '../Identicon/StatusIcon'
 import { AutoRow } from '../Row'
-import Copy from './Copy'
 import Transaction from './Transaction'
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
   padding: 1rem 1rem;
   font-weight: 500;
-  color: ${(props) => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  color: ${(props) => (props.color === 'blue' ? ({ theme }) => theme.deprecated_primary1 : 'inherit')};
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
     padding: 1rem;
   `};
 `
@@ -52,7 +51,7 @@ const UpperSection = styled.div`
 
 const InfoCard = styled.div`
   padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.bg3};
+  border: 1px solid ${({ theme }) => theme.deprecated_bg3};
   border-radius: 20px;
   position: relative;
   display: grid;
@@ -65,7 +64,7 @@ const AccountGroupingRow = styled.div`
   justify-content: space-between;
   align-items: center;
   font-weight: 400;
-  color: ${({ theme }) => theme.text1};
+  color: ${({ theme }) => theme.deprecated_text1};
 
   div {
     ${({ theme }) => theme.flexRowNoWrap}
@@ -75,7 +74,7 @@ const AccountGroupingRow = styled.div`
 
 const AccountSection = styled.div`
   padding: 0rem 1rem;
-  ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
 `
 
 const YourAccount = styled.div`
@@ -95,14 +94,14 @@ const LowerSection = styled.div`
   padding: 1.5rem;
   flex-grow: 1;
   overflow: auto;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.deprecated_bg2};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 
   h5 {
     margin: 0;
     font-weight: 400;
-    color: ${({ theme }) => theme.text3};
+    color: ${({ theme }) => theme.deprecated_text3};
   }
 `
 
@@ -128,14 +127,15 @@ const AccountControl = styled.div`
   }
 `
 
-const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
-  font-size: 0.825rem;
-  color: ${({ theme }) => theme.text3};
+const AddressLink = styled(ExternalLink)`
+  color: ${({ theme }) => theme.deprecated_text3};
   margin-left: 1rem;
   font-size: 0.825rem;
   display: flex;
+  gap: 6px;
+  text-decoration: none !important;
   :hover {
-    color: ${({ theme }) => theme.text2};
+    color: ${({ theme }) => theme.deprecated_text2};
   }
 `
 
@@ -151,7 +151,7 @@ const CloseIcon = styled.div`
 
 const CloseColor = styled(Close)`
   path {
-    stroke: ${({ theme }) => theme.text4};
+    stroke: ${({ theme }) => theme.deprecated_text4};
   }
 `
 
@@ -159,40 +159,8 @@ const WalletName = styled.div`
   width: initial;
   font-size: 0.825rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.text3};
+  color: ${({ theme }) => theme.deprecated_text3};
 `
-
-const IconWrapper = styled.div<{ size?: number }>`
-  ${({ theme }) => theme.flexColumnNoWrap};
-  align-items: center;
-  justify-content: center;
-  margin-right: 8px;
-  & > img,
-  span {
-    height: ${({ size }) => (size ? size + 'px' : '32px')};
-    width: ${({ size }) => (size ? size + 'px' : '32px')};
-  }
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    align-items: flex-end;
-  `};
-`
-
-function WrappedStatusIcon({ connector }: { connector: AbstractConnector | Connector }) {
-  return (
-    <IconWrapper size={16}>
-      <StatusIcon connector={connector} />
-      {connector === portis && (
-        <MainWalletAction
-          onClick={() => {
-            portis.portis.showPortis()
-          }}
-        >
-          <Trans>Show Portis</Trans>
-        </MainWalletAction>
-      )}
-    </IconWrapper>
-  )
-}
 
 const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -208,10 +176,6 @@ const WalletAction = styled(ButtonSecondary)`
     cursor: pointer;
     text-decoration: underline;
   }
-`
-
-const MainWalletAction = styled(WalletAction)`
-  color: ${({ theme }) => theme.primary1};
 `
 
 function renderTransactions(transactions: string[]) {
@@ -239,22 +203,20 @@ export default function AccountDetails({
   ENSName,
   openOptions,
 }: AccountDetailsProps) {
-  const { chainId, account, connector } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
+  const { chainId, account, connector } = useWeb3React()
+  const connectionType = getConnection(connector).type
+
+  const theme = useTheme()
   const dispatch = useAppDispatch()
 
+  const isMetaMask = getIsMetaMask()
+  const isCoinbaseWallet = getIsCoinbaseWallet()
+  const isInjectedMobileBrowser = (isMetaMask || isCoinbaseWallet) && isMobile
+
   function formatConnectorName() {
-    const { ethereum } = window
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
-    const name = Object.keys(SUPPORTED_WALLETS)
-      .filter(
-        (k) =>
-          SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
-      )
-      .map((k) => SUPPORTED_WALLETS[k].name)[0]
     return (
       <WalletName>
-        <Trans>Connected with {name}</Trans>
+        <Trans>Connected with</Trans> {getConnectionName(connectionType, isMetaMask)}
       </WalletName>
     )
   }
@@ -278,99 +240,61 @@ export default function AccountDetails({
               <AccountGroupingRow>
                 {formatConnectorName()}
                 <div>
-                  {connector !== injected && connector !== walletlink && (
-                    <WalletAction
-                      style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
-                      onClick={() => {
-                        ;(connector as any).close()
-                      }}
-                    >
-                      <Trans>Disconnect</Trans>
-                    </WalletAction>
+                  {!isInjectedMobileBrowser && (
+                    <>
+                      <WalletAction
+                        style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
+                        onClick={() => {
+                          const walletType = getConnectionName(getConnection(connector).type, getIsMetaMask())
+                          if (connector.deactivate) {
+                            connector.deactivate()
+                          } else {
+                            connector.resetState()
+                          }
+
+                          dispatch(updateSelectedWallet({ wallet: undefined }))
+                          dispatch(removeConnectedWallet({ account, walletType }))
+                          openOptions()
+                        }}
+                      >
+                        <Trans>Disconnect</Trans>
+                      </WalletAction>
+                      <WalletAction
+                        style={{ fontSize: '.825rem', fontWeight: 400 }}
+                        onClick={() => {
+                          openOptions()
+                        }}
+                      >
+                        <Trans>Change</Trans>
+                      </WalletAction>
+                    </>
                   )}
-                  <WalletAction
-                    style={{ fontSize: '.825rem', fontWeight: 400 }}
-                    onClick={() => {
-                      openOptions()
-                    }}
-                  >
-                    <Trans>Change</Trans>
-                  </WalletAction>
                 </div>
               </AccountGroupingRow>
-              <AccountGroupingRow id="web3-account-identifier-row">
+              <AccountGroupingRow data-testid="web3-account-identifier-row">
                 <AccountControl>
-                  {ENSName ? (
-                    <>
-                      <div>
-                        {connector && <WrappedStatusIcon connector={connector} />}
-                        <p> {ENSName}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        {connector && <WrappedStatusIcon connector={connector} />}
-                        <p> {account && shortenAddress(account)}</p>
-                      </div>
-                    </>
-                  )}
+                  <div>
+                    <StatusIcon connectionType={connectionType} />
+                    <p>{ENSName ? ENSName : account && shortenAddress(account)}</p>
+                  </div>
                 </AccountControl>
               </AccountGroupingRow>
               <AccountGroupingRow>
-                {ENSName ? (
-                  <>
-                    <AccountControl>
-                      <div>
-                        {account && (
-                          <Copy toCopy={account}>
-                            <span style={{ marginLeft: '4px' }}>
-                              <Trans>Copy Address</Trans>
-                            </span>
-                          </Copy>
-                        )}
-                        {chainId && account && (
-                          <AddressLink
-                            hasENS={!!ENSName}
-                            isENS={true}
-                            href={getExplorerLink(chainId, ENSName, ExplorerDataType.ADDRESS)}
-                          >
-                            <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>
-                              <Trans>View on Explorer</Trans>
-                            </span>
-                          </AddressLink>
-                        )}
-                      </div>
-                    </AccountControl>
-                  </>
-                ) : (
-                  <>
-                    <AccountControl>
-                      <div>
-                        {account && (
-                          <Copy toCopy={account}>
-                            <span style={{ marginLeft: '4px' }}>
-                              <Trans>Copy Address</Trans>
-                            </span>
-                          </Copy>
-                        )}
-                        {chainId && account && (
-                          <AddressLink
-                            hasENS={!!ENSName}
-                            isENS={false}
-                            href={getExplorerLink(chainId, account, ExplorerDataType.ADDRESS)}
-                          >
-                            <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>
-                              <Trans>View on Explorer</Trans>
-                            </span>
-                          </AddressLink>
-                        )}
-                      </div>
-                    </AccountControl>
-                  </>
-                )}
+                <AccountControl>
+                  <div>
+                    {account && (
+                      <CopyHelper toCopy={account} gap={6} iconSize={16} fontSize={14}>
+                        <Trans>Copy Address</Trans>
+                      </CopyHelper>
+                    )}
+                    {chainId && account && (
+                      <AddressLink href={getExplorerLink(chainId, ENSName ?? account, ExplorerDataType.ADDRESS)}>
+                        <LinkIcon size={16} />
+                        <Trans>View on Explorer</Trans>
+                      </AddressLink>
+                    )}
+                  </div>
+                </AccountControl>
               </AccountGroupingRow>
             </InfoCard>
           </YourAccount>
@@ -379,9 +303,9 @@ export default function AccountDetails({
       {!!pendingTransactions.length || !!confirmedTransactions.length ? (
         <LowerSection>
           <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
-            <ThemedText.Body>
+            <ThemedText.DeprecatedBody>
               <Trans>Recent Transactions</Trans>
-            </ThemedText.Body>
+            </ThemedText.DeprecatedBody>
             <LinkStyledButton onClick={clearAllTransactionsCallback}>
               <Trans>(clear all)</Trans>
             </LinkStyledButton>
@@ -391,9 +315,9 @@ export default function AccountDetails({
         </LowerSection>
       ) : (
         <LowerSection>
-          <ThemedText.Body color={theme.text1}>
+          <ThemedText.DeprecatedBody color={theme.deprecated_text1}>
             <Trans>Your transactions will appear here...</Trans>
-          </ThemedText.Body>
+          </ThemedText.DeprecatedBody>
         </LowerSection>
       )}
     </>

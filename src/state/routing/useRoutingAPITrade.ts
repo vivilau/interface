@@ -1,17 +1,22 @@
 import { skipToken } from '@reduxjs/toolkit/query/react'
 import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { IMetric, MetricLoggerUnit, setGlobalMetric } from '@uniswap/smart-order-router'
-import { useStablecoinAmountFromFiatValue } from 'hooks/useUSDCPrice'
+import { sendTiming } from 'components/analytics'
+import { useStablecoinAmountFromFiatValue } from 'hooks/useStablecoinPrice'
 import { useRoutingAPIArguments } from 'lib/hooks/routing/useRoutingAPIArguments'
 import useIsValidBlock from 'lib/hooks/useIsValidBlock'
 import ms from 'ms.macro'
 import { useMemo } from 'react'
-import ReactGA from 'react-ga4'
 import { useGetQuoteQuery } from 'state/routing/slice'
 import { useClientSideRouter } from 'state/user/hooks'
 
 import { GetQuoteResult, InterfaceTrade, TradeState } from './types'
 import { computeRoutes, transformRoutesToTrade } from './utils'
+
+export enum RouterPreference {
+  CLIENT = 'client',
+  API = 'api',
+}
 
 /**
  * Returns the best trade by invoking the routing api or the smart order router on the client
@@ -22,7 +27,8 @@ import { computeRoutes, transformRoutesToTrade } from './utils'
 export function useRoutingAPITrade<TTradeType extends TradeType>(
   tradeType: TTradeType,
   amountSpecified?: CurrencyAmount<Currency>,
-  otherCurrency?: Currency
+  otherCurrency?: Currency,
+  routerPreference?: RouterPreference
 ): {
   state: TradeState
   trade: InterfaceTrade<Currency, Currency, TTradeType> | undefined
@@ -35,7 +41,10 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
     [amountSpecified, otherCurrency, tradeType]
   )
 
-  const [clientSideRouter] = useClientSideRouter()
+  const [clientSideRouterStoredPreference] = useClientSideRouter()
+  const clientSideRouter = routerPreference
+    ? routerPreference === RouterPreference.CLIENT
+    : clientSideRouterStoredPreference
 
   const queryArgs = useRoutingAPIArguments({
     tokenIn: currencyIn,
@@ -78,14 +87,16 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
       }
     }
 
-    const otherAmount =
-      tradeType === TradeType.EXACT_INPUT
-        ? currencyOut && quoteResult
-          ? CurrencyAmount.fromRawAmount(currencyOut, quoteResult.quote)
-          : undefined
-        : currencyIn && quoteResult
-        ? CurrencyAmount.fromRawAmount(currencyIn, quoteResult.quote)
-        : undefined
+    let otherAmount = undefined
+    if (quoteResult) {
+      if (tradeType === TradeType.EXACT_INPUT && currencyOut) {
+        otherAmount = CurrencyAmount.fromRawAmount(currencyOut, quoteResult.quote)
+      }
+
+      if (tradeType === TradeType.EXACT_OUTPUT && currencyIn) {
+        otherAmount = CurrencyAmount.fromRawAmount(currencyIn, quoteResult.quote)
+      }
+    }
 
     if (isError || !otherAmount || !route || route.length === 0 || !queryArgs) {
       return {
@@ -95,7 +106,7 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
     }
 
     try {
-      const trade = transformRoutesToTrade(route, tradeType, gasUseEstimateUSD)
+      const trade = transformRoutesToTrade(route, tradeType, quoteResult?.blockNumber, gasUseEstimateUSD)
       return {
         // always return VALID regardless of isFetching status
         state: isSyncing ? TradeState.SYNCING : TradeState.VALID,
@@ -125,7 +136,7 @@ class GAMetric extends IMetric {
   }
 
   putMetric(key: string, value: number, unit?: MetricLoggerUnit) {
-    ReactGA._gaCommandSendTiming('Routing API', `${key} | ${unit}`, value, 'client')
+    sendTiming('Routing API', `${key} | ${unit}`, value, 'client')
   }
 }
 

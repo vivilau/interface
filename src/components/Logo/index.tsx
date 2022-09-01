@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Slash } from 'react-feather'
 import { ImageProps } from 'rebass'
-
-import useTheme from '../../hooks/useTheme'
+import { useTheme } from 'styled-components/macro'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}
 
@@ -35,5 +34,5 @@ export default function Logo({ srcs, alt, style, ...rest }: LogoProps) {
     )
   }
 
-  return <Slash {...rest} style={{ ...style, color: theme.bg4 }} />
+  return <Slash {...rest} style={{ ...style, color: theme.deprecated_bg4 }} />
 }

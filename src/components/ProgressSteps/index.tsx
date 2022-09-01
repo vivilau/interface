@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import styled from 'styled-components/macro'
-import { ThemeContext } from 'styled-components/macro'
+import styled, { useTheme } from 'styled-components/macro'
 
 import { ThemedText } from '../../theme'
 import { AutoColumn } from '../Column'
@@ -13,7 +11,7 @@ const Wrapper = styled(AutoColumn)`
 const Grouping = styled(AutoColumn)`
   width: fit-content;
   padding: 4px;
-  /* background-color: ${({ theme }) => theme.bg2}; */
+  /* background-color: ${({ theme }) => theme.deprecated_bg2}; */
   border-radius: 16px;
 `
 
@@ -21,9 +19,9 @@ const Circle = styled.div<{ confirmed?: boolean; disabled?: boolean }>`
   width: 48px;
   height: 48px;
   background-color: ${({ theme, confirmed, disabled }) =>
-    disabled ? theme.bg3 : confirmed ? theme.green1 : theme.primary1};
+    disabled ? theme.deprecated_bg3 : confirmed ? theme.deprecated_green1 : theme.deprecated_primary1};
   border-radius: 50%;
-  color: ${({ theme, disabled }) => (disabled ? theme.text3 : theme.text1)};
+  color: ${({ theme, disabled }) => (disabled ? theme.deprecated_text3 : theme.deprecated_text1)};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +52,7 @@ interface ProgressCirclesProps {
  * @param steps  array of booleans where true means step is complete
  */
 export default function ProgressCircles({ steps, disabled = false, ...rest }: ProgressCirclesProps) {
-  const theme = useContext(ThemeContext)
+  const theme = useTheme()
 
   return (
     <Wrapper justify={'center'} {...rest}>
@@ -65,7 +63,7 @@ export default function ProgressCircles({ steps, disabled = false, ...rest }: Pr
               <Circle confirmed={step} disabled={disabled || (!steps[i - 1] && i !== 0)}>
                 {step ? '✓' : i + 1 + '.'}
               </Circle>
-              <ThemedText.Main color={theme.text4}>|</ThemedText.Main>
+              <ThemedText.DeprecatedMain color={theme.deprecated_text4}>|</ThemedText.DeprecatedMain>
             </CircleRow>
           )
         })}

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: uniswap-interface\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-03-28 23:07\n"
+"PO-Revision-Date: 2022-08-26 17:08\n"
 "Last-Translator: \n"
 "Language: ru_RU\n"
 "Language-Team: Russian\n"
@@ -116,12 +116,16 @@ msgstr "<0>🎉 </0>Добро пожаловать в команду едино
 msgid "A minimum threshold of 0.25% of the total UNI supply is required to submit proposals"
 msgstr "Для внесения предложений требуется минимальный порог в 0,25% от общего предложения UNI"
 
+#: src/components/swap/PriceImpactWarning.tsx
+msgid "A swap of this size may have a high price impact, given the current liquidity in the pool. There may be a large difference between the amount of your input token and what you will receive in the output token"
+msgstr "Своп такого размера может сильно повлиять на цену, учитывая текущую ликвидность в пуле. Может быть большая разница между количеством вашего входного токена и тем, что вы получите в выходном токене."
+
 #: src/components/Menu/index.tsx
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
 msgid "About"
 msgstr "О протоколе"
 
 #: src/components/swap/SwapModalHeader.tsx
-#: src/lib/components/Swap/Summary/index.tsx
 msgid "Accept"
 msgstr "Принять"
 
@@ -129,15 +133,12 @@ msgstr "Принять"
 msgid "Account"
 msgstr "Аккаунт"
 
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Acknowledge"
-msgstr "Принять"
-
 #: src/components/SearchModal/ImportRow.tsx
 #: src/pages/Vote/styled.tsx
 msgid "Active"
 msgstr "Активный"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/PositionCard/index.tsx
 #: src/pages/AddLiquidity/index.tsx
 msgid "Add"
@@ -169,8 +170,9 @@ msgid "Add more liquidity"
 msgstr "Добавить ещё ликвидность"
 
 #: src/components/TransactionConfirmationModal/index.tsx
-msgid "Add {0} to Metamask <0/>"
-msgstr "Добавить {0} в MetaMask <0/>"
+#: src/components/TransactionConfirmationModal/index.tsx
+msgid "Add {0}"
+msgstr "Добавить {0}"
 
 #: src/pages/Earn/Manage.tsx
 msgid "Add {0}-{1} liquidity"
@@ -180,9 +182,22 @@ msgstr "Добавить ликвидность {0}-{1}"
 msgid "Add {0}/{1} V3 liquidity"
 msgstr "Добавить ликвидность {0}/{1} в V3"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Added"
+msgstr "Добавлен"
+
+#: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 msgid "Added {0}"
-msgstr "Добавлено {0}"
+msgstr "{0} добавлен"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Adding"
+msgstr "Добавление"
+
+#: src/components/vote/QueueModal.tsx
+msgid "Adding this proposal to the queue will allow it to be executed, after a delay."
+msgstr "Добавление этого предложения в очередь позволит выполнить его после задержки."
 
 #: src/components/claim/AddressClaimModal.tsx
 msgid "Address has no available claim"
@@ -192,10 +207,6 @@ msgstr "У адреса нет прав требования"
 msgid "Against"
 msgstr "Против"
 
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Allow"
-msgstr "Одобрить"
-
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
 msgid "Allow LP token migration"
 msgstr "Разрешить перенос LP-токенов"
@@ -204,21 +215,9 @@ msgstr "Разрешить перенос LP-токенов"
 msgid "Allow high price impact trades and skip the confirm screen. Use at your own risk."
 msgstr "Разрешить сделки с высоким влиянием на цену и не показывать экран подтверждения. Используйте на свой страх и риск."
 
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Allow in your wallet"
-msgstr "Разрешите в своём кошельке"
-
 #: src/pages/Swap/index.tsx
 msgid "Allow the Uniswap Protocol to use your {0}"
 msgstr "Разрешить протоколу Uniswap использовать ваши {0}"
-
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Allow {0} first"
-msgstr "Сначала одобрите {0}"
-
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Allowance pending"
-msgstr "Разрешение подтверждается"
 
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
 msgid "Allowed"
@@ -232,12 +231,8 @@ msgstr "Сумма"
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note: fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr "Произошла ошибка при попытке произвести этот обмен. Возможно, нужно увеличить допустимое проскальзывание. Если это не сработает, возможно, имеет место несовместимость с токеном, которым вы торгуете. Обратите внимание: токены с комиссией за перевод или изменяемой базой несовместимы с Uniswap V3."
 
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Approval pending"
-msgstr "Одобрение подтверждается"
-
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/earn/StakingModal.tsx
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
 #: src/pages/RemoveLiquidity/index.tsx
 msgid "Approve"
 msgstr "Одобрить"
@@ -245,10 +240,6 @@ msgstr "Одобрить"
 #: src/pages/CreateProposal/ProposalActionSelector.tsx
 msgid "Approve Token"
 msgstr "Одобрить токен"
-
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Approve in your wallet"
-msgstr "Одобрите в своём кошельке"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
 #: src/pages/AddLiquidity/index.tsx
@@ -258,14 +249,12 @@ msgstr "Одобрите в своём кошельке"
 msgid "Approve {0}"
 msgstr "Одобрить {0}"
 
-#: src/lib/components/Swap/SwapButton/useApprovalData.tsx
-msgid "Approve {0} first"
-msgstr "Сначала одобрите {0}"
-
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/RemoveLiquidity/index.tsx
 msgid "Approved"
 msgstr "Одобрено"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
 #: src/pages/RemoveLiquidity/index.tsx
 msgid "Approving"
@@ -303,13 +292,8 @@ msgid "At least {0} {1} and {2} {3} will be refunded to your wallet due to selec
 msgstr "Не менее {0} {1} и {2} {3} будут возвращены на ваш кошелёк из-за выбранного диапазона цен."
 
 #: src/components/TransactionSettings/index.tsx
-#: src/lib/components/Swap/Settings/MaxSlippageSelect.tsx
 msgid "Auto"
 msgstr "Авто"
-
-#: src/lib/components/Swap/RoutingDiagram/index.tsx
-msgid "Auto Router"
-msgstr "Автомаршрутизатор"
 
 #: src/components/Settings/index.tsx
 msgid "Auto Router API"
@@ -319,6 +303,12 @@ msgstr "API автомаршрутизатора"
 msgid "Available to deposit: {0}"
 msgstr "Доступно для внесения: {0}"
 
+#: src/components/WalletModal/PendingView.tsx
+#: src/components/WalletModal/PendingView.tsx
+msgid "Back to wallet selection"
+msgstr "Назад к выбору кошелька"
+
+#: src/components/CurrencyInputPanel/SwapCurrencyInputPanel.tsx
 #: src/components/CurrencyInputPanel/index.tsx
 msgid "Balance: {0}"
 msgstr "Баланс: {0}"
@@ -343,9 +333,17 @@ msgstr "Подходит для очень стабильных пар."
 msgid "Best price route costs ~{formattedGasPriceString} in gas."
 msgstr "Стоимость газа в маршруте с лучшей ценой составит ~{formattedGasPriceString}."
 
+#: src/components/ConnectedAccountBlocked/index.tsx
+msgid "Blocked Address"
+msgstr "Заблокированный адрес"
+
 #: src/components/Blocklist/index.tsx
 msgid "Blocked address"
 msgstr "Заблокированный адрес"
+
+#: src/components/Header/NetworkSelector.tsx
+msgid "Blockscout"
+msgstr "Блокскаут"
 
 #: src/components/Header/NetworkSelector.tsx
 msgid "Bridge"
@@ -360,12 +358,17 @@ msgid "By adding this list you are implicitly trusting that the data is correct.
 msgstr "Добавляя этот список, вы подразумеваете, что доверяете его данным. Любой может создать список, включая создание поддельных версий существующих списков, а также списков, якобы сделанных проектами, у которых нет списков."
 
 #: src/components/WalletModal/index.tsx
+#: src/components/WalletModal/index.tsx
 msgid "By connecting a wallet, you agree to Uniswap Labs’ <0>Terms of Service</0> and acknowledge that you have read and understand the Uniswap <1>Protocol Disclaimer</1>."
 msgstr "Подключая кошелёк, вы соглашаетесь с <0>Условиями предоставления услуг</0> Uniswap Labs и подтверждаете, что прочитали и поняли <1>Отказ от претензий протокола Uniswap</1>."
 
 #: src/pages/Vote/styled.tsx
 msgid "Canceled"
 msgstr "Отменено"
+
+#: src/constants/tokenSafety.tsx
+msgid "Caution"
+msgstr "Осторожность"
 
 #: src/components/AccountDetails/index.tsx
 msgid "Change"
@@ -383,6 +386,8 @@ msgstr "Проверьте состояние сети"
 msgid "Check out our v3 LP walkthrough and migration guides."
 msgstr "Ознакомьтесь с нашими руководствами по предоставлению и переносу ликвидности в V3."
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/pages/Earn/Manage.tsx
@@ -417,6 +422,7 @@ msgstr "Востребовать комиссии"
 msgid "Claim your UNI tokens"
 msgstr "Востребуйте свои токены UNI"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/claim/AddressClaimModal.tsx
 msgid "Claimed"
 msgstr "Востребовано"
@@ -430,6 +436,7 @@ msgstr "Вы востребовали UNI!"
 msgid "Claimed!"
 msgstr "Востребовано!"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/claim/AddressClaimModal.tsx
 #: src/components/claim/ClaimModal.tsx
 msgid "Claiming"
@@ -452,9 +459,10 @@ msgstr "Очистить всё"
 msgid "Clear all"
 msgstr "Очистить всё"
 
+#: src/components/TokenSafety/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
-#: src/lib/components/Swap/Status/StatusDialog.tsx
+#: src/components/TransactionConfirmationModal/index.tsx
 msgid "Close"
 msgstr "Закрыть"
 
@@ -463,6 +471,7 @@ msgstr "Закрыть"
 msgid "Closed"
 msgstr "Закрыто"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/Pool/PositionPage.tsx
 msgid "Collect"
 msgstr "Получить"
@@ -480,10 +489,12 @@ msgstr "Получить комиссии"
 msgid "Collect {0}/{1} fees"
 msgstr "Получить комиссии {0}/{1}"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/Pool/PositionPage.tsx
 msgid "Collected"
 msgstr "Получено"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/Pool/PositionPage.tsx
 msgid "Collecting"
 msgstr "Получение"
@@ -509,19 +520,17 @@ msgstr "Подтвердить внесение"
 msgid "Confirm Swap"
 msgstr "Подтвердить обмен"
 
-#: src/lib/components/Swap/Summary/index.tsx
-#: src/lib/components/Swap/SwapButton/index.tsx
-msgid "Confirm in your wallet"
-msgstr "Подтвердите в своём кошельке"
-
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Confirm swap"
-msgstr "Подтвердите обмен"
+#: src/components/WalletModal/PendingView.tsx
+msgid "Confirm this connection in your wallet"
+msgstr "Подтвердите это подключение в своем кошельке"
 
 #: src/components/ModalViews/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
+#: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/claim/AddressClaimModal.tsx
 #: src/components/claim/ClaimModal.tsx
+#: src/components/vote/ExecuteModal.tsx
+#: src/components/vote/QueueModal.tsx
 #: src/components/vote/VoteModal.tsx
 msgid "Confirm this transaction in your wallet"
 msgstr "Подтвердите эту транзакцию в своём кошельке"
@@ -529,6 +538,10 @@ msgstr "Подтвердите эту транзакцию в своём кош�
 #: src/components/TransactionConfirmationModal/index.tsx
 msgid "Confirm transaction in wallet"
 msgstr "Подтвердите транзакцию в кошельке"
+
+#: src/components/Web3Status/index.tsx
+msgid "Connect"
+msgstr "Соединять"
 
 #: src/components/Web3Status/index.tsx
 #: src/components/earn/ClaimRewardModal.tsx
@@ -563,30 +576,30 @@ msgstr "Подключите кошелёк, чтобы просмотреть �
 msgid "Connect to a wallet to view your liquidity."
 msgstr "Подключите кошелёк, чтобы просмотреть вашу ликвидность."
 
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Connect wallet to swap"
-msgstr "Подключите кошелек, чтобы обменять"
-
-#: src/lib/components/Wallet.tsx
-msgid "Connect your wallet"
-msgstr "Подключить свой кошелёк"
-
 #: src/components/AccountDetails/index.tsx
-msgid "Connected with {name}"
-msgstr "Подключено к {name}"
+msgid "Connected with"
+msgstr "Связано с"
 
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Convert {0} to {1} with no slippage"
-msgstr "Конвертировать {0} в {1} без проскальзывания"
+#: src/components/WalletModal/PendingView.tsx
+msgid "Connecting..."
+msgstr "Подключение..."
 
-#: src/components/AccountDetails/Copy.tsx
-msgid "Copied"
-msgstr "Скопировано"
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
+#: src/theme/components.tsx
+msgid "Copied!"
+msgstr "Скопировано!"
 
-#: src/components/AccountDetails/index.tsx
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
+msgid "Copy"
+msgstr "Копировать"
+
 #: src/components/AccountDetails/index.tsx
 msgid "Copy Address"
 msgstr "Копировать адрес"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Create"
+msgstr "Создать"
 
 #: src/pages/AddLiquidityV2/ConfirmAddModalBottom.tsx
 msgid "Create Pool & Supply"
@@ -622,6 +635,14 @@ msgstr "Создать пул."
 msgid "Create {0}/{1} V3 pool"
 msgstr "Создать пул {0}/{1} в V3"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Created"
+msgstr "Созданный"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Creating"
+msgstr "Создание"
+
 #: src/components/PositionPreview/index.tsx
 #: src/pages/Pool/PositionPage.tsx
 msgid "Current price"
@@ -634,6 +655,10 @@ msgstr "Текущая цена {0}:"
 #: src/components/Menu/index.tsx
 msgid "Dark Theme"
 msgstr "Тёмная тема"
+
+#: src/components/WalletDropdown/DefaultMenu.tsx
+msgid "Dark theme"
+msgstr "Темная тема"
 
 #: src/pages/Vote/styled.tsx
 msgid "Defeated"
@@ -707,6 +732,7 @@ msgid "Details"
 msgstr "Подробности"
 
 #: src/components/AccountDetails/index.tsx
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
 msgid "Disconnect"
 msgstr "Отключить"
 
@@ -715,12 +741,16 @@ msgid "Discord"
 msgstr "Discord"
 
 #: src/components/TransactionConfirmationModal/index.tsx
-#: src/lib/components/Swap/Status/StatusDialog.tsx
+#: src/components/TransactionConfirmationModal/index.tsx
 msgid "Dismiss"
 msgstr "Закрыть"
 
 #: src/components/Menu/index.tsx
 msgid "Docs"
+msgstr "Документация"
+
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "Documentation"
 msgstr "Документация"
 
 #: src/pages/MigrateV2/index.tsx
@@ -757,7 +787,6 @@ msgstr "Введите адрес, чтобы востребовать UNI. Ес
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-#: src/lib/components/Swap/Toolbar/Caption.tsx
 #: src/state/burn/hooks.tsx
 #: src/state/mint/hooks.tsx
 #: src/state/mint/v3/hooks.tsx
@@ -781,26 +810,15 @@ msgstr "Введите сумму в {0}"
 
 #: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
+#: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/Web3Status/index.tsx
 msgid "Error"
 msgstr "Ошибка"
 
 #: src/components/WalletModal/PendingView.tsx
-#: src/components/WalletModal/index.tsx
+#: src/components/WalletModal/PendingView.tsx
 msgid "Error connecting"
 msgstr "Ошибка подключения"
-
-#: src/components/WalletModal/index.tsx
-msgid "Error connecting. Try refreshing the page."
-msgstr "Ошибка подключения. Попробуйте обновить страницу."
-
-#: src/lib/components/Error/ErrorDialog.tsx
-msgid "Error details"
-msgstr "Описание ошибки"
-
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Error fetching trade"
-msgstr "Ошибка при получении сделки"
 
 #: src/components/SearchModal/ManageLists.tsx
 msgid "Error importing list"
@@ -818,11 +836,36 @@ msgstr "Приблизительная комиссия сети"
 msgid "Etherscan"
 msgstr "Etherscan"
 
+#: src/components/vote/ExecuteModal.tsx
+#: src/pages/Vote/VotePage.tsx
+msgid "Execute"
+msgstr "Выполнять"
+
+#: src/components/vote/ExecuteModal.tsx
+msgid "Execute Proposal {proposalId}"
+msgstr "Выполнить предложение {proposalId}"
+
+#: src/components/AccountDetails/TransactionSummary.tsx
+msgid "Execute proposal {proposalKey}."
+msgstr "Выполнить предложение {proposalKey}."
+
 #: src/pages/Vote/styled.tsx
 msgid "Executed"
 msgstr "Исполнено"
 
-#: src/components/SearchModal/CurrencyList.tsx
+#: src/components/vote/ExecuteModal.tsx
+msgid "Executing"
+msgstr "выполнение"
+
+#: src/components/vote/ExecuteModal.tsx
+msgid "Executing this proposal will enact the calldata on-chain."
+msgstr "Выполнение этого предложения активирует данные вызова в цепочке."
+
+#: src/components/vote/ExecuteModal.tsx
+msgid "Execution Submitted"
+msgstr "Исполнение отправлено"
+
+#: src/components/SearchModal/CurrencyList/index.tsx
 msgid "Expanded results from inactive Token Lists"
 msgstr "Расширенные результаты из неактивных списков токенов"
 
@@ -842,6 +885,15 @@ msgstr "Экспертный режим отключает экран подтв
 msgid "Expired"
 msgstr "Истёк срок"
 
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
+msgid "Explore"
+msgstr "Исследовать"
+
+#: src/pages/Tokens/index.tsx
+#: src/pages/Tokens/index.tsx
+msgid "Explore Tokens"
+msgstr "Исследуйте жетоны"
+
 #: src/pages/Pool/CTACards.tsx
 msgid "Explore Uniswap Analytics."
 msgstr "Изучите Uniswap Analytics."
@@ -849,6 +901,10 @@ msgstr "Изучите Uniswap Analytics."
 #: src/components/Popups/FailedNetworkSwitchPopup.tsx
 msgid "Failed to switch networks from the Uniswap Interface. In order to use Uniswap on {0}, you must change the network in your wallet."
 msgstr "Не удалось переключить сеть через интерфейс Uniswap. Чтобы использовать Uniswap в {0}, вам нужно переключить сеть в своем кошельке."
+
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "Feature Flags"
+msgstr "Флаги функций"
 
 #: src/components/PositionPreview/index.tsx
 msgid "Fee Tier"
@@ -862,11 +918,10 @@ msgstr "Уровень комиссий"
 msgid "Fetching best price..."
 msgstr "Получение лучшей цены..."
 
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Fetching best price…"
-msgstr "Получение лучшей цены…"
+#: src/components/Tokens/TokenTable/SearchBar.tsx
+msgid "Filter tokens"
+msgstr "Фильтровать токены"
 
-#: src/lib/components/Swap/Output.tsx
 #: src/pages/Vote/VotePage.tsx
 msgid "For"
 msgstr "За"
@@ -900,39 +955,28 @@ msgstr "Получите поддержку в Discord"
 msgid "Help Center"
 msgstr "Центр поддержки"
 
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "Help center"
+msgstr "Центр помощи"
+
 #: src/components/FeeSelector/index.tsx
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
 msgid "Hide"
 msgstr "Скрыть"
-
-#: src/components/PositionList/index.tsx
-msgid "Hide closed positions"
-msgstr "Скрыть закрытые позиции"
 
 #: src/pages/Swap/index.tsx
 msgid "High Price Impact"
 msgstr "Высокое влияние на цену"
 
-#: src/lib/components/Swap/Summary/index.tsx
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "High price impact"
-msgstr "Высокое влияние на цену"
-
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "High slippage"
-msgstr "Высокое проскальзывание"
-
-#: src/lib/components/Swap/Settings/MaxSlippageSelect.tsx
-msgid "High slippage increases the risk of price movement"
-msgstr "Высокое проскальзывание увеличивает риск изменения цены"
-
-#: src/components/WalletModal/index.tsx
-msgid "How this app uses APIs"
-msgstr "Как это приложение использует API"
-
 #: src/components/SearchModal/ImportList.tsx
+#: src/components/TokenSafety/index.tsx
 #: src/pages/AddLiquidity/index.tsx
 msgid "I understand"
 msgstr "Я понимаю"
+
+#: src/components/ConnectedAccountBlocked/index.tsx
+msgid "If you believe this is an error, please send an email including your address to"
+msgstr "Если вы считаете, что это ошибка, отправьте электронное письмо с указанием вашего адреса на"
 
 #: src/components/SearchModal/ImportList.tsx
 msgid "If you purchase a token from this list, you may not be able to sell it back."
@@ -974,29 +1018,20 @@ msgstr "Увеличить ликвидность"
 msgid "Initial prices and pool share"
 msgstr "Начальные цены и доля в пуле"
 
-#: src/components/WalletModal/PendingView.tsx
-msgid "Initializing..."
-msgstr "Инициализация..."
-
 #: src/components/swap/SwapModalHeader.tsx
 msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
 msgstr "Сумма к продаже — оценочная. Вы продадите максимум <0>{0} {1}</0>, или транзакция откатится."
 
-#: src/components/WalletModal/index.tsx
-msgid "Install Metamask"
-msgstr "Установить MetaMask"
+#: src/components/WalletModal/InjectedOption.tsx
+msgid "Install MetaMask"
+msgstr "Установить МетаМаск"
 
 #: src/pages/Swap/index.tsx
 msgid "Insufficient liquidity for this trade."
 msgstr "Недостаточно ликвидности для этой сделки."
 
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Insufficient liquidity in the pool for your trade"
-msgstr "Недостаточно ликвидности в пуле для вашей сделки"
-
 #: src/hooks/useWrapCallback.tsx
 #: src/hooks/useWrapCallback.tsx
-#: src/lib/components/Swap/Toolbar/Caption.tsx
 #: src/state/mint/hooks.tsx
 #: src/state/mint/hooks.tsx
 #: src/state/mint/v3/hooks.tsx
@@ -1033,6 +1068,8 @@ msgid "Invalid recipient"
 msgstr "Неверный получатель"
 
 #: src/components/Menu/index.tsx
+#: src/components/WalletDropdown/DefaultMenu.tsx
+#: src/components/WalletDropdown/LanguageMenu.tsx
 msgid "Language"
 msgstr "Язык"
 
@@ -1046,17 +1083,23 @@ msgstr "Узнать подробнее о предоставлении ликв
 
 #: src/components/PrivacyPolicy/index.tsx
 #: src/components/PrivacyPolicy/index.tsx
+#: src/components/TokenSafety/TokenSafetyMessage.tsx
+#: src/components/TokenSafety/index.tsx
 msgid "Learn more"
 msgstr "Узнать больше"
 
 #: src/components/Menu/index.tsx
+#: src/components/NavBar/MenuDropdown.tsx
 #: src/components/PrivacyPolicy/index.tsx
-#: src/components/WalletModal/index.tsx
 msgid "Legal & Privacy"
 msgstr "Юридическая информация и политика конфиденциальности"
 
 #: src/components/Menu/index.tsx
 msgid "Light Theme"
+msgstr "Светлая тема"
+
+#: src/components/WalletDropdown/DefaultMenu.tsx
+msgid "Light theme"
 msgstr "Светлая тема"
 
 #: src/components/claim/ClaimModal.tsx
@@ -1067,10 +1110,6 @@ msgstr "Ликвидность"
 #: src/components/LiquidityChartRangeInput/index.tsx
 msgid "Liquidity data not available."
 msgstr "Данные о ликвидности отсутствуют."
-
-#: src/lib/components/Swap/Summary/Details.tsx
-msgid "Liquidity provider fee"
-msgstr "Комиссия поставщика ликвидности"
 
 #: src/pages/Pool/v2.tsx
 msgid "Liquidity provider rewards"
@@ -1123,7 +1162,7 @@ msgstr "Управлять списками токенов"
 msgid "Manage this pool."
 msgstr "Управление этим пулом."
 
-#: src/lib/components/Swap/TokenInput.tsx
+#: src/components/CurrencyInputPanel/SwapCurrencyInputPanel.tsx
 #: src/pages/RemoveLiquidity/V3.tsx
 msgid "Max"
 msgstr "Максимум"
@@ -1137,16 +1176,11 @@ msgstr "Макс. цена"
 msgid "Max price"
 msgstr "Макс. цена"
 
-#: src/lib/components/Swap/Settings/MaxSlippageSelect.tsx
-msgid "Max slippage"
-msgstr "Максимальное проскальзывание"
-
 #: src/components/PositionListItem/index.tsx
 msgid "Max:"
 msgstr "Макс.:"
 
 #: src/components/swap/AdvancedSwapDetails.tsx
-#: src/lib/components/Swap/Summary/Details.tsx
 msgid "Maximum sent"
 msgstr "Максимум к продаже"
 
@@ -1197,7 +1231,6 @@ msgid "Min:"
 msgstr "Мин.:"
 
 #: src/components/swap/AdvancedSwapDetails.tsx
-#: src/lib/components/Swap/Summary/Details.tsx
 msgid "Minimum received"
 msgstr "Минимум к получению"
 
@@ -1205,13 +1238,21 @@ msgstr "Минимум к получению"
 msgid "Missing dependencies"
 msgstr "Отсутствуют зависимости"
 
-#: src/lib/components/Swap/Settings/MockToggle.tsx
-msgid "Mock Toggle"
-msgstr "Включить симуляцию"
-
 #: src/pages/Pool/index.tsx
 msgid "More"
 msgstr "Ещё"
+
+#: src/components/NavBar/SearchBar.tsx
+msgid "NFT Collections"
+msgstr "Коллекции NFT"
+
+#: src/components/NavBar/Navbar.tsx
+msgid "NFTs"
+msgstr "NFT"
+
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
+msgid "Name not found"
+msgstr "Имя не найдено"
 
 #: src/components/swap/AdvancedSwapDetails.tsx
 msgid "Network Fee"
@@ -1259,35 +1300,28 @@ msgid "No proposals found."
 msgstr "Предложений не найдено."
 
 #: src/components/SearchModal/CurrencySearch.tsx
-#: src/lib/components/TokenSelect/index.tsx
 msgid "No results found."
 msgstr "Ничего не найдено."
+
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
+msgid "No token information available"
+msgstr "Нет информации о токене"
+
+#: src/components/NavBar/SearchBar.tsx
+msgid "No tokens found."
+msgstr "Токены не найдены."
+
+#: src/constants/tokenSafety.tsx
+msgid "Not Available"
+msgstr "Нет в наличии"
 
 #: src/components/FeeSelector/FeeTierPercentageBadge.tsx
 msgid "Not created"
 msgstr "Не создано"
 
-#: src/components/Toggle/ListToggle.tsx
-#: src/lib/components/Toggle.tsx
-msgid "OFF"
-msgstr "ВЫКЛ"
-
-#: src/components/Toggle/ListToggle.tsx
-#: src/lib/components/Toggle.tsx
-msgid "ON"
-msgstr "ВКЛ"
-
 #: src/components/Settings/index.tsx
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ИСПОЛЬЗУЙТЕ ЭТОТ РЕЖИМ, ТОЛЬКО ЕСЛИ ЗНАЕТЕ, ЧТО ДЕЛАЕТЕ."
-
-#: src/components/Toggle/index.tsx
-msgid "Off"
-msgstr "Выкл"
-
-#: src/components/Toggle/index.tsx
-msgid "On"
-msgstr "Вкл"
 
 #: src/pages/AddLiquidityV2/index.tsx
 msgid "Once you are happy with the rate click supply to review."
@@ -1297,13 +1331,9 @@ msgstr "Как только вы будете довольны курсом, н�
 msgid "Only UNI votes that were self delegated or delegated to another address before block {0} are eligible for voting."
 msgstr "Проголосовать могут только те голоса UNI, которые делегированы себе или на другой адрес до блока {0}."
 
-#: src/components/Web3ReactManager/index.tsx
-msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device."
-msgstr "Ой! Произошла неизвестная ошибка. Пожалуйста, обновите страницу или откройте из другого браузера или с другого устройства."
-
 #: src/components/Header/NetworkSelector.tsx
-msgid "Optimism Gateway"
-msgstr "Шлюз в Optimism"
+msgid "Optimism Bridge"
+msgstr "Мост в Optimism"
 
 #: src/components/DowntimeWarning/index.tsx
 msgid "Optimism is in Beta and may experience downtime. Optimism expects planned downtime to upgrade the network in the near future. During downtime, your position will not earn fees and you will be unable to remove liquidity. <0>Read more.</0>"
@@ -1326,14 +1356,6 @@ msgstr "Сумма к получению — оценочная. Если цен
 msgid "Output is estimated. You will receive at least <0>{0} {1}</0> or the transaction will revert."
 msgstr "Сумма к получению — оценочная. Вы получите как минимум <0>{0} {1}</0>, или транзакция откатится."
 
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Output is estimated. You will receive at least {0} {1} or the transaction will revert."
-msgstr "Сумма к получению — оценочная. Вы получите как минимум {0} {1}, или транзакция откатится."
-
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Output is estimated. You will send at most {0} {1} or the transaction will revert."
-msgstr "Сумма к продаже — оценочная. Вы продадите максимум {0} {1}, или транзакция откатится."
-
 #: src/components/swap/SwapModalHeader.tsx
 msgid "Output will be sent to <0>{0}</0>"
 msgstr "Сумма к получению будет отправлена на <0>{0}</0>"
@@ -1346,6 +1368,7 @@ msgstr "Владелец"
 msgid "Participating pools"
 msgstr "Участвующие пулы"
 
+#: src/components/WalletDropdown/DefaultMenu.tsx
 #: src/pages/Vote/styled.tsx
 msgid "Pending"
 msgstr "Ожидает"
@@ -1358,13 +1381,9 @@ msgstr "Чтобы подтвердить, что вы хотите удалит
 msgid "Please connect to Layer 1 Ethereum"
 msgstr "Пожалуйста, подключитесь к Уровню 1 Ethereum"
 
-#: src/components/WalletModal/index.tsx
-msgid "Please connect to a supported network in the dropdown menu or in your wallet."
-msgstr "Пожалуйста, подключитесь на поддерживаемую сеть в выпадающем меню или в своём кошельке."
-
-#: src/lib/components/Swap/Settings/MaxSlippageSelect.tsx
-msgid "Please enter a valid slippage %"
-msgstr "Пожалуйста, введите корректный процент проскальзывания"
+#: src/constants/tokenSafety.tsx
+msgid "Please do your own research before trading."
+msgstr "Пожалуйста, проведите собственное исследование перед торговлей."
 
 #: src/components/Settings/index.tsx
 msgid "Please type the word \"{confirmWord}\" to enable expert mode."
@@ -1378,8 +1397,9 @@ msgstr "Мост в Polygon"
 msgid "Polygonscan"
 msgstr "Polygonscan"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/Header/index.tsx
-#: src/components/NavigationTabs/index.tsx
+#: src/components/NavBar/Navbar.tsx
 msgid "Pool"
 msgstr "Пулы"
 
@@ -1412,12 +1432,21 @@ msgid "Pooled {0}:"
 msgstr "{0} в пуле:"
 
 #: src/pages/Pool/index.tsx
-msgid "Pools Overview"
-msgstr "Обзор пулов"
+#: src/pages/Pool/index.tsx
+msgid "Pools"
+msgstr "Бассейны"
 
-#: src/lib/components/BrandedFooter.tsx
-msgid "Powered by the Uniswap protocol"
-msgstr "Работает по протоколу Uniswap"
+#: src/components/NavBar/SearchBar.tsx
+msgid "Popular NFT collections"
+msgstr "Популярные коллекции NFT"
+
+#: src/components/NavBar/SearchBar.tsx
+msgid "Popular tokens"
+msgstr "Популярные токены"
+
+#: src/components/Header/NetworkSelector.tsx
+msgid "Portal Bridge"
+msgstr "Портальный мост"
 
 #: src/pages/AddLiquidity/index.tsx
 msgid "Preview"
@@ -1443,17 +1472,13 @@ msgstr "Слишком высокое влияние на цену"
 msgid "Price Updated"
 msgstr "Цена была обновлена"
 
-#: src/lib/components/Swap/Summary/Details.tsx
-msgid "Price impact"
-msgstr "Влияние на цену"
+#: src/components/swap/PriceImpactWarning.tsx
+msgid "Price impact warning"
+msgstr "Предупреждение о влиянии цены"
 
 #: src/pages/Pool/PositionPage.tsx
 msgid "Price range"
 msgstr "Диапазон цен"
-
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Price updated"
-msgstr "Цена обновлена"
 
 #: src/pages/RemoveLiquidity/index.tsx
 msgid "Price:"
@@ -1495,13 +1520,34 @@ msgstr "Автор предложения"
 msgid "Protocol Disclaimer"
 msgstr "Отказ от ответственности протокола"
 
+#: src/components/vote/QueueModal.tsx
+#: src/pages/Vote/VotePage.tsx
+msgid "Queue"
+msgstr "Очередь"
+
+#: src/components/vote/QueueModal.tsx
+msgid "Queue Proposal {proposalId}"
+msgstr "Очередь Предложение {proposalId}"
+
+#: src/components/AccountDetails/TransactionSummary.tsx
+msgid "Queue proposal {proposalKey}."
+msgstr "Очередь предложения {proposalKey}."
+
 #: src/pages/Vote/styled.tsx
 msgid "Queued"
 msgstr "В очереди"
 
+#: src/components/vote/QueueModal.tsx
+msgid "Queueing"
+msgstr "очередь"
+
 #: src/pages/AddLiquidityV2/ConfirmAddModalBottom.tsx
 msgid "Rates"
 msgstr "Тарифы"
+
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
+msgid "Read more"
+msgstr "Узнать подробнее"
 
 #: src/pages/Earn/index.tsx
 msgid "Read more about UNI"
@@ -1523,18 +1569,15 @@ msgstr "Подробнее о неподдерживаемых активах"
 msgid "Recent Transactions"
 msgstr "Последние транзакции"
 
-#: src/lib/components/RecentTransactionsDialog.tsx
-msgid "Recent transactions"
-msgstr "Последние транзакции"
+#: src/components/NavBar/SearchBar.tsx
+msgid "Recent searches"
+msgstr "Недавние поиски"
 
 #: src/components/AddressInputPanel/index.tsx
 msgid "Recipient"
 msgstr "Получатель"
 
-#: src/lib/components/Error/ErrorBoundary.tsx
-msgid "Reload the page"
-msgstr "Перезагрузить страницу"
-
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/PositionCard/V2.tsx
 #: src/components/PositionCard/index.tsx
 #: src/pages/RemoveLiquidity/V3.tsx
@@ -1565,6 +1608,14 @@ msgstr "Удалить ликвидность"
 msgid "Remove list"
 msgstr "Удалить список"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Removed"
+msgstr "Удаленный"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Removing"
+msgstr "Удаление"
+
 #: src/pages/RemoveLiquidity/V3.tsx
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "Удаление {0} {1} и {2} {3}"
@@ -1577,40 +1628,31 @@ msgstr "Удаление {0} {1} и{2} {3}"
 msgid "Request Features"
 msgstr "Предложить идею"
 
-#: src/lib/components/Swap/Settings/index.tsx
-msgid "Reset"
-msgstr "Сбросить"
-
+#: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 #: src/pages/CreateProposal/ProposalSubmissionModal.tsx
 msgid "Return"
 msgstr "Назад"
 
-#: src/lib/components/Swap/SwapButton/index.tsx
-msgid "Review swap"
-msgstr "Проверьте обмен"
-
-#: src/lib/components/TokenSelect/index.tsx
-msgid "Search by token name or address"
-msgstr "Поиск токена по имени или адресу"
-
 #: src/components/SearchModal/CurrencySearch.tsx
 msgid "Search name or paste address"
 msgstr "Найдите по имени или вставьте адрес"
+
+#: src/components/NavBar/SearchBar.tsx
+msgid "Search tokens"
+msgstr "Поиск токенов"
+
+#: src/components/NavBar/SearchBar.tsx
+msgid "Search tokens and NFT collections"
+msgstr "Поиск токенов и коллекций NFT"
 
 #: src/pages/AddLiquidity/index.tsx
 msgid "Select Pair"
 msgstr "Выберите пару"
 
-#: src/components/Header/NetworkSelector.tsx
-msgid "Select a network"
-msgstr "Выберите сеть"
-
 #: src/components/CurrencyInputPanel/index.tsx
 #: src/components/SearchModal/CurrencySearch.tsx
-#: src/lib/components/TokenSelect/TokenButton.tsx
-#: src/lib/components/TokenSelect/index.tsx
 #: src/pages/PoolFinder/index.tsx
 #: src/pages/PoolFinder/index.tsx
 #: src/state/swap/hooks.tsx
@@ -1621,9 +1663,17 @@ msgstr "Выберите токен"
 msgid "Select a token to find your v2 liquidity."
 msgstr "Выберите токен, чтобы найти свою ликвидность в V2."
 
+#: src/components/Header/NetworkSelector.tsx
+msgid "Select a {0}network"
+msgstr "Выберите сеть {0}"
+
 #: src/pages/CreateProposal/ProposalActionSelector.tsx
 msgid "Select an action"
 msgstr "Выберите действие"
+
+#: src/components/CurrencyInputPanel/SwapCurrencyInputPanel.tsx
+msgid "Select token"
+msgstr "Выберите токен"
 
 #: src/pages/AddLiquidity/index.tsx
 msgid "Selected Range"
@@ -1637,6 +1687,10 @@ msgstr "Себе"
 msgid "Self Delegate"
 msgstr "Делегировать себе"
 
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "Sell NFTs"
+msgstr "Продать NFT"
+
 #: src/pages/AddLiquidity/index.tsx
 #: src/pages/AddLiquidity/index.tsx
 #: src/pages/MigrateV2/MigrateV2Pair.tsx
@@ -1647,10 +1701,6 @@ msgstr "Установите диапазон цен"
 msgid "Set Starting Price"
 msgstr "Установите начальную цену"
 
-#: src/lib/components/Swap/Settings/index.tsx
-msgid "Settings"
-msgstr "Настройки"
-
 #: src/pages/AddLiquidityV2/PoolPriceBar.tsx
 msgid "Share of Pool"
 msgstr "Доля в пуле"
@@ -1659,10 +1709,12 @@ msgstr "Доля в пуле"
 msgid "Share of Pool:"
 msgstr "Доля в пуле:"
 
-#: src/components/AccountDetails/index.tsx
-msgid "Show Portis"
-msgstr "Показать Portis"
+#: src/pages/Vote/Landing.tsx
+msgid "Show Cancelled"
+msgstr "Показать отменённые"
 
+#: src/components/PositionList/index.tsx
+#: src/components/PositionList/index.tsx
 #: src/pages/Pool/index.tsx
 msgid "Show closed positions"
 msgstr "Показать закрытые позиции"
@@ -1672,7 +1724,6 @@ msgid "Simple"
 msgstr "Простой"
 
 #: src/components/TransactionSettings/index.tsx
-#: src/lib/components/Swap/Summary/Details.tsx
 msgid "Slippage tolerance"
 msgstr "Допустимое проскальзывание"
 
@@ -1683,11 +1734,6 @@ msgstr "Некоторые активы недоступны через этот
 #: src/components/ErrorBoundary/index.tsx
 msgid "Something went wrong"
 msgstr "Что-то пошло не так"
-
-#: src/lib/components/Error/ErrorBoundary.tsx
-#: src/lib/components/Error/ErrorDialog.tsx
-msgid "Something went wrong."
-msgstr "Что-то пошло не так."
 
 #: src/pages/Earn/Manage.tsx
 msgid "Step 1. Get UNI-V2 Liquidity tokens"
@@ -1721,10 +1767,10 @@ msgstr "Внести"
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Внесение {0} {1} и {2} {3}"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/Header/index.tsx
-#: src/components/NavigationTabs/index.tsx
+#: src/components/NavBar/Navbar.tsx
 #: src/components/swap/SwapHeader.tsx
-#: src/lib/components/Swap/index.tsx
 #: src/pages/Swap/index.tsx
 #: src/pages/Swap/index.tsx
 #: src/pages/Swap/index.tsx
@@ -1740,14 +1786,6 @@ msgstr "Обменять <0/> на ровно <1/>"
 msgid "Swap Anyway"
 msgstr "Всё равно обменять"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Swap confirmed"
-msgstr "Обмен подтверждён"
-
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Swap details"
-msgstr "Подробности обмена"
-
 #: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Swap exactly <0/> for <1/>"
 msgstr "Обменять ровно <0/> на <1/>"
@@ -1757,17 +1795,21 @@ msgstr "Обменять ровно <0/> на <1/>"
 msgid "Swap failed: {0}"
 msgstr "Обмен не удался: {0}"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Swap pending"
-msgstr "Ожидается обмен"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Swapped"
+msgstr "Поменял местами"
 
-#: src/lib/components/Swap/Summary/index.tsx
-msgid "Swap summary"
-msgstr "Общая информация об обмене"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Swapping"
+msgstr "Обмен"
 
 #: src/components/swap/ConfirmSwapModal.tsx
 msgid "Swapping {0} {1} for {2} {3}"
-msgstr "Идет обмен {0} {1} на {2} {3}"
+msgstr "Обмен {0} {1} на {2} {3}"
+
+#: src/components/Tokens/TokenDetails/TokenDetail.tsx
+msgid "Symbol not found"
+msgstr "Символ не найден"
 
 #: src/components/Popups/SurveyPopup.tsx
 msgid "Take a 10 minute survey to help us improve your experience in the Uniswap app."
@@ -1789,6 +1831,10 @@ msgstr "%, который вы заработаете в виде комисси
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr "Инвариант Uniswap x * y = k не соблюдается при обмене. Обычно это означает, что один из токенов, которые вы обмениваете, имеет особенности поведения при его передаче."
 
+#: src/components/swap/AdvancedSwapDetails.tsx
+msgid "The amount you expect to receive at the current market price. You may receive less or more if the market price changes while your transaction is pending."
+msgstr "Сумма, которую вы ожидаете получить по текущей рыночной цене. Вы можете получить меньше или больше, если рыночная цена изменится, пока ваша транзакция подтверждается."
+
 #: src/components/PrivacyPolicy/index.tsx
 msgid "The app fetches blockchain data from The Graph’s hosted service."
 msgstr "Приложение получает данные блокчейна из сервиса The Graph."
@@ -1809,6 +1855,11 @@ msgstr "Приложение собирает анонимную статист�
 msgid "The app securely collects your wallet address and shares it with TRM Labs Inc. for risk and compliance reasons."
 msgstr "Приложение безопасно получает адрес вашего кошелька и передает его TRM Labs Inc. в целях управления рисками и соблюдения требований законодательства."
 
+#: src/components/WalletModal/PendingView.tsx
+#: src/components/WalletModal/PendingView.tsx
+msgid "The connection attempt failed. Please click try again and follow the steps to connect in your wallet."
+msgstr "Попытка подключения не удалась. Нажмите «Повторить попытку» и следуйте инструкциям по подключению в своем кошельке."
+
 #: src/components/swap/SwapWarningDropdown.tsx
 msgid "The cost of sending this transaction is more than half of the value of the input amount."
 msgstr "Стоимость отправки этой транзакции превышает половину стоимости токенов к продаже."
@@ -1821,13 +1872,26 @@ msgstr "Текущая стоимость газа для быстрого по�
 msgid "The estimated difference between the USD values of input and output amounts."
 msgstr "Приблизительная разница между стоимостью токенов к продаже и к получению в долларах США."
 
+#: src/components/swap/AdvancedSwapDetails.tsx
+msgid "The fee paid to miners who process your transaction. This must be paid in {0}."
+msgstr "Комиссия, уплачиваемая майнерам, обрабатывающим вашу транзакцию. Она оплачивается в {0}."
+
+#: src/components/swap/AdvancedSwapDetails.tsx
+msgid "The impact your trade has on the market price of this pool."
+msgstr "Влияние вашей сделки на рыночную цену этого пула."
+
 #: src/utils/swapErrorToUserReadableMessage.tsx
 msgid "The input token cannot be transferred. There may be an issue with the input token."
 msgstr "Невозможно перевести токен к продаже. Возможно, имеется проблема с этим токеном."
 
+#: src/components/CurrencyInputPanel/SwapCurrencyInputPanel.tsx
 #: src/components/CurrencyInputPanel/index.tsx
 msgid "The market price is outside your specified price range. Single-asset deposit only."
 msgstr "Рыночная цена находится вне указанного вами диапазона. Вы можете внести только один актив."
+
+#: src/components/swap/AdvancedSwapDetails.tsx
+msgid "The minimum amount you are guaranteed to receive. If the price slips any further, your transaction will revert."
+msgstr "Минимальная сумма, которую вы гарантированно получите. Если цена упадёт ниже, ваша транзакция откатится."
 
 #: src/components/Header/Polling.tsx
 msgid "The most recent block number on this network. Prices update on every block."
@@ -1861,6 +1925,14 @@ msgstr "Транзакция не может быть отправлена, по
 msgid "There is no liquidity data."
 msgstr "Нет данных о ликвидности."
 
+#: src/components/Tokens/TokenDetails/BalanceSummary.tsx
+msgid "There was an error loading your {tokenSymbol} balance"
+msgstr "Произошла ошибка при загрузке вашего баланса {tokenSymbol}"
+
+#: src/components/ConnectedAccountBlocked/index.tsx
+msgid "This address is blocked on the Uniswap Labs interface because it is associated with one or more"
+msgstr "Этот адрес заблокирован в интерфейсе Uniswap Labs, поскольку он связан с одним или несколькими"
+
 #: src/components/PrivacyPolicy/index.tsx
 msgid "This app uses the following third-party APIs:"
 msgstr "Это приложение использует следующие сторонние API:"
@@ -1868,6 +1940,10 @@ msgstr "Это приложение использует следующие ст
 #: src/pages/AddLiquidity/index.tsx
 msgid "This pool must be initialized before you can add liquidity. To initialize, select a starting price for the pool. Then, enter your liquidity price range and deposit amount. Gas fees will be higher than usual due to the initialization transaction."
 msgstr "Этот пул необходимо инициализировать, прежде чем вы сможете добавить ликвидность. Для инициализации выберите начальную цену для пула. Затем введите диапазон цен для ликвидности и сумму депозита. Плата за газ будет выше, чем обычно, из-за инициализирующей транзакции."
+
+#: src/pages/Vote/VotePage.tsx
+msgid "This proposal may be executed after {0}."
+msgstr "Это предложение может быть выполнено после {0}."
 
 #: src/components/swap/SwapRoute.tsx
 msgid "This route optimizes your total output by considering split routes, multiple hops, and the gas cost of each step."
@@ -1907,15 +1983,22 @@ msgstr "На токены"
 msgid "To (at least)"
 msgstr "На токены (минимум)"
 
+#: src/components/Tokens/TokenTable/TokenRow.tsx
+msgid "Token Name"
+msgstr "Имя токена"
+
 #: src/components/SearchModal/BlockedToken.tsx
 msgid "Token not supported"
 msgstr "Токен не поддерживается"
 
+#: src/components/Header/index.tsx
+#: src/components/NavBar/Navbar.tsx
+#: src/components/NavBar/SearchBar.tsx
 #: src/components/SearchModal/Manage.tsx
 msgid "Tokens"
 msgstr "Токены"
 
-#: src/components/SearchModal/CurrencyList.tsx
+#: src/components/SearchModal/CurrencyList/index.tsx
 msgid "Tokens from inactive lists. Import specific tokens below or click Manage to activate more lists."
 msgstr "Показаны токены из неактивных списков. Импортируйте нужные токены или нажмите «Управлять», чтобы активировать больше списков."
 
@@ -1936,7 +2019,6 @@ msgid "Trade Route"
 msgstr "Маршрут обмена"
 
 #: src/components/Settings/index.tsx
-#: src/components/Settings/index.tsx
 msgid "Transaction Settings"
 msgstr "Настройки транзакций"
 
@@ -1946,6 +2028,7 @@ msgstr "Настройки транзакций"
 #: src/components/earn/StakingModal.tsx
 #: src/components/earn/UnstakingModal.tsx
 #: src/components/vote/DelegateModal.tsx
+#: src/components/vote/QueueModal.tsx
 #: src/components/vote/VoteModal.tsx
 msgid "Transaction Submitted"
 msgstr "Транзакция отправлена"
@@ -1954,35 +2037,32 @@ msgstr "Транзакция отправлена"
 msgid "Transaction completed in"
 msgstr "Транзакция завершена за"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Transaction confirmed"
-msgstr "Транзакция подтверждена"
-
 #: src/components/TransactionSettings/index.tsx
-#: src/lib/components/Swap/Settings/TransactionTtlInput.tsx
 msgid "Transaction deadline"
 msgstr "Cрок действия транзакции"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Transaction pending"
-msgstr "Транзакция подтверждается"
+#: src/lib/hooks/swap/useSendSwapTransaction.tsx
+#: src/lib/hooks/swap/useSendSwapTransaction.tsx
+msgid "Transaction rejected"
+msgstr "Транзакция отклонена"
 
-#: src/lib/hooks/swap/useSendSwapTransaction.tsx
-#: src/lib/hooks/swap/useSendSwapTransaction.tsx
-msgid "Transaction rejected."
-msgstr "Транзакция отклонена."
+#: src/components/TransactionConfirmationModal/index.tsx
+msgid "Transaction submitted"
+msgstr "Транзакция отправлена"
+
+#: src/components/WalletDropdown/DefaultMenu.tsx
+#: src/components/WalletDropdown/TransactionMenu.tsx
+msgid "Transactions"
+msgstr "Транзакции"
 
 #: src/pages/CreateProposal/ProposalActionSelector.tsx
 msgid "Transfer Token"
 msgstr "Перевести токен"
 
 #: src/components/WalletModal/PendingView.tsx
+#: src/components/WalletModal/PendingView.tsx
 msgid "Try Again"
 msgstr "Попробовать ещё раз"
-
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Try increasing your slippage tolerance.<0/>NOTE: Fee on transfer and rebase tokens are incompatible with Uniswap V3."
-msgstr "Попробуйте увеличить допустимое проскальзывание.<0/>ВНИМАНИЕ: токены с комиссией за перевод или изменямой базой несовместимы с Uniswap V3."
 
 #: src/components/Settings/index.tsx
 msgid "Turn On Expert Mode"
@@ -2084,14 +2164,11 @@ msgstr "Актив не поддерживается"
 msgid "Unsupported Assets"
 msgstr "Неподдерживаемые активы"
 
-#: src/lib/components/Swap/Toolbar/Caption.tsx
-msgid "Unsupported network - switch to another to trade"
-msgstr "Сеть не поддерживается; переключитесь на другую, чтобы торговать"
-
 #: src/state/governance/hooks.ts
 msgid "Untitled"
 msgstr "Без названия"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/Swap/index.tsx
 msgid "Unwrap"
 msgstr "Развернуть"
@@ -2100,17 +2177,13 @@ msgstr "Развернуть"
 msgid "Unwrap <0/> to {0}"
 msgstr "Развернуть <0/> в {0}"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Unwrap confirmed"
-msgstr "Разворачивание подтверждено"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Unwrapped"
+msgstr "Развернутый"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Unwrap pending"
-msgstr "Разворачивание подтверждается"
-
-#: src/lib/components/Swap/SwapButton/index.tsx
-msgid "Unwrap {0}"
-msgstr "Развернуть {0}"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Unwrapping"
+msgstr "Развертывание"
 
 #: src/pages/Vote/Landing.tsx
 msgid "Update Delegation"
@@ -2122,15 +2195,15 @@ msgstr "Обновить список"
 
 #: src/components/Settings/index.tsx
 msgid "Use the Uniswap Labs API to get faster quotes."
-msgstr "Используйте API Uniswap Labs, чтобы быстрее получать котировки."
+msgstr "Использовать API от Uniswap Labs, чтобы быстрее получать котировки."
 
 #: src/components/claim/ClaimModal.tsx
 msgid "User"
 msgstr "Пользователь"
 
 #: src/pages/Pool/v2.tsx
-msgid "V2 is not available on Layer 2. Switch to Layer 1 Ethereum."
-msgstr "V2 недоступна на 2-м уровне. Переключитесь на Ethereum 1-го уровня."
+msgid "V2 Pool is not available on Layer 2. Switch to Layer 1 Ethereum."
+msgstr "Пул V2 недоступен на уровне 2. Переключитесь на уровень 1 Ethereum."
 
 #: src/pages/Pool/index.tsx
 msgid "V2 liquidity"
@@ -2149,21 +2222,26 @@ msgstr "Просмотреть начисленные комиссии и ана
 msgid "View list"
 msgstr "Просмотреть список"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
+#: src/components/TransactionConfirmationModal/index.tsx
 #: src/pages/CreateProposal/ProposalSubmissionModal.tsx
 msgid "View on Etherscan"
 msgstr "Посмотреть на Etherscan"
 
-#: src/components/AccountDetails/index.tsx
 #: src/components/AccountDetails/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 #: src/components/TransactionConfirmationModal/index.tsx
 msgid "View on Explorer"
 msgstr "Просмотреть в обозревателе"
 
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "View token analytics"
+msgstr "Посмотреть аналитику токенов"
+
 #: src/components/ModalViews/index.tsx
 #: src/components/claim/AddressClaimModal.tsx
 #: src/components/claim/ClaimModal.tsx
+#: src/components/vote/ExecuteModal.tsx
+#: src/components/vote/QueueModal.tsx
 #: src/components/vote/VoteModal.tsx
 msgid "View transaction on Explorer"
 msgstr "Просмотреть транзакцию в обозревателе"
@@ -2206,6 +2284,10 @@ msgstr "Проголосовать за предложение {proposalKey}"
 msgid "Vote for proposal {proposalKey} with reason \"{0}\""
 msgstr "Проголосовать за предложение {proposalKey} по причине \"{0}\""
 
+#: src/components/NavBar/MenuDropdown.tsx
+msgid "Vote in governance"
+msgstr "Голосовать в управлении"
+
 #: src/components/vote/VoteModal.tsx
 #: src/components/vote/VoteModal.tsx
 msgid "Vote to abstain on proposal {proposalId}"
@@ -2235,9 +2317,21 @@ msgstr "Голосование начнется примерно {0}"
 msgid "Waiting For Confirmation"
 msgstr "Ожидание подтверждения"
 
+#: src/components/TransactionConfirmationModal/index.tsx
+msgid "Waiting for confirmation"
+msgstr "Ожидание подтверждения"
+
+#: src/components/WalletModal/PendingView.tsx
+msgid "Waiting to connect"
+msgstr "Ожидание подключения"
+
 #: src/components/AddressInputPanel/index.tsx
 msgid "Wallet Address or ENS name"
 msgstr "Адрес кошелька или ENS-имя"
+
+#: src/constants/tokenSafety.tsx
+msgid "Warning"
+msgstr "Предупреждение"
 
 #: src/components/earn/StakingModal.tsx
 msgid "Weekly Rewards"
@@ -2280,6 +2374,7 @@ msgstr "Вывод {0} UNI-V2"
 msgid "Withdrew UNI-V2!"
 msgstr "Вы вывели UNI-V2!"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/pages/Swap/index.tsx
 msgid "Wrap"
 msgstr "Обернуть"
@@ -2288,22 +2383,13 @@ msgstr "Обернуть"
 msgid "Wrap <0/> to {0}"
 msgstr "Обернуть <0/> в {0}"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Wrap confirmed"
-msgstr "Обёртывание подтверждено"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Wrapped"
+msgstr "завернутый"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "Wrap pending"
-msgstr "Обёртывание подтверждается"
-
-#: src/lib/components/Swap/SwapButton/index.tsx
-msgid "Wrap {0}"
-msgstr "Обернуть {0}"
-
-#: src/components/WalletModal/index.tsx
-#: src/components/Web3Status/index.tsx
-msgid "Wrong Network"
-msgstr "Неверная сеть"
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "Wrapping"
+msgstr "Оберточная бумага"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "You already have an active or pending proposal"
@@ -2382,6 +2468,10 @@ msgstr "Ваша ликвидность в V2"
 msgid "Your active V3 liquidity positions will appear here."
 msgstr "Здесь появятся ваши активные позиции ликвидности в V3."
 
+#: src/pages/Pool/index.tsx
+msgid "Your connected network is unsupported."
+msgstr "Ваша подключенная сеть не поддерживается."
+
 #: src/pages/Earn/Manage.tsx
 msgid "Your liquidity deposits"
 msgstr "Ваши взносы ликвидности"
@@ -2445,18 +2535,17 @@ msgstr "Ваша транзакция подвержена атаке на оп�
 msgid "Your transaction may fail"
 msgstr "Ваша транзакция может быть неудачной"
 
-#: src/lib/components/Swap/Settings/TransactionTtlInput.tsx
-msgid "Your transaction will revert if it has been pending for longer than this period of time."
-msgstr "Ваша транзакция откатится, если её подтверждение займёт больше указанного времени."
-
 #: src/components/TransactionSettings/index.tsx
 msgid "Your transaction will revert if it is pending for more than this period of time."
 msgstr "Ваша транзакция откатится, если её подтверждение займёт больше указанного времени."
 
 #: src/components/TransactionSettings/index.tsx
-#: src/lib/components/Swap/Settings/MaxSlippageSelect.tsx
 msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
 msgstr "Ваша транзакция откатится, если цена изменится не в вашу пользу более, чем на этот процент."
+
+#: src/components/WalletDropdown/TransactionMenu.tsx
+msgid "Your transactions will appear here"
+msgstr "Ваши транзакции будут отображаться здесь"
 
 #: src/components/AccountDetails/index.tsx
 msgid "Your transactions will appear here..."
@@ -2470,9 +2559,32 @@ msgstr "Ваши невостребованные UNI"
 msgid "after slippage"
 msgstr "после проскальзывания"
 
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "and"
+msgstr "а также"
+
+#: src/components/ConnectedAccountBlocked/index.tsx
+msgid "blocked activities"
+msgstr "заблокированными действиями"
+
 #: src/components/Settings/index.tsx
 msgid "confirm"
 msgstr "подтверждаю"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "failed"
+msgstr "не удалось"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "fees"
+msgstr "сборы"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "for"
+msgstr "за"
 
 #: src/components/claim/AddressClaimModal.tsx
 msgid "for {0}"
@@ -2495,9 +2607,16 @@ msgid "https:// or ipfs:// or ENS name"
 msgstr "https:// или ipfs:// или ENS-имя"
 
 #: src/components/TransactionSettings/index.tsx
-#: src/lib/components/Swap/Settings/TransactionTtlInput.tsx
 msgid "minutes"
 msgstr "минут(-ы)"
+
+#: src/components/WalletDropdown/AuthenticatedHeader.tsx
+msgid "reward"
+msgstr "награда"
+
+#: src/components/AccountDetailsV2/TransactionBody.tsx
+msgid "to"
+msgstr "к"
 
 #: src/components/SearchModal/ImportRow.tsx
 msgid "via {0}"
@@ -2507,16 +2626,21 @@ msgstr "из {0}"
 msgid "via {0} token list"
 msgstr "из списка токенов {0}"
 
-#: src/lib/components/Swap/RoutingDiagram/index.tsx
-msgid "{0, plural, =1 {Best route via 1 hop} other {Best route via # hops}}"
-msgstr "{0, plural, =1 {Лучший маршрут — 1 прыжок} few {Лучший маршрут — # прыжка} many {Лучший маршрут — # прыжков} other {Лучший маршрут — # прыжок}}"
-
 #: src/components/SearchModal/ImportToken.tsx
 msgid "{0, plural, =1 {Import token} other {Import tokens}}"
 msgstr "{0, plural, =1 {Импортировать токен} other {Импортировать токены}}"
 
+#: src/constants/tokenSafety.tsx
+msgid "{0, plural, =1 {This token isn't verified} other {These tokens aren't verified}}"
+msgstr "{0, plural, =1 {Этот токен не проверен} other {Эти токены не проверены}}"
+
+#: src/constants/tokenSafety.tsx
+msgid "{0, plural, =1 {You can't trade this token using the Uniswap App.} other {You can't trade these tokens using the Uniswap App.}}"
+msgstr "{0, plural, =1 {Вы не можете обменять этот токен с помощью приложения Uniswap.} other {Вы не можете торговать этими токенами с помощью приложения Uniswap.}}"
+
 #: src/components/RateToggle/index.tsx
 #: src/components/RateToggle/index.tsx
+#: src/components/Settings/index.tsx
 msgid "{0}"
 msgstr "{0}"
 
@@ -2606,7 +2730,7 @@ msgstr "Цена {0} {1}:"
 msgid "{0} {nativeCurrencySymbol}"
 msgstr "{0} {nativeCurrencySymbol}"
 
-#: src/components/SearchModal/CurrencyList.tsx
+#: src/components/SearchModal/CurrencyList/index.tsx
 msgid "{0} • Added by user"
 msgstr "{0} • Пользовательский"
 
@@ -2658,31 +2782,19 @@ msgstr "{USER_AMOUNT} UNI"
 msgid "{activeTokensOnThisChain} tokens"
 msgstr "{activeTokensOnThisChain} токенов"
 
-#: src/lib/components/Swap/Summary/Details.tsx
-msgid "{integrator} fee"
-msgstr "Комиссия {integrator}"
-
 #: src/components/NetworkAlert/NetworkAlert.tsx
 msgid "{label} token bridge"
 msgstr "Мост токена {label}"
 
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "{min}m {sec}s"
-msgstr "{min}м {sec}с"
-
 #: src/pages/RemoveLiquidity/V3.tsx
 msgid "{percentForSlider}%"
 msgstr "{percentForSlider}%"
-
-#: src/lib/components/Swap/Status/StatusDialog.tsx
-msgid "{sec}s"
-msgstr "{sec}с"
 
 #: src/components/InputStepCounter/InputStepCounter.tsx
 msgid "{tokenB} per {tokenA}"
 msgstr "{tokenB} за {tokenA}"
 
 #: src/pages/Pool/PositionPage.tsx
-msgid "← Back to Pools Overview"
-msgstr "← Назад к пулам"
+msgid "← Back to Pools"
+msgstr "← Назад к Бассейны"
 

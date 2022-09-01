@@ -1,30 +1,28 @@
-import React, { HTMLProps } from 'react'
-import { ArrowLeft, ExternalLink as LinkIconFeather, Trash, X } from 'react-feather'
-import ReactGA from 'react-ga4'
+import { Trans } from '@lingui/macro'
+import { outboundLink } from 'components/analytics'
+import { MOBILE_MEDIA_BREAKPOINT } from 'components/Tokens/constants'
+import useCopyClipboard from 'hooks/useCopyClipboard'
+import React, { forwardRef, HTMLProps, ReactNode, useCallback, useImperativeHandle } from 'react'
+import {
+  ArrowLeft,
+  CheckCircle,
+  Copy,
+  ExternalLink as ExternalLinkIconFeather,
+  Link as LinkIconFeather,
+  Trash,
+  X,
+} from 'react-feather'
 import { Link } from 'react-router-dom'
-import styled, { keyframes } from 'styled-components/macro'
+import styled, { css, keyframes } from 'styled-components/macro'
 
+import { ReactComponent as TooltipTriangle } from '../assets/svg/tooltip_triangle.svg'
 import { anonymizeLink } from '../utils/anonymizeLink'
+import { Color } from './styled'
 
-export const ButtonText = styled.button`
-  outline: none;
-  border: none;
-  font-size: inherit;
-  padding: 0;
-  margin: 0;
-  background: none;
-  cursor: pointer;
+// TODO: Break this file into a components folder
 
-  :hover {
-    opacity: 0.7;
-  }
-
-  :focus {
-    text-decoration: underline;
-  }
-`
-
-export const CloseIcon = styled(X)<{ onClick: () => void }>`
+export const CloseIcon = styled(X)<{ onClick: () => void; redesignFlag?: boolean }>`
+  color: ${({ redesignFlag, theme }) => redesignFlag && theme.textSecondary};
   cursor: pointer;
 `
 
@@ -38,7 +36,7 @@ export const IconWrapper = styled.div<{ stroke?: string; size?: string; marginRi
   margin-right: ${({ marginRight }) => marginRight ?? 0};
   margin-left: ${({ marginLeft }) => marginLeft ?? 0};
   & > * {
-    stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
+    stroke: ${({ theme, stroke }) => stroke ?? theme.accentActive};
   }
 `
 
@@ -49,7 +47,7 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
   background: none;
 
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ theme, disabled }) => (disabled ? theme.text2 : theme.primary1)};
+  color: ${({ theme, disabled }) => (disabled ? theme.deprecated_text2 : theme.deprecated_primary1)};
   font-weight: 500;
 
   :hover {
@@ -64,83 +62,81 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
   :active {
     text-decoration: none;
   }
+`
+
+export const OPACITY_HOVER = 0.6
+export const OPACITY_CLICK = 0.4
+
+export const ButtonText = styled.button`
+  outline: none;
+  border: none;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+
+  :hover {
+    opacity: ${OPACITY_HOVER};
+  }
+
+  :focus {
+    text-decoration: underline;
+  }
+`
+
+export const ClickableStyle = css`
+  text-decoration: none;
+  cursor: pointer;
+
+  :hover {
+    opacity: ${OPACITY_HOVER};
+  }
+  :active {
+    opacity: ${OPACITY_CLICK};
+  }
+`
+
+export const LinkStyle = css`
+  color: ${({ theme }) => theme.accentAction};
+  stroke: ${({ theme }) => theme.accentAction};
+  font-weight: 500;
 `
 
 // An internal link from the react-router-dom library that is correctly styled
 export const StyledInternalLink = styled(Link)`
-  text-decoration: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
-  font-weight: 500;
-
-  :hover {
-    text-decoration: underline;
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: underline;
-  }
-
-  :active {
-    text-decoration: none;
-  }
-`
-
-const StyledLink = styled.a`
-  text-decoration: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
-  font-weight: 500;
-
-  :hover {
-    text-decoration: underline;
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: underline;
-  }
-
-  :active {
-    text-decoration: none;
-  }
+  ${ClickableStyle}
+  ${LinkStyle}
 `
 
 const LinkIconWrapper = styled.a`
-  text-decoration: none;
-  cursor: pointer;
   align-items: center;
   justify-content: center;
   display: flex;
-
-  :hover {
-    text-decoration: none;
-    opacity: 0.7;
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: none;
-  }
-
-  :active {
-    text-decoration: none;
-  }
 `
 
-const LinkIcon = styled(LinkIconFeather)`
+const IconStyle = css`
   height: 16px;
   width: 18px;
   margin-left: 10px;
-  stroke: ${({ theme }) => theme.blue1};
+`
+
+const LinkIcon = styled(ExternalLinkIconFeather)`
+  ${IconStyle}
+  ${ClickableStyle}
+  ${LinkStyle}
+`
+
+const CopyIcon = styled(Copy)`
+  ${IconStyle}
+  ${ClickableStyle}
+  ${LinkStyle}
+  stroke: ${({ theme }) => theme.accentAction};
 `
 
 export const TrashIcon = styled(Trash)`
-  height: 16px;
-  width: 18px;
-  margin-left: 10px;
-  stroke: ${({ theme }) => theme.text3};
+  ${IconStyle}
+  stroke: ${({ theme }) => theme.deprecated_text3};
 
   cursor: pointer;
   align-items: center;
@@ -148,7 +144,7 @@ export const TrashIcon = styled(Trash)`
   display: flex;
 
   :hover {
-    opacity: 0.7;
+    opacity: ${OPACITY_HOVER};
   }
 `
 
@@ -175,18 +171,22 @@ function handleClickExternalLink(event: React.MouseEvent<HTMLAnchorElement>) {
 
   // don't prevent default, don't redirect if it's a new tab
   if (target === '_blank' || event.ctrlKey || event.metaKey) {
-    ReactGA.outboundLink({ label: anonymizedHref }, () => {
+    outboundLink({ label: anonymizedHref }, () => {
       console.debug('Fired outbound link event', anonymizedHref)
     })
   } else {
     event.preventDefault()
     // send a ReactGA event and then trigger a location change
-    ReactGA.outboundLink({ label: anonymizedHref }, () => {
+    outboundLink({ label: anonymizedHref }, () => {
       window.location.href = anonymizedHref
     })
   }
 }
 
+const StyledLink = styled.a`
+  ${ClickableStyle}
+  ${LinkStyle}
+`
 /**
  * Outbound link that handles firing google analytics events
  */
@@ -212,6 +212,195 @@ export function ExternalLinkIcon({
   )
 }
 
+const ToolTipWrapper = styled.div<{ isCopyContractTooltip?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: ${({ isCopyContractTooltip }) => (isCopyContractTooltip ? 'relative' : 'absolute')};
+  right: ${({ isCopyContractTooltip }) => isCopyContractTooltip && '50%'};
+  transform: translate(5px, 32px);
+  z-index: 9999;
+`
+
+const StyledTooltipTriangle = styled(TooltipTriangle)`
+  path {
+    fill: ${({ theme }) => theme.black};
+  }
+`
+
+const CopiedTooltip = styled.div<{ isCopyContractTooltip?: boolean }>`
+  background-color: ${({ theme }) => theme.black};
+  text-align: center;
+  justify-content: center;
+  width: ${({ isCopyContractTooltip }) => !isCopyContractTooltip && '60px'};
+  height: ${({ isCopyContractTooltip }) => !isCopyContractTooltip && '32px'};
+  line-height: ${({ isCopyContractTooltip }) => !isCopyContractTooltip && '32px'};
+
+  padding: ${({ isCopyContractTooltip }) => isCopyContractTooltip && '8px'};
+  border-radius: 8px;
+
+  color: ${({ theme }) => theme.white};
+  font-size: 12px;
+`
+
+function Tooltip({ isCopyContractTooltip }: { isCopyContractTooltip: boolean }) {
+  return (
+    <ToolTipWrapper isCopyContractTooltip={isCopyContractTooltip}>
+      <StyledTooltipTriangle />
+      <CopiedTooltip isCopyContractTooltip={isCopyContractTooltip}>Copied!</CopiedTooltip>
+    </ToolTipWrapper>
+  )
+}
+
+const CopyIconWrapper = styled.div`
+  text-decoration: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`
+
+export function CopyLinkIcon({ toCopy }: { toCopy: string }) {
+  const [isCopied, setCopied] = useCopyClipboard()
+  const copy = useCallback(() => {
+    setCopied(toCopy)
+  }, [toCopy, setCopied])
+  return (
+    <CopyIconWrapper onClick={copy}>
+      <CopyIcon />
+      {isCopied && <Tooltip isCopyContractTooltip={false} />}
+    </CopyIconWrapper>
+  )
+}
+
+const FullAddress = styled.span`
+  @media only screen and (max-width: ${MOBILE_MEDIA_BREAKPOINT}) {
+    display: none;
+  }
+`
+const TruncatedAddress = styled.span`
+  display: none;
+  @media only screen and (max-width: ${MOBILE_MEDIA_BREAKPOINT}) {
+    display: flex;
+  }
+`
+
+const CopyAddressRow = styled.div<{ isClicked: boolean }>`
+  ${ClickableStyle}
+  color: inherit;
+  stroke: inherit;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 6px;
+  ${({ isClicked }) => isClicked && `opacity: ` + OPACITY_CLICK + ` !important`}
+`
+
+const CopyContractAddressWrapper = styled.div`
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`
+
+export function CopyContractAddress({ address }: { address: string }) {
+  const [isCopied, setCopied] = useCopyClipboard()
+  const copy = useCallback(() => {
+    setCopied(address)
+  }, [address, setCopied])
+
+  const truncated = `${address.slice(0, 4)}...${address.slice(-3)}`
+  return (
+    <CopyContractAddressWrapper onClick={copy}>
+      <CopyAddressRow isClicked={isCopied}>
+        <FullAddress>{address}</FullAddress>
+        <TruncatedAddress>{truncated}</TruncatedAddress>
+        <Copy size={14} />
+      </CopyAddressRow>
+      {isCopied && <Tooltip isCopyContractTooltip={true} />}
+    </CopyContractAddressWrapper>
+  )
+}
+
+const CopyHelperContainer = styled(LinkStyledButton)<{ clicked: boolean }>`
+  ${({ clicked }) => !clicked && ClickableStyle};
+  color: ${({ color, theme }) => color || theme.accentAction};
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  text-decoration: none;
+  :hover,
+  :active,
+  :focus {
+    text-decoration: none;
+    color: ${({ color, theme }) => color || theme.accentAction};
+  }
+`
+const CopyHelperText = styled.span<{ fontSize: number }>`
+  ${({ theme }) => theme.flexRowNoWrap};
+  font-size: ${({ fontSize }) => fontSize + 'px'};
+  font-weight: 400;
+  align-items: center;
+`
+const CopiedIcon = styled(CheckCircle)`
+  color: ${({ theme }) => theme.accentSuccess};
+  stroke-width: 1.5px;
+`
+interface CopyHelperProps {
+  link?: boolean
+  toCopy: string
+  color?: Color
+  fontSize?: number
+  iconSize?: number
+  gap?: number
+  iconPosition?: 'left' | 'right'
+  iconColor?: Color
+  children: ReactNode
+}
+
+export type CopyHelperRefType = { forceCopy: () => void }
+export const CopyHelper = forwardRef<CopyHelperRefType, CopyHelperProps>(
+  (
+    {
+      link,
+      toCopy,
+      color,
+      fontSize = 16,
+      iconSize = 20,
+      gap = 12,
+      iconPosition = 'left',
+      iconColor,
+      children,
+    }: CopyHelperProps,
+    ref
+  ) => {
+    const [isCopied, setCopied] = useCopyClipboard()
+    const copy = useCallback(() => {
+      setCopied(toCopy)
+    }, [toCopy, setCopied])
+
+    useImperativeHandle(ref, () => ({
+      forceCopy() {
+        copy()
+      },
+    }))
+
+    const BaseIcon = isCopied ? CopiedIcon : link ? LinkIconFeather : Copy
+
+    return (
+      <CopyHelperContainer onClick={copy} color={color} clicked={isCopied}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap }}>
+          {iconPosition === 'left' && <BaseIcon size={iconSize} strokeWidth={1.5} color={iconColor} />}
+          <CopyHelperText fontSize={fontSize}>{isCopied ? <Trans>Copied!</Trans> : children}</CopyHelperText>
+          {iconPosition === 'right' && <BaseIcon size={iconSize} strokeWidth={1.5} color={iconColor} />}
+        </div>
+      </CopyHelperContainer>
+    )
+  }
+)
+CopyHelper.displayName = 'CopyHelper'
+
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -220,15 +409,21 @@ const rotate = keyframes`
     transform: rotate(360deg);
   }
 `
+const SpinnerCss = css`
+  animation: 2s ${rotate} linear infinite;
+`
 
 const Spinner = styled.img`
-  animation: 2s ${rotate} linear infinite;
+  ${SpinnerCss}
   width: 16px;
   height: 16px;
 `
+export const SpinnerSVG = styled.svg`
+  ${SpinnerCss}
+`
 
 const BackArrowLink = styled(StyledInternalLink)`
-  color: ${({ theme }) => theme.text1};
+  color: ${({ theme }) => theme.deprecated_text1};
 `
 export function BackArrow({ to }: { to: string }) {
   return (
@@ -244,26 +439,26 @@ export const CustomLightSpinner = styled(Spinner)<{ size: string }>`
 `
 
 export const HideSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
     display: none;
   `};
 `
 
 export const HideExtraSmall = styled.span`
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToExtraSmall`
     display: none;
   `};
 `
 
 export const SmallOnly = styled.span`
   display: none;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
     display: block;
   `};
 `
 
-export const Separator = styled.div`
+export const Separator = styled.div<{ redesignFlag?: boolean }>`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme, redesignFlag }) => (redesignFlag ? theme.backgroundOutline : theme.deprecated_bg2)};
 `

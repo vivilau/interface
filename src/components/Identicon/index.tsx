@@ -1,5 +1,5 @@
 import jazzicon from '@metamask/jazzicon'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useWeb3React } from '@web3-react/core'
 import useENSAvatar from 'hooks/useENSAvatar'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components/macro'
@@ -8,7 +8,7 @@ const StyledIdenticon = styled.div`
   height: 1rem;
   width: 1rem;
   border-radius: 1.125rem;
-  background-color: ${({ theme }) => theme.bg4};
+  background-color: ${({ theme }) => theme.deprecated_bg4};
   font-size: initial;
 `
 
@@ -19,7 +19,7 @@ const StyledAvatar = styled.img`
 `
 
 export default function Identicon() {
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
   const { avatar } = useENSAvatar(account ?? undefined)
   const [fetchable, setFetchable] = useState(true)
 

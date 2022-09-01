@@ -1,7 +1,10 @@
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, CurrencyAmount, Token } from '@uniswap/sdk-core'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useWeb3React } from '@web3-react/core'
+import { sendAnalyticsEvent } from 'components/AmplitudeAnalytics'
+import { EventName } from 'components/AmplitudeAnalytics/constants'
+import { getTokenAddress } from 'components/AmplitudeAnalytics/utils'
 import { useTokenContract } from 'hooks/useContract'
 import { useTokenAllowance } from 'hooks/useTokenAllowance'
 import { useCallback, useMemo } from 'react'
@@ -14,12 +17,12 @@ export enum ApprovalState {
   APPROVED = 'APPROVED',
 }
 
-export function useApprovalStateForSpender(
+function useApprovalStateForSpender(
   amountToApprove: CurrencyAmount<Currency> | undefined,
   spender: string | undefined,
   useIsPendingApproval: (token?: Token, spender?: string) => boolean
 ): ApprovalState {
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
   const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined
 
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
@@ -48,7 +51,7 @@ export function useApproval(
   ApprovalState,
   () => Promise<{ response: TransactionResponse; tokenAddress: string; spenderAddress: string } | undefined>
 ] {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined
 
   // check the current approval status
@@ -88,11 +91,19 @@ export function useApproval(
       .approve(spender, useExact ? amountToApprove.quotient.toString() : MaxUint256, {
         gasLimit: calculateGasMargin(estimatedGas),
       })
-      .then((response) => ({
-        response,
-        tokenAddress: token.address,
-        spenderAddress: spender,
-      }))
+      .then((response) => {
+        const eventProperties = {
+          chain_id: chainId,
+          token_symbol: token?.symbol,
+          token_address: getTokenAddress(token),
+        }
+        sendAnalyticsEvent(EventName.APPROVE_TOKEN_TXN_SUBMITTED, eventProperties)
+        return {
+          response,
+          tokenAddress: token.address,
+          spenderAddress: spender,
+        }
+      })
       .catch((error: Error) => {
         logFailure(error)
         throw error

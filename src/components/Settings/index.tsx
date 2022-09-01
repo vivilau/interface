@@ -1,16 +1,17 @@
 // eslint-disable-next-line no-restricted-imports
 import { t, Trans } from '@lingui/macro'
 import { Percent } from '@uniswap/sdk-core'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { AUTO_ROUTER_SUPPORTED_CHAINS } from 'lib/hooks/routing/clientSideSmartOrderRouter'
-import { useContext, useRef, useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import { sendEvent } from 'components/analytics'
+import { RedesignVariant, useRedesignFlag } from 'featureFlags/flags/redesign'
+import { isSupportedChainId } from 'lib/hooks/routing/clientSideSmartOrderRouter'
+import { useRef, useState } from 'react'
 import { Settings, X } from 'react-feather'
-import ReactGA from 'react-ga4'
 import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components/macro'
+import styled, { useTheme } from 'styled-components/macro'
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
+import { useModalIsOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 import { ApplicationModal } from '../../state/application/reducer'
 import { useClientSideRouter, useExpertModeManager } from '../../state/user/hooks'
 import { ThemedText } from '../../theme'
@@ -22,20 +23,16 @@ import { RowBetween, RowFixed } from '../Row'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
 
-const StyledMenuIcon = styled(Settings)`
+const StyledMenuIcon = styled(Settings)<{ redesignFlag: boolean }>`
   height: 20px;
   width: 20px;
 
   > * {
-    stroke: ${({ theme }) => theme.text1};
-  }
-
-  :hover {
-    opacity: 0.7;
+    stroke: ${({ theme, redesignFlag }) => (redesignFlag ? theme.textSecondary : theme.deprecated_text1)};
   }
 `
 
-const StyledCloseIcon = styled(X)`
+const StyledCloseIcon = styled(X)<{ redesignFlag: boolean }>`
   height: 20px;
   width: 20px;
   :hover {
@@ -43,11 +40,11 @@ const StyledCloseIcon = styled(X)`
   }
 
   > * {
-    stroke: ${({ theme }) => theme.text1};
+    stroke: ${({ theme, redesignFlag }) => (redesignFlag ? theme.textSecondary : theme.deprecated_text1)};
   }
 `
 
-const StyledMenuButton = styled.button`
+const StyledMenuButton = styled.button<{ disabled: boolean }>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -58,11 +55,16 @@ const StyledMenuButton = styled.button`
   border-radius: 0.5rem;
   height: 20px;
 
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-  }
+  ${({ disabled }) =>
+    !disabled &&
+    `
+    :hover,
+    :focus {
+      cursor: pointer;
+      outline: none;
+      opacity: 0.7;
+    }
+  `}
 `
 const EmojiWrapper = styled.div`
   position: absolute;
@@ -81,10 +83,10 @@ const StyledMenu = styled.div`
   text-align: left;
 `
 
-const MenuFlyout = styled.span`
+const MenuFlyout = styled.span<{ redesignFlag: boolean }>`
   min-width: 20.125rem;
-  background-color: ${({ theme }) => theme.bg2};
-  border: 1px solid ${({ theme }) => theme.bg3};
+  background-color: ${({ theme, redesignFlag }) => (redesignFlag ? theme.backgroundSurface : theme.deprecated_bg2)};
+  border: 1px solid ${({ theme, redesignFlag }) => (redesignFlag ? theme.backgroundOutline : theme.deprecated_bg3)};
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
     0px 24px 32px rgba(0, 0, 0, 0.01);
   border-radius: 12px;
@@ -95,8 +97,9 @@ const MenuFlyout = styled.span`
   top: 2rem;
   right: 0rem;
   z-index: 100;
+  color: ${({ theme, redesignFlag }) => redesignFlag && theme.textPrimary};
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
     min-width: 18.125rem;
   `};
 
@@ -106,7 +109,7 @@ const MenuFlyout = styled.span`
 const Break = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.bg3};
+  background-color: ${({ theme }) => theme.deprecated_bg3};
 `
 
 const ModalContentWrapper = styled.div`
@@ -114,18 +117,20 @@ const ModalContentWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem 0;
-  background-color: ${({ theme }) => theme.bg2};
+  background-color: ${({ theme }) => theme.deprecated_bg2};
   border-radius: 20px;
 `
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
+  const redesignFlag = useRedesignFlag()
+  const redesignFlagEnabled = redesignFlag === RedesignVariant.Enabled
 
   const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.SETTINGS)
+  const open = useModalIsOpen(ApplicationModal.SETTINGS)
   const toggle = useToggleSettingsMenu()
 
-  const theme = useContext(ThemeContext)
+  const theme = useTheme()
 
   const [expertMode, toggleExpertMode] = useExpertModeManager()
 
@@ -147,7 +152,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               <Text fontWeight={500} fontSize={20}>
                 <Trans>Are you sure?</Trans>
               </Text>
-              <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
+              <StyledCloseIcon onClick={() => setShowConfirmation(false)} redesignFlag={redesignFlagEnabled} />
             </RowBetween>
             <Break />
             <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
@@ -179,8 +184,13 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
           </AutoColumn>
         </ModalContentWrapper>
       </Modal>
-      <StyledMenuButton onClick={toggle} id="open-settings-dialog-button" aria-label={t`Transaction Settings`}>
-        <StyledMenuIcon />
+      <StyledMenuButton
+        disabled={!isSupportedChainId(chainId)}
+        onClick={toggle}
+        id="open-settings-dialog-button"
+        aria-label={t`Transaction Settings`}
+      >
+        <StyledMenuIcon redesignFlag={redesignFlagEnabled} />
         {expertMode ? (
           <EmojiWrapper>
             <span role="img" aria-label="wizard-icon">
@@ -190,28 +200,28 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
         ) : null}
       </StyledMenuButton>
       {open && (
-        <MenuFlyout>
+        <MenuFlyout redesignFlag={redesignFlagEnabled}>
           <AutoColumn gap="md" style={{ padding: '1rem' }}>
             <Text fontWeight={600} fontSize={14}>
-              <Trans>Transaction Settings</Trans>
+              <Trans>{redesignFlagEnabled ? 'Settings' : 'Transaction Settings'}</Trans>
             </Text>
             <TransactionSettings placeholderSlippage={placeholderSlippage} />
             <Text fontWeight={600} fontSize={14}>
               <Trans>Interface Settings</Trans>
             </Text>
-            {chainId && AUTO_ROUTER_SUPPORTED_CHAINS.includes(chainId) && (
+            {isSupportedChainId(chainId) && (
               <RowBetween>
                 <RowFixed>
-                  <ThemedText.Black fontWeight={400} fontSize={14} color={theme.text2}>
+                  <ThemedText.DeprecatedBlack fontWeight={400} fontSize={14} color={theme.deprecated_text2}>
                     <Trans>Auto Router API</Trans>
-                  </ThemedText.Black>
+                  </ThemedText.DeprecatedBlack>
                   <QuestionHelper text={<Trans>Use the Uniswap Labs API to get faster quotes.</Trans>} />
                 </RowFixed>
                 <Toggle
                   id="toggle-optimized-router-button"
                   isActive={!clientSideRouter}
                   toggle={() => {
-                    ReactGA.event({
+                    sendEvent({
                       category: 'Routing',
                       action: clientSideRouter ? 'enable routing API' : 'disable routing API',
                     })
@@ -222,9 +232,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             )}
             <RowBetween>
               <RowFixed>
-                <ThemedText.Black fontWeight={400} fontSize={14} color={theme.text2}>
+                <ThemedText.DeprecatedBlack fontWeight={400} fontSize={14} color={theme.deprecated_text2}>
                   <Trans>Expert Mode</Trans>
-                </ThemedText.Black>
+                </ThemedText.DeprecatedBlack>
                 <QuestionHelper
                   text={
                     <Trans>Allow high price impact trades and skip the confirm screen. Use at your own risk.</Trans>

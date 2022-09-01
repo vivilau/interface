@@ -1,12 +1,12 @@
 import { Trans } from '@lingui/macro'
-import { darken } from 'polished'
+import { Connector } from '@web3-react/types'
+import { ButtonEmpty, ButtonPrimary } from 'components/Button'
+import { RedesignVariant, useRedesignFlag } from 'featureFlags/flags/redesign'
+import { AlertTriangle } from 'react-feather'
 import styled from 'styled-components/macro'
-import { AbstractConnector } from 'web3-react-abstract-connector'
+import { ThemedText } from 'theme'
 
-import { injected } from '../../connectors'
-import { SUPPORTED_WALLETS } from '../../constants/wallet'
 import Loader from '../Loader'
-import Option from './Option'
 
 const PendingSection = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -18,18 +18,33 @@ const PendingSection = styled.div`
   }
 `
 
-const StyledLoader = styled(Loader)`
-  margin-right: 1rem;
+const WaitingToConnectSection = styled.div`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `
 
-const LoadingMessage = styled.div<{ error?: boolean }>`
+const AlertTriangleIcon = styled(AlertTriangle)`
+  width: 25%;
+  height: 25%;
+  stroke-width: 1;
+  padding-bottom: 2rem;
+  color: ${({ theme }) => theme.accentCritical};
+`
+
+const LoaderContainer = styled.div`
+  margin: 16px 0;
   ${({ theme }) => theme.flexRowNoWrap};
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+`
+
+const LoadingMessage = styled.div`
+  ${({ theme }) => theme.flexRowNoWrap};
+  align-items: center;
+  justify-content: center;
   border-radius: 12px;
-  margin-bottom: 20px;
-  color: ${({ theme, error }) => (error ? theme.red1 : 'inherit')};
-  border: 1px solid ${({ theme, error }) => (error ? theme.red1 : theme.text4)};
 
   & > * {
     padding: 1rem;
@@ -37,29 +52,13 @@ const LoadingMessage = styled.div<{ error?: boolean }>`
 `
 
 const ErrorGroup = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
+  ${({ theme }) => theme.flexColumnNoWrap};
   align-items: center;
   justify-content: flex-start;
 `
 
-const ErrorButton = styled.div`
-  border-radius: 8px;
-  font-size: 12px;
-  color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg4};
-  margin-left: 1rem;
-  padding: 0.5rem;
-  font-weight: 600;
-  user-select: none;
-
-  &:hover {
-    cursor: pointer;
-    background-color: ${({ theme }) => darken(0.1, theme.text4)};
-  }
-`
-
 const LoadingWrapper = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
+  ${({ theme }) => theme.flexColumnNoWrap};
   align-items: center;
   justify-content: center;
 `
@@ -67,67 +66,106 @@ const LoadingWrapper = styled.div`
 export default function PendingView({
   connector,
   error = false,
-  setPendingError,
   tryActivation,
+  openOptions,
 }: {
-  connector?: AbstractConnector
+  connector: Connector
   error?: boolean
-  setPendingError: (error: boolean) => void
-  tryActivation: (connector: AbstractConnector) => void
+  tryActivation: (connector: Connector) => void
+  openOptions: () => void
 }) {
-  const isMetamask = window?.ethereum?.isMetaMask
+  const redesignFlag = useRedesignFlag()
+  const redesignFlagEnabled = redesignFlag === RedesignVariant.Enabled
 
-  return (
+  return redesignFlagEnabled ? (
     <PendingSection>
-      <LoadingMessage error={error}>
+      <LoadingMessage>
         <LoadingWrapper>
           {error ? (
             <ErrorGroup>
-              <div>
+              <AlertTriangleIcon />
+              <ThemedText.MediumHeader marginBottom={12}>
                 <Trans>Error connecting</Trans>
-              </div>
-              <ErrorButton
+              </ThemedText.MediumHeader>
+              <ThemedText.BodyPrimary fontSize={16} marginBottom={36} textAlign="center">
+                <Trans>
+                  The connection attempt failed. Please click try again and follow the steps to connect in your wallet.
+                </Trans>
+              </ThemedText.BodyPrimary>
+              <ButtonPrimary
+                $borderRadius="12px"
+                redesignFlag={true}
                 onClick={() => {
-                  setPendingError(false)
-                  connector && tryActivation(connector)
+                  tryActivation(connector)
                 }}
               >
                 <Trans>Try Again</Trans>
-              </ErrorButton>
+              </ButtonPrimary>
+              <ButtonEmpty width="fit-content" padding="0" marginTop={20}>
+                <ThemedText.Link onClick={openOptions}>
+                  <Trans>Back to wallet selection</Trans>
+                </ThemedText.Link>
+              </ButtonEmpty>
             </ErrorGroup>
           ) : (
             <>
-              <StyledLoader />
-              <Trans>Initializing...</Trans>
+              <WaitingToConnectSection>
+                <LoaderContainer style={{ padding: '16px 0px' }}>
+                  <Loader redesignFlag={true} strokeWidth={0.8} size="100px" />
+                </LoaderContainer>
+                <ThemedText.MediumHeader>
+                  <Trans>Waiting to connect</Trans>
+                </ThemedText.MediumHeader>
+                <ThemedText.SubHeader style={{ paddingTop: '8px' }}>
+                  <Trans>Confirm this connection in your wallet</Trans>
+                </ThemedText.SubHeader>
+              </WaitingToConnectSection>
             </>
           )}
         </LoadingWrapper>
       </LoadingMessage>
-      {Object.keys(SUPPORTED_WALLETS).map((key) => {
-        const option = SUPPORTED_WALLETS[key]
-        if (option.connector === connector) {
-          if (option.connector === injected) {
-            if (isMetamask && option.name !== 'MetaMask') {
-              return null
-            }
-            if (!isMetamask && option.name === 'MetaMask') {
-              return null
-            }
-          }
-          return (
-            <Option
-              id={`connect-${key}`}
-              key={key}
-              clickable={false}
-              color={option.color}
-              header={option.name}
-              subheader={option.description}
-              icon={option.iconURL}
-            />
-          )
-        }
-        return null
-      })}
+    </PendingSection>
+  ) : (
+    <PendingSection>
+      <LoadingMessage>
+        <LoadingWrapper>
+          {error ? (
+            <ErrorGroup>
+              <ThemedText.DeprecatedMediumHeader marginBottom={12}>
+                <Trans>Error connecting</Trans>
+              </ThemedText.DeprecatedMediumHeader>
+              <ThemedText.DeprecatedBody fontSize={14} marginBottom={36} textAlign="center">
+                <Trans>
+                  The connection attempt failed. Please click try again and follow the steps to connect in your wallet.
+                </Trans>
+              </ThemedText.DeprecatedBody>
+              <ButtonPrimary
+                $borderRadius="12px"
+                padding="12px"
+                onClick={() => {
+                  tryActivation(connector)
+                }}
+              >
+                <Trans>Try Again</Trans>
+              </ButtonPrimary>
+              <ButtonEmpty width="fit-content" padding="0" marginTop={20}>
+                <ThemedText.DeprecatedLink fontSize={12} onClick={openOptions}>
+                  <Trans>Back to wallet selection</Trans>
+                </ThemedText.DeprecatedLink>
+              </ButtonEmpty>
+            </ErrorGroup>
+          ) : (
+            <>
+              <ThemedText.DeprecatedBlack fontSize={20} marginY={16}>
+                <LoaderContainer>
+                  <Loader stroke="currentColor" size="32px" />
+                </LoaderContainer>
+                <Trans>Connecting...</Trans>
+              </ThemedText.DeprecatedBlack>
+            </>
+          )}
+        </LoadingWrapper>
+      </LoadingMessage>
     </PendingSection>
   )
 }

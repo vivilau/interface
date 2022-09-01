@@ -83,6 +83,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     USDT_POLYGON,
     WETH_POLYGON,
   ],
+  [SupportedChainId.CELO]: [CUSD_CELO, CEUR_CELO, CMC02_CELO, PORTAL_USDC_CELO, PORTAL_ETH_CELO],
 }
 export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: Token[] } } = {
   [SupportedChainId.MAINNET]: {
@@ -172,6 +173,20 @@ export const COMMON_BASES: ChainCurrencyList = {
     DOG_POLYGON_MUMBAI,
     BEAR_POLYGON_MUMBAI,
     GOO_POLYGON_MUMBAI,
+  ],
+
+  [SupportedChainId.CELO]: [
+    nativeOnChain(SupportedChainId.CELO),
+    CEUR_CELO,
+    CUSD_CELO,
+    PORTAL_ETH_CELO,
+    PORTAL_USDC_CELO,
+    CMC02_CELO,
+  ],
+  [SupportedChainId.CELO_ALFAJORES]: [
+    nativeOnChain(SupportedChainId.CELO_ALFAJORES),
+    CUSD_CELO_ALFAJORES,
+    CEUR_CELO_ALFAJORES,
   ],
 }
 

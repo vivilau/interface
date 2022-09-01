@@ -3,10 +3,9 @@ import { ButtonPrimary } from 'components/Button'
 import { AutoColumn } from 'components/Column'
 import Modal from 'components/Modal'
 import { LoadingView, SubmittedView } from 'components/ModalViews'
-import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components/macro'
+import { useTheme } from 'styled-components/macro'
 import { ExternalLink, ThemedText } from 'theme'
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
 
@@ -19,16 +18,16 @@ export const ProposalSubmissionModal = ({
   hash: string | undefined
   onDismiss: () => void
 }) => {
-  const theme = useContext(ThemeContext)
+  const theme = useTheme()
 
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {!hash ? (
         <LoadingView onDismiss={onDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.LargeHeader>
+            <ThemedText.DeprecatedLargeHeader>
               <Trans>Submitting Proposal</Trans>
-            </ThemedText.LargeHeader>
+            </ThemedText.DeprecatedLargeHeader>
           </AutoColumn>
         </LoadingView>
       ) : (
@@ -39,7 +38,7 @@ export const ProposalSubmissionModal = ({
             </Text>
             {hash && (
               <ExternalLink href={getExplorerLink(1, hash, ExplorerDataType.TRANSACTION)}>
-                <Text fontWeight={500} fontSize={14} color={theme.primary1}>
+                <Text fontWeight={500} fontSize={14} color={theme.deprecated_primary1}>
                   <Trans>View on Etherscan</Trans>
                 </Text>
               </ExternalLink>
