@@ -2,6 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Trans } from '@lingui/macro'
 import { left, right } from '@popperjs/core'
 import { Position } from '@uniswap/v3-sdk'
+import { useWeb3React } from '@web3-react/core'
 import { OutlineCard } from 'components/Card'
 import CurrencyLogo from 'components/CurrencyLogo'
 import ClaimRewardModal from 'components/earn/ClaimRewardModal'
@@ -10,19 +11,17 @@ import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/earn/s
 import UnstakingModal from 'components/earn/UnstakingModal'
 import { AutoRow, RowBetween, RowFixed } from 'components/Row'
 import StatusBadge from 'components/stake/StatusBadge'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { NavBarVariant, useNavBarFlag } from 'featureFlags/flags/navBar'
 import { useColor } from 'hooks/useColor'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePool } from 'hooks/usePools'
 import usePrevious from 'hooks/usePrevious'
 import { useV3Positions, useV3PositionsFromTokenIds } from 'hooks/useV3Positions'
 import JSBI from 'jsbi'
-import { Spinner } from 'lib/icons'
 import { LoadingRows } from 'pages/Pool/styleds'
 import darken from 'polished/lib/color/darken'
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { RouteComponentProps } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
 import { Button } from 'rebass/styled-components'
 import styled from 'styled-components/macro'
@@ -39,9 +38,19 @@ import { AutoColumn } from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency, useToken } from '../../hooks/Tokens'
 import { DepositInfo, useClaimNum, useDeposits, useIncentiveInfo, useTokens } from '../../state/stake/hooks'
-const PageWrapper = styled(AutoColumn)`
+
+const PageWrapper = styled(AutoColumn)<{ navBarFlag: boolean }>`
+  padding: ${({ navBarFlag }) => (navBarFlag ? '68px 8px 0px' : '0px')};
   max-width: 640px;
   width: 100%;
+
+  @media only screen and (max-width: ${({ theme }) => `${theme.breakpoint.md}px`}) {
+    padding: ${({ navBarFlag }) => (navBarFlag ? '48px 8px 0px' : '0px 8px 0px')};
+  }
+
+  @media only screen and (max-width: ${({ theme }) => `${theme.breakpoint.sm}px`}) {
+    padding-top: ${({ navBarFlag }) => (navBarFlag ? '20px' : '0px')};
+  }
 `
 
 const PositionInfo = styled(AutoColumn)<{ dim: any }>`
@@ -62,11 +71,13 @@ const StyledDataCard = styled(DataCard)<{ bgColor?: any; showBackground?: any }>
   z-index: 2;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%,  ${showBackground ? theme.black : theme.bg5} 100%) `};
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%,  ${
+      showBackground ? theme.black : theme.deprecated_bg5
+    } 100%) `};
 `
 
 const StyledBottomCard = styled(DataCard)<{ dim: any }>`
-  background: ${({ theme }) => theme.bg3};
+  background: ${({ theme }) => theme.deprecated_bg3};
   opacity: ${({ dim }) => (dim ? 0.4 : 1)};
   margin-top: -40px;
   padding: 0 1.25rem 1rem 1.25rem;
@@ -92,23 +103,23 @@ const Proposal = styled(ButtonEmpty)`
   cursor: pointer;
   outline: none;
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
   }
   &:focus {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
     text-decoration: none;
   }
   &:active {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
     text-decoration: none;
   }
-  grid-template-columns: 60px 1fr 120px;
-  color: ${({ theme }) => theme.text1};
+  grid-template-columns: 85px 1fr 120px;
+  color: ${({ theme }) => theme.deprecated_text1};
   padding-right: 25px;
-  background-color: ${({ theme }) => theme.bg2};
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-  grid-template-columns: 55px 1fr 85px;
-  padding-right: 8px;
+  background-color: ${({ theme }) => theme.deprecated_bg2};
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
+  grid-template-columns: 85px 1fr 85px;
+  padding-right: 5px;
   `}
 `
 const Clou = styled(TopSection)`
@@ -116,8 +127,8 @@ const Clou = styled(TopSection)`
   grid-gap: 0px;
   z-index: 1;
   align-items: center;
-  grid-template-columns: 100px 1fr;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  grid-template-columns: 90px 1fr;
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
 `}
 `
 const Proposal2 = styled(ButtonEmpty)`
@@ -134,29 +145,29 @@ const Proposal2 = styled(ButtonEmpty)`
   outline: none;
   text-decoration: none;
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
   }
   &:focus {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
     text-decoration: none;
   }
   &:active {
-    background-color: ${({ theme }) => darken(0.05, theme.bg2)};
+    background-color: ${({ theme }) => darken(0.05, theme.deprecated_bg2)};
     text-decoration: none;
   }
-  grid-template-columns: 60px 1fr 120px;
-  color: ${({ theme }) => theme.text1};
+  grid-template-columns: 80px 1fr 120px;
+  color: ${({ theme }) => theme.deprecated_text1};
   padding-right: 25px;
-  background-color: ${({ theme }) => theme.bg2};
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-  grid-template-columns: 55px 1fr  70px;  
+  background-color: ${({ theme }) => theme.deprecated_bg2};
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
+  grid-template-columns: 80px 1fr  70px;  
   padding-right: 8px;
   `}
 `
 const ProposalNumberButton = styled(Button)`
   opacity: 0.6;
   flex: 0 0 40px;
-  color: ${({ theme }) => theme.green1};
+  color: ${({ theme }) => theme.deprecated_green1};
 `
 const Symbol = styled(Text)`
   font-weight: 500;
@@ -168,7 +179,7 @@ const Symbol = styled(Text)`
   align-items: center;
   float: left;
   color: #b2b9d2;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
   font-weight: 400;
   font-size: 14px;
 `};
@@ -182,37 +193,33 @@ const ProposalTitle = styled.span`
   padding-right: 8px;
   align-items: center;
   float: left;
-  color: ${({ theme }) => theme.text2};
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  color: ${({ theme }) => theme.deprecated_text2};
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
     font-size: 14px;
   `};
 `
 
 const WrapSmall = styled(RowBetween)`
   margin-bottom: 1rem;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
     flex-wrap: wrap;
   `};
 `
 
-export const DepositIcon = styled(Spinner)<{ size: string }>`
-  height: ${({ size }) => size};
-  width: ${({ size }) => size};
-`
 const ClaimButton = styled(ButtonEmpty)`
   padding: 8px;
   border-radius: 8px;
   width: fit-content;
-  color: ${({ theme }) => darken(0.1, theme.green1)};
-  border: 1px solid ${({ theme }) => darken(0.1, theme.green1)};
+  color: ${({ theme }) => darken(0.1, theme.deprecated_green1)};
+  border: 1px solid ${({ theme }) => darken(0.1, theme.deprecated_green1)};
 `
 
-export default function Manage({
-  match: {
-    params: { index },
-  },
-}: RouteComponentProps<{ index?: string }>) {
-  const { account } = useActiveWeb3React()
+export default function Manage() {
+  const navBarFlag = useNavBarFlag()
+  const navBarFlagEnabled = navBarFlag === NavBarVariant.Enabled
+
+  const { account } = useWeb3React()
+  const index = useParams<{ index: string }>()?.index
   const incentiveId = Number(index)
   //  // get incentiveInfo
   const stakingInfo = useIncentiveInfo(incentiveId)
@@ -358,7 +365,7 @@ export default function Manage({
     )
   }
   return (
-    <PageWrapper gap="lg" justify="center">
+    <PageWrapper gap="lg" justify="center" navBarFlag={navBarFlagEnabled}>
       <RowBetween style={{ gap: '24px' }}>
         <ThemedText.MediumHeader style={{ margin: 0 }}>
           <Trans>
@@ -376,7 +383,7 @@ export default function Manage({
             stakingInfo={stakingInfo}
             tokenId={tokenId}
             tokenRate={tokenRate}
-            poolId={index ?? ''}
+            poolId={incentiveId?.toString() ?? ''}
           />
           <UnstakingModal
             isOpen={showUnstakingModal}
@@ -400,10 +407,10 @@ export default function Manage({
               <CardNoise />
               <AutoColumn gap="md">
                 <RowBetween>
-                  <ThemedText.White fontWeight={600}>
+                  <ThemedText.DeprecatedWhite fontWeight={600}>
                     <Trans>Your Total Liquidity </Trans>
-                  </ThemedText.White>
-                  <ThemedText.White fontWeight={500} style={{ opacity: '0.6' }}>
+                  </ThemedText.DeprecatedWhite>
+                  <ThemedText.DeprecatedWhite fontWeight={500} style={{ opacity: '0.6' }}>
                     <Trans>Minimum Duration</Trans>
                     {'  :  '}
                     {stakingInfo ? (
@@ -418,20 +425,20 @@ export default function Manage({
                         </>
                       )
                     ) : null}
-                  </ThemedText.White>
+                  </ThemedText.DeprecatedWhite>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
-                  <ThemedText.White fontSize={36} fontWeight={600}>
+                  <ThemedText.DeprecatedWhite fontSize={36} fontWeight={600}>
                     {tolLiquidity && numFixed(tolLiquidity, 18)}
-                  </ThemedText.White>
-                  <ThemedText.White>
+                  </ThemedText.DeprecatedWhite>
+                  <ThemedText.DeprecatedWhite>
                     <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                       ⚡
                     </span>
                     {numFixed(stakingInfo?.outputDaily, 18)} {rewardToken?.symbol}
                     {'  '}/{'  '}
                     <Trans>day</Trans>
-                  </ThemedText.White>
+                  </ThemedText.DeprecatedWhite>
                 </RowBetween>
               </AutoColumn>
             </CardSection>
@@ -442,9 +449,9 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <ThemedText.Black>
+                  <ThemedText.DeprecatedBlack>
                     <Trans>Your unclaimed {rewardToken?.symbol}</Trans>
-                  </ThemedText.Black>
+                  </ThemedText.DeprecatedBlack>
                 </div>
                 <ClaimButton onClick={() => claim()}>
                   <Trans>Claim</Trans>
@@ -462,14 +469,14 @@ export default function Manage({
                     duration={0.01}
                   />
                 </ThemedText.LargeHeader>
-                <ThemedText.Black fontSize={16} fontWeight={500}>
+                <ThemedText.DeprecatedBlack fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
                   </span>
                   {yourRate} {rewardToken?.symbol}
                   {'  '}/{'  '}
                   <Trans>day</Trans>
-                </ThemedText.Black>
+                </ThemedText.DeprecatedBlack>
               </RowBetween>
             </AutoColumn>
           </StyledBottomCard>

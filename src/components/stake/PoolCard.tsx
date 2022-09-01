@@ -23,7 +23,7 @@ const StatContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   margin: 1rem;
-  // ${({ theme }) => theme.mediaWidth.upToSmall`
+  // ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
   // display: none;
 `};
 `
@@ -35,8 +35,10 @@ const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
   background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
-  color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${
+      showBackground ? theme.black : theme.deprecated_bg5
+    } 100%) `};
+  color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.deprecated_text1)} !important;
 
   ${({ showBackground }) =>
     showBackground &&
@@ -54,7 +56,7 @@ const TopSection = styled.div`
   padding-right: 1rem;
   padding-bottom: 0.5rem;
   z-index: 1;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
     grid-template-columns: 30px 1fr 65px;
   `};
 `
@@ -72,7 +74,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 const StyledDiv = styled.div`
   align-items: left;
   text-align: center;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
   display: grid;
   grid-template-columns: 1fr;
   `};
@@ -84,7 +86,7 @@ const StatText = styled(Text)`
   opacity: 0.8;
   float: left;
   height: 1.2rem;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
   height:1.6rem;
 `};
 `
@@ -94,7 +96,7 @@ const Symbol = styled(Text)`
   color: white;
   float: left;
   opacity: 0.7;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
   display: none;
 `};
 `
@@ -103,7 +105,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const token0 = useCurrency(stakingInfo.token0) ?? undefined
   const token1 = useCurrency(stakingInfo.token1) ?? undefined
   const rewardToken = useCurrency(stakingInfo.rewardToken)
-  const rewardName = rewardToken && rewardToken.symbol
+  const rewardName = rewardToken?.symbol
   const fee = stakingInfo.fee.toFixed(1)
   const numberOfStakes = stakingInfo.numberOfStakes
   const minDuration = useMemo(() => {
@@ -127,17 +129,17 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <div style={{ marginLeft: '10px' }}>
             <DoubleCurrencyLogo currency0={token0} currency1={token1} size={24} />
           </div>
-          <ThemedText.White style={{ marginLeft: '8px' }} fontSize="18px">
+          <ThemedText.DeprecatedWhite style={{ marginLeft: '8px' }} fontSize="18px">
             {token0?.symbol}-{token1?.symbol}
             {'  '}
             {'  '}
             {fee}%
-          </ThemedText.White>
+          </ThemedText.DeprecatedWhite>
           <div style={{ marginRight: '8px' }}>
             <CurrencyLogo style={{ float: left }} currency={rewardToken} size={'18px'} />
-            <ThemedText.White style={{ textAlign: 'center', float: right, fontSize: '16px' }}>
+            <ThemedText.DeprecatedWhite style={{ textAlign: 'center', float: right, fontSize: '16px' }}>
               <Trans>{rewardToken?.symbol}</Trans>
-            </ThemedText.White>
+            </ThemedText.DeprecatedWhite>
           </div>
         </TopSection>
 
@@ -190,24 +192,24 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <>
             <Break />
             <BottomSection showBackground={false}>
-              <ThemedText.Black color={'white'} fontWeight={500}>
+              <ThemedText.DeprecatedBlack color={'white'} fontWeight={500}>
                 <span>
                   <Trans>Your rate</Trans>
                 </span>
-              </ThemedText.Black>
+              </ThemedText.DeprecatedBlack>
 
-              <ThemedText.Black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+              <ThemedText.DeprecatedBlack style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
                 <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                   ⚡
                 </span>
                 {stakingInfo ? (
                   <Trans>
-                    {stakingInfo?.outputDaily} {{ rewardName }}/day
+                    {stakingInfo?.outputDaily?.toString()} {rewardName}/day
                   </Trans>
                 ) : (
                   '-'
                 )}
-              </ThemedText.Black>
+              </ThemedText.DeprecatedBlack>
             </BottomSection>
           </>
         )}

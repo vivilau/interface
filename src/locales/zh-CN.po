@@ -53,12 +53,12 @@ msgid "No liquidity token, create a liquidity token first."
 msgstr "无可用的流动性Token，请先创建流动性Token。"
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "No unclaimed OPK"
-msgstr "没有未领取的OPK"
+msgid "No unclaimed {rewardTokenName}"
+msgstr "没有未领取的{rewardTokenName}"
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "Unclaimed OPK"
-msgstr "领取OPK"
+msgid "Unclaimed {rewardTokenName}"
+msgstr "领取{rewardTokenName}"
 
 #: src/components/Menu/index.tsx
 msgid "Wrap FIl Token"
@@ -109,8 +109,8 @@ msgid "Your Total Liquidity"
 msgstr "已抵押流动性"
 
 #: src/pages/Stake/Manage.tsx
-msgid "Your unclaimed OPK"
-msgstr "未领取收益"
+msgid "Your unclaimed {0}"
+msgstr "未领取 {0}"
 
 #: src/components/earn/StakingModal.tsx
 msgid "Stake Token"
@@ -127,14 +127,14 @@ msgstr "赎回#{tokenId}"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claiming {rewards} OPK"
-msgstr "收获 {rewards} OPK"
+msgid "Claiming  {rewards} {rewardTokenName}"
+msgstr "收获 {rewards} {rewardTokenName}"
 
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claimed OPK!"
-msgstr "成功领取 OPK!"
+msgid "Claimed {rewardTokenName}!"
+msgstr "成功领取 {rewardTokenName}!"
 
 #: src/components/AccountDetails/TransactionSummary.tsx
 msgid "Claim OPK reward"
@@ -147,8 +147,8 @@ msgstr "已抵押"
 
 
 #: src/components/earn/StakingModal.tsx
-msgid "Staked {tokenId}"
-msgstr "已抵押 {tokenId}"
+msgid "Staked {0}"
+msgstr "已抵押 {0}"
 
 #: src/components/earn/UnstakingModal.tsx
 msgid "UNSTAKE"
@@ -162,6 +162,14 @@ msgstr "奖励:"
 msgid "Estimated Earning"
 msgstr "预计收益"
 
+
+#: src/components/earn/StakingModal.tsx
+msgid "{0}  / day"
+msgstr "{0}  / 天"
+
+#: src/components/earn/StakingModal.tsx
+msgid "Staking..."
+msgstr "抵押中"
 
 #: src/pages/Stake/Manage.tsx
 #: src/components/earn/StakingModal.tsx
@@ -181,8 +189,12 @@ msgstr "锁定期  :   {minDuration} 天"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Generated OPK"
-msgstr "预计获得OPC"
+msgid "Generated {rewardTokenName}"
+msgstr "预计获得{rewardTokenName}"
+
+#: src/components/Menu/index.tsx
+msgid "Earn"
+msgstr "赚取"
 
 #: src/pages/Pool/PositionPage.tsx
 #: src/pages/Pool/PositionPage.tsx
@@ -614,8 +626,9 @@ msgstr "已领取！"
 #: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/claim/AddressClaimModal.tsx
 #: src/components/claim/ClaimModal.tsx
-msgid "Claiming"
-msgstr "领取中"
+#: src/components/earn/ClaimRewardModal.tsx
+msgid "Claiming..."
+msgstr "领取中..."
 
 #: src/components/Header/index.tsx
 msgid "Claiming UNI"
@@ -725,6 +738,7 @@ msgstr "连接"
 
 #: src/components/Web3Status/index.tsx
 #: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/StakingModal.tsx
 #: src/pages/AddLiquidity/index.tsx
 #: src/pages/AddLiquidityV2/index.tsx
 #: src/pages/RemoveLiquidity/index.tsx
@@ -1620,7 +1634,7 @@ msgid "Pooled {0}:"
 msgstr "流动池汇集 {0}:"
 
 #: src/pages/Pool/index.tsx
-msgid "Pools Overview"
+msgid "Pools"
 msgstr "流动池概览"
 
 #: src/lib/components/BrandedFooter.tsx
@@ -2989,5 +3003,5 @@ msgstr "{tokenB} 每 {tokenA}"
 
 #: src/pages/Pool/PositionPage.tsx
 msgid "← Back to Pools"
-msgstr "← 返回游泳池"
+msgstr "← 返回流动池"
 

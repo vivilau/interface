@@ -12,7 +12,7 @@ import { useSyncWidgetTransactions } from './transactions'
 
 export const WIDGET_WIDTH = 320
 
-const WIDGET_ROUTER_URL = 'https://api.uniswap.org/v1/'
+const WIDGET_ROUTER_URL = 'https://hucuww71t3.execute-api.us-east-2.amazonaws.com/prod/'
 
 export interface WidgetProps {
   defaultToken?: Currency

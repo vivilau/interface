@@ -8,24 +8,10 @@ import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from 'constants/loca
 import { useActiveLocale } from 'hooks/useActiveLocale'
 import { useLocationLinkProps } from 'hooks/useLocationLinkProps'
 import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react'
-import {
-  BookOpen,
-  Check,
-  ChevronLeft,
-  Coffee,
-  FileText,
-  Flag,
-  Globe,
-  HelpCircle,
-  Info,
-  MessageCircle,
-  Moon,
-  Sun,
-} from 'react-feather'
+import { Check, ChevronLeft, Globe, Moon, Sun } from 'react-feather'
 import { Link } from 'react-router-dom'
 import { useDarkModeManager } from 'state/user/hooks'
 import styled, { css } from 'styled-components/macro'
-import { isDevelopmentEnv, isStagingEnv } from 'utils/env'
 
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
@@ -33,6 +19,11 @@ import { useModalIsOpen, useToggleModal } from '../../state/application/hooks'
 import { ApplicationModal } from '../../state/application/reducer'
 import { ExternalLink } from '../../theme'
 import { ButtonPrimary } from '../Button'
+
+const ButtonExternalLink = styled(ExternalLink)`
+  text-decoration: none;
+  color: white;
+`
 
 export enum FlyoutAlignment {
   LEFT = 'LEFT',
@@ -75,10 +66,7 @@ const UNIbutton = styled(ButtonPrimary)`
   background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
   border: none;
 `
-const ButtonExternalLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-`
+
 const StyledMenu = styled.div`
   display: flex;
   justify-content: center;
@@ -249,7 +237,7 @@ export default function Menu() {
               default:
                 return (
                   <MenuFlyout>
-                    <MenuItem href="https://uniswap.org/">
+                    {/* <MenuItem href="https://uniswap.org/">
                       <div>
                         <Trans>About</Trans>
                       </div>
@@ -266,13 +254,13 @@ export default function Menu() {
                         <Trans>Request Features</Trans>
                       </div>
                       <Coffee opacity={0.6} size={16} />
-                    </MenuItem>
-                    <MenuItem href="https://discord.gg/FCfyBSbCU5">
+                    </MenuItem> */}
+                    {/* <MenuItem href="https://discord.gg/FCfyBSbCU5">
                       <div>
                         <Trans>Discord</Trans>
                       </div>
                       <MessageCircle opacity={0.6} size={16} />
-                    </MenuItem>
+                    </MenuItem> */}
                     <ToggleMenuItem onClick={() => setMenu('lang')}>
                       <div>
                         <Trans>Language</Trans>
@@ -283,13 +271,13 @@ export default function Menu() {
                       <div>{darkMode ? <Trans>Light Theme</Trans> : <Trans>Dark Theme</Trans>}</div>
                       {darkMode ? <Moon opacity={0.6} size={16} /> : <Sun opacity={0.6} size={16} />}
                     </ToggleMenuItem>
-                    <MenuItem href="https://docs.uniswap.org/">
+                    {/* <MenuItem href="https://docs.uniswap.org/">
                       <div>
                         <Trans>Docs</Trans>
                       </div>
                       <BookOpen opacity={0.6} size={16} />
-                    </MenuItem>
-                    <ToggleMenuItem onClick={() => togglePrivacyPolicy()}>
+                    </MenuItem> */}
+                    {/* <ToggleMenuItem onClick={() => togglePrivacyPolicy()}>
                       <div>
                         <Trans>Legal & Privacy</Trans>
                       </div>
@@ -299,11 +287,11 @@ export default function Menu() {
                       <ToggleMenuItem onClick={openFeatureFlagsModal}>
                         Feature Flags <Flag opacity={0.6} size={16} />
                       </ToggleMenuItem>
-                    )}
+                    )} */}
                     {showUNIClaimOption && (
                       <UNIbutton padding="8px 16px" width="100%" $borderRadius="12px" mt="0.5rem">
-                        <ButtonExternalLink color="white" to={'/bridge'}>
-                          <Trans>Wrap FIl Token</Trans>
+                        <ButtonExternalLink color="white" href="https://game.runbit.org/">
+                          <Trans>Earn</Trans> {'  '}RB
                         </ButtonExternalLink>
                       </UNIbutton>
                     )}

@@ -35,8 +35,8 @@ export enum TransactionType {
   SUBMIT_PROPOSAL,
   QUEUE,
   EXECUTE,
-  UNSTAKE_TOKEN = 15,
-  ADD_REFERRER = 16,
+  UNSTAKE_TOKEN,
+  ADD_REFERRER,
 }
 
 export interface BaseTransactionInfo {

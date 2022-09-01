@@ -1,15 +1,15 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
+import { useWeb3React } from '@web3-react/core'
 import AddressInputPanel from 'components/AddressInputPanel'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useENS from 'hooks/useENS'
 import { ReactNode, useState } from 'react'
 import { STAKING_REWARDS_INFO } from 'state/stake/hooks'
 import styled from 'styled-components/macro'
 
 import { useStakingContract } from '../../hooks/useContract'
-import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
+import { TransactionType } from '../../state/transactions/types'
 import { CloseIcon, ThemedText } from '../../theme'
 import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
@@ -28,7 +28,7 @@ interface AddReferModalProps {
 }
 
 export default function AddReferModal({ isOpen, onDismiss }: AddReferModalProps) {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useWeb3React()
   // console.error('rewards', rewards)
   // monitor call to help UI loading state
   const addTransaction = useTransactionAdder()
@@ -106,9 +106,9 @@ export default function AddReferModal({ isOpen, onDismiss }: AddReferModalProps)
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="6px" justify={'center'}>
-            <ThemedText.Body fontSize={20}>
+            <ThemedText.BodyPrimary fontSize={20}>
               <Trans>Adding... </Trans>
-            </ThemedText.Body>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </LoadingView>
       )}
@@ -116,9 +116,9 @@ export default function AddReferModal({ isOpen, onDismiss }: AddReferModalProps)
       {hash && (
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="6px" justify={'center'}>
-            <ThemedText.Body fontSize={20}>
+            <ThemedText.BodyPrimary fontSize={20}>
               <Trans>Added!</Trans>
-            </ThemedText.Body>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </SubmittedView>
       )}

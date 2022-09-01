@@ -61,6 +61,7 @@ import useIsArgentWallet from '../../hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from '../../hooks/useIsSwapUnsupported'
 import { useStablecoinValue } from '../../hooks/useStablecoinPrice'
 import useWrapCallback, { WrapErrorText, WrapType } from '../../hooks/useWrapCallback'
+import { useCurrencyBalance } from '../../state/connection/hooks'
 import { Field } from '../../state/swap/actions'
 import {
   useDefaultsFromURLSearch,
@@ -69,7 +70,6 @@ import {
   useSwapState,
 } from '../../state/swap/hooks'
 import { useExpertModeManager } from '../../state/user/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { LinkStyledButton, ThemedText } from '../../theme'
 import { computeFiatValuePriceImpact } from '../../utils/computeFiatValuePriceImpact'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -699,14 +699,14 @@ export default function Swap() {
                         </ButtonLight>
                       </TraceEvent>
                     ) : OverError ? (
-                <ButtonPrimary disabled={true}>
-                  <ThemedText.Main mb="4px">
-                    <Trans>
-                      {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} max per wallet
-                    </Trans>
-                  </ThemedText.Main>
-                </ButtonPrimary>
-              ) : showWrap ? (
+                      <ButtonPrimary disabled={true}>
+                        <ThemedText.DeprecatedMain mb="4px">
+                          <Trans>
+                            {MAXNUM} {OPK_POLYGON_MUMBAI.symbol} max per wallet
+                          </Trans>
+                        </ThemedText.DeprecatedMain>
+                      </ButtonPrimary>
+                    ) : showWrap ? (
                       <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                         {wrapInputError ? (
                           <WrapErrorText wrapInputError={wrapInputError} />
@@ -741,9 +741,7 @@ export default function Swap() {
                                 signatureState === UseERC20PermitState.SIGNED ? (
                                   <Trans>You can now trade {currencies[Field.INPUT]?.symbol}</Trans>
                                 ) : (
-                                  <Trans>
-                                    Allow the Uniswap Protocol to use your {currencies[Field.INPUT]?.symbol}
-                                  </Trans>
+                                  <Trans>Allow the Upswap Protocol to use your {currencies[Field.INPUT]?.symbol}</Trans>
                                 )}
                               </span>
                               {approvalState === ApprovalState.PENDING ? (

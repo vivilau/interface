@@ -5,20 +5,10 @@ import { NftVariant, useNftFlag } from 'featureFlags/flags/nft'
 import { useOnClickOutside } from 'hooks/useOnClickOutside'
 import { Box } from 'nft/components/Box'
 import { Column, Row } from 'nft/components/Flex'
-import {
-  BarChartIcon,
-  DiscordIconMenu,
-  EllipsisIcon,
-  GithubIconMenu,
-  GovernanceIcon,
-  ThinTagIcon,
-  TwitterIconMenu,
-} from 'nft/components/icons'
+import { BarChartIcon, EllipsisIcon, GovernanceIcon, ThinTagIcon } from 'nft/components/icons'
 import { body, bodySmall } from 'nft/css/common.css'
-import { themeVars } from 'nft/css/sprinkles.css'
 import { ReactNode, useReducer, useRef } from 'react'
 import { NavLink, NavLinkProps } from 'react-router-dom'
-import { isDevelopmentEnv, isStagingEnv } from 'utils/env'
 
 import { useToggleModal } from '../../state/application/hooks'
 import { ApplicationModal } from '../../state/application/reducer'
@@ -161,7 +151,7 @@ export const MenuDropdown = () => {
                 </PrimaryMenuRow>
               </Column>
               <Separator />
-              <Box
+              {/* <Box
                 display="flex"
                 flexDirection={{ sm: 'row', md: 'column' }}
                 flexWrap="wrap"
@@ -187,8 +177,8 @@ export const MenuDropdown = () => {
                     <Trans>Feature Flags</Trans>
                   </SecondaryLinkedText>
                 )}
-              </Box>
-              <IconRow>
+              </Box> */}
+              {/* <IconRow>
                 <Icon href="https://discord.com/invite/FCfyBSbCU5">
                   <DiscordIconMenu className={styles.hover} width={24} height={24} color={themeVars.colors.darkGray} />
                 </Icon>
@@ -198,7 +188,7 @@ export const MenuDropdown = () => {
                 <Icon href="https://github.com/Uniswap">
                   <GithubIconMenu className={styles.hover} width={24} height={24} color={themeVars.colors.darkGray} />
                 </Icon>
-              </IconRow>
+              </IconRow> */}
             </Column>
           </NavDropdown>
         )}

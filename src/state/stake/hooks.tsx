@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Token } from '@uniswap/sdk-core'
+import { useWeb3React } from '@web3-react/core'
 import { RB_POLYGON, RB_POLYGON_MUMBAI } from 'constants/tokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useStakingContract } from 'hooks/useContract'
 import { CallStateResult, useSingleCallResult, useSingleContractMultipleData } from 'lib/hooks/multicall'
 import { useMemo } from 'react'
@@ -58,7 +58,7 @@ interface tokensResults {
  * @return {tokenIds}
  */
 export function useTokens(): tokensResults {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
 
@@ -95,7 +95,7 @@ export function useTokens(): tokensResults {
   return { loading: balanceLoading || someTokenIdsLoading, tokens: tokenIds }
 }
 export function useIncentiveInfo(index: number): StakingInfo | undefined {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
   const { result } = useSingleCallResult(tokenContract, 'incentiveInfo', [[index]])
@@ -125,7 +125,7 @@ export function useIncentiveInfo(index: number): StakingInfo | undefined {
 }
 // gets the all the  staking(incentiveInfo) info from the network for the active chain id
 export function useStakingInfo(): StakingResults {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
 
@@ -182,7 +182,7 @@ export function useStakingInfo(): StakingResults {
  * @return {*}
  */
 export function useClaimNum(): BigNumber {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
 
@@ -200,7 +200,7 @@ export function useClaimNum(): BigNumber {
  * @return {*}
  */
 export function useDeposits(tokenIds: BigNumber[]): DepositResults {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
 
@@ -261,7 +261,7 @@ export function useDeposits(tokenIds: BigNumber[]): DepositResults {
 }
 
 export function useReferrer() {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useWeb3React()
   const stakingAdress = chainId ? STAKING_REWARDS_INFO[chainId]?.stakingAddress : undefined
   const tokenContract = useStakingContract(stakingAdress)
   const { result: rewards } = useSingleCallResult(tokenContract, 'referrer', [account ?? undefined])

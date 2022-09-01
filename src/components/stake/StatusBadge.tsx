@@ -27,7 +27,7 @@ const BadgeUnStake = styled.div`
   align-items: center;
   background-color: #ebd5e4;
   border-radius: 0.2rem;
-  color: ${({ theme }) => theme.primary1};
+  color: ${({ theme }) => theme.deprecated_primary1};
   display: inline-flex;
   padding: 4px 6px;
   justify-content: center;

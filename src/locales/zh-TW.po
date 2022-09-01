@@ -52,12 +52,12 @@ msgid "No liquidity token, create a liquidity token first."
 msgstr "無可用的流動性Token，請先創建流動性Token。"
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "Unclaimed OPK"
-msgstr "領取OPK"
+msgid "Unclaimed {rewardTokenName}"
+msgstr "領取{rewardTokenName}"
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "No unclaimed OPK"
-msgstr "沒有未領取的OPK"
+msgid "No unclaimed {rewardTokenName} "
+msgstr "沒有未領取的{rewardTokenName}"
 
 #: src/components/Menu/index.tsx
 msgid "Wrap FIl Token"
@@ -121,6 +121,10 @@ msgid "Stake"
 msgstr "抵押"
 
 #: src/components/earn/StakingModal.tsx
+msgid "Staking..."
+msgstr "抵押中"
+
+#: src/components/earn/StakingModal.tsx
 msgid "Stake Token"
 msgstr "抵押 Token"
 
@@ -155,8 +159,8 @@ msgid "Not expired"
 msgstr "未到期"
 
 #: src/components/earn/StakingModal.tsx
-msgid "Staked {tokenId}"
-msgstr "已抵押 {tokenId}"
+msgid "Staked {0}"
+msgstr "已抵押 {0}"
 
 #: src/pages/Stake/PoolCard.tsx
 msgid "Min Duration"
@@ -177,8 +181,8 @@ msgstr "預計收益"
 
 
 #: src/components/earn/StakingModal.tsx
-msgid "{0} OPK / day"
-msgstr "{0} OPK / 天"
+msgid "{0}  / day"
+msgstr "{0}  / 天"
 
 #: src/components/stake/PoolCard.tsx
 msgid "{0} OPK/day"
@@ -210,28 +214,28 @@ msgstr "贖回"
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Claiming {rewards} OPK"
-msgstr "收穫 {rewards} OPK"
+msgid "Claiming {rewards} {rewardTokenName}"
+msgstr "收穫 {rewards} {rewardTokenName}"
 
 
 #: src/components/earn/ClaimRewardModal.tsx
-msgid "Claimed OPK!"
-msgstr "成功领取OPC"
+msgid "Claimed {rewardTokenName}!"
+msgstr "成功领取{rewardTokenName}!"
 
 
 
 #: src/components/earn/ClaimRewardModal.tsx
 #: src/components/earn/UnstakingModal.tsx
-msgid "Generated OPK"
-msgstr "預計獲得OPC"
+msgid "Generated {rewardTokenName}"
+msgstr "預計獲得{rewardTokenName}"
 
 #: src/pages/Stake/Manage.tsx
 msgid "Your Total Liquidity"
 msgstr "已抵押流動性"
 
 #: src/pages/Stake/Manage.tsx
-msgid "Your unclaimed OPK"
-msgstr "未領取收益"
+msgid "Your unclaimed {0} "
+msgstr "未領取{0}"
 
 #: src/pages/Pool/PositionPage.tsx
 #: src/pages/Pool/PositionPage.tsx
@@ -275,6 +279,10 @@ msgstr "- 刪除接收人"
 #: src/pages/Earn/Manage.tsx
 msgid "0 UNI / week"
 msgstr "0 UNI 代幣 / 每周"
+
+#: src/components/Menu/index.tsx
+msgid "Earn"
+msgstr "賺取"
 
 #: src/pages/RemoveLiquidity/V3.tsx
 msgid "25%"
@@ -663,7 +671,8 @@ msgstr "已領取!"
 #: src/components/AccountDetailsV2/TransactionBody.tsx
 #: src/components/claim/AddressClaimModal.tsx
 #: src/components/claim/ClaimModal.tsx
-msgid "Claiming"
+msgid "Claiming..."
+#: src/components/earn/ClaimRewardModal.tsx
 msgstr "領取中"
 
 #: src/components/Header/index.tsx
@@ -769,6 +778,7 @@ msgstr "連接"
 
 #: src/components/Web3Status/index.tsx
 #: src/components/earn/ClaimRewardModal.tsx
+#: src/components/earn/StakingModal.tsx
 #: src/pages/AddLiquidity/index.tsx
 #: src/pages/AddLiquidityV2/index.tsx
 #: src/pages/RemoveLiquidity/index.tsx
@@ -1648,7 +1658,7 @@ msgid "Pooled {0}:"
 msgstr "流動池匯集 {0}:"
 
 #: src/pages/Pool/index.tsx
-msgid "Pools Overview"
+msgid "Pools"
 msgstr "流動池概覽"
 
 #: src/lib/components/BrandedFooter.tsx

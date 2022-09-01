@@ -1,10 +1,10 @@
 import { Trans } from '@lingui/macro'
+import { useWeb3React } from '@web3-react/core'
 import { ButtonEmpty, ButtonPrimary } from 'components/Button'
 import AddReferModal from 'components/earn/AddReferModal'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { LoadingRows } from 'pages/Pool/styleds'
 import { useState } from 'react'
-import { useWalletModalToggle } from 'state/application/hooks'
+import { useToggleWalletModal } from 'state/application/hooks'
 import { STAKING_REWARDS_INFO, useReferrer } from 'state/stake/hooks'
 import { useStakingInfo } from 'state/stake/hooks'
 import styled from 'styled-components/macro'
@@ -35,18 +35,18 @@ const PoolSection = styled.div`
 `
 
 const DataRow = styled(RowBetween)`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
 flex-direction: column;
 `};
 `
 
 //TODO:use ContrctCall
 export default function Stake() {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useWeb3React()
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && STAKING_REWARDS_INFO[chainId])
-  const rewardToken = chainId && STAKING_REWARDS_INFO[chainId].rewardToken
+  const rewardToken = chainId && STAKING_REWARDS_INFO[chainId]?.rewardToken
   const rewardName = rewardToken && rewardToken.symbol
-  const toggleWalletModal = useWalletModalToggle()
+  const toggleWalletModal = useToggleWalletModal()
   const showConnectAWallet = Boolean(!account)
   const [showAddReferModal, setAddReferModal] = useState(false)
   const refer = useReferrer()
@@ -86,19 +86,19 @@ export default function Stake() {
               <CardSection>
                 <AutoColumn gap="md">
                   <RowBetween>
-                    <ThemedText.White fontWeight={600}>
+                    <ThemedText.DeprecatedWhite fontWeight={600}>
                       <Trans>Upswap liquidity mining</Trans>
-                    </ThemedText.White>
+                    </ThemedText.DeprecatedWhite>
                   </RowBetween>
                   <RowBetween>
-                    <ThemedText.White fontSize={14}>
-                      <Trans>Deposit your Liquidity Provider tokens to receive {{ rewardName }}.</Trans>
-                    </ThemedText.White>
+                    <ThemedText.DeprecatedWhite fontSize={14}>
+                      <Trans>Deposit your Liquidity Provider tokens to receive {rewardName}.</Trans>
+                    </ThemedText.DeprecatedWhite>
                   </RowBetween>{' '}
                   <ExternalLink style={{ color: 'white', textDecoration: 'underline' }} href="" target="_blank">
-                    <ThemedText.White fontSize={14}>
-                      <Trans>Read more about {{ rewardName }}</Trans>
-                    </ThemedText.White>
+                    <ThemedText.DeprecatedWhite fontSize={14}>
+                      <Trans>Read more about {rewardName}</Trans>
+                    </ThemedText.DeprecatedWhite>
                   </ExternalLink>
                 </AutoColumn>
               </CardSection>

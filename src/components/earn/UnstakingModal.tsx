@@ -2,8 +2,9 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
+import { useWeb3React } from '@web3-react/core'
 import { RowBetween, RowFixed } from 'components/Row'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCurrency } from 'hooks/Tokens'
 import { useStakingContract } from 'hooks/useContract'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { ReactNode, useState } from 'react'
@@ -11,8 +12,8 @@ import styled from 'styled-components/macro'
 import { dateFormat, numFixed } from 'utils/numberHelper'
 
 import { DepositInfo, StakingInfo } from '../../state/stake/hooks'
-import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
+import { TransactionType } from '../../state/transactions/types'
 import { CloseIcon, ThemedText } from '../../theme'
 import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
@@ -32,7 +33,7 @@ interface StakingModalProps {
 }
 
 export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, depositInfo }: StakingModalProps) {
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
   const tokenId = depositInfo?.tokenid
   const poolId = depositInfo?.incentiveId
   const liquidity = numFixed(depositInfo?.liquidity, 18)
@@ -46,6 +47,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
   const [attempting, setAttempting] = useState(false)
 
   const rewardToken = stakingInfo.rewardToken
+  const rewardTokenName = useCurrency(rewardToken)?.symbol
   function wrappedOndismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -97,43 +99,43 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
           </RowBetween>
           {liquidity && expire ? (
             <RowBetween>
-              <ThemedText.Body>
+              <ThemedText.BodyPrimary>
                 <Trans>Deposited liquidity:</Trans>
-              </ThemedText.Body>
+              </ThemedText.BodyPrimary>
               <RowFixed>
-                <ThemedText.Body>{liquidity}</ThemedText.Body>
+                <ThemedText.BodyPrimary>{liquidity}</ThemedText.BodyPrimary>
               </RowFixed>
             </RowBetween>
           ) : undefined}
           {rewards && expire ? (
             <RowBetween>
-              <ThemedText.Body>
-                <Trans>Generated {{ rewardToken }}</Trans>
+              <ThemedText.BodyPrimary>
+                <Trans>Generated {rewardTokenName}</Trans>
                 {':'}
-              </ThemedText.Body>
+              </ThemedText.BodyPrimary>
               <RowFixed>
-                <ThemedText.Body>{rewards}</ThemedText.Body>
+                <ThemedText.BodyPrimary>{rewards}</ThemedText.BodyPrimary>
               </RowFixed>
             </RowBetween>
           ) : undefined}
           {!expire ? (
             <>
               <RowBetween>
-                <ThemedText.Body>
+                <ThemedText.BodyPrimary>
                   <Trans>Status:</Trans>
-                </ThemedText.Body>
+                </ThemedText.BodyPrimary>
                 <RowFixed>
-                  <ThemedText.Body>
+                  <ThemedText.BodyPrimary>
                     <Trans>not expired</Trans>
-                  </ThemedText.Body>
+                  </ThemedText.BodyPrimary>
                 </RowFixed>
               </RowBetween>
               <RowBetween>
-                <ThemedText.Body>
+                <ThemedText.BodyPrimary>
                   <Trans>Expire date:</Trans>
-                </ThemedText.Body>
+                </ThemedText.BodyPrimary>
                 <RowFixed>
-                  <ThemedText.Body>{expireDate}</ThemedText.Body>
+                  <ThemedText.BodyPrimary>{expireDate}</ThemedText.BodyPrimary>
                 </RowFixed>
               </RowBetween>
             </>
@@ -149,14 +151,14 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.Body fontSize={20}>
-              <Trans>unstake #{tokenId} </Trans>
-            </ThemedText.Body>
-            <ThemedText.Body fontSize={20}>
+            <ThemedText.BodyPrimary fontSize={20}>
+              <Trans>unstake #{tokenId?.toString()} </Trans>
+            </ThemedText.BodyPrimary>
+            <ThemedText.BodyPrimary fontSize={20}>
               <Trans>
-                Claiming {rewards} {{ rewardToken }}
+                Claiming {rewards} {rewardTokenName}
               </Trans>
-            </ThemedText.Body>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </LoadingView>
       )}
@@ -166,9 +168,9 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo, deposit
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
-              <Trans>Claimed {{ rewardToken }}!</Trans>
-            </ThemedText.Body>
+            <ThemedText.BodyPrimary fontSize={20}>
+              <Trans>Claimed {rewardTokenName}!</Trans>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </SubmittedView>
       )}

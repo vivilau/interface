@@ -3,13 +3,14 @@ import { hexZeroPad } from '@ethersproject/bytes'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
 import { NonfungiblePositionManager } from '@uniswap/v3-sdk'
+import { useWeb3React } from '@web3-react/core'
 import { RowBetween, RowFixed } from 'components/Row'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCurrency } from 'hooks/Tokens'
 import { useV3NFTPositionManagerContract } from 'hooks/useContract'
 import { ReactNode, useCallback, useState } from 'react'
 import ReactGA from 'react-ga4'
-import { TransactionType } from 'state/transactions/actions'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import { TransactionType } from 'state/transactions/types'
 import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
@@ -43,12 +44,13 @@ export default function StakingModal({
   tokenRate,
   poolId,
 }: StakingModalProps) {
-  const { chainId, account, library } = useActiveWeb3React()
+  const { chainId, account, provider } = useWeb3React()
   //get
   const stakeAddress = stakingInfo.stakeAddress
   const tokenA = stakingInfo.token0
   const tokenB = stakingInfo.token1
   const rewardToken = stakingInfo.rewardToken
+  const rewardTokenName = useCurrency(rewardToken)?.symbol
   // state for pending and submitted txn views
   const addTransaction = useTransactionAdder()
   const [attempting, setAttempting] = useState<boolean>(false)
@@ -62,7 +64,7 @@ export default function StakingModal({
   const data1 = hexZeroPad(BigNumber.from(poolId).toHexString(), 32)
   function deposit() {
     setAttempting(true)
-    if (!positionManager || !tokenId || !account || !chainId || !stakeAddress || !library || !tokenA || !tokenB) {
+    if (!positionManager || !tokenId || !account || !chainId || !stakeAddress || !provider || !tokenA || !tokenB) {
       return
     }
     const { calldata, value } = NonfungiblePositionManager.safeTransferFromParameters({
@@ -78,7 +80,7 @@ export default function StakingModal({
       value,
     }
 
-    library
+    provider
       .getSigner()
       .estimateGas(txn)
       .then((estimate) => {
@@ -87,7 +89,7 @@ export default function StakingModal({
           gasLimit: calculateGasMargin(estimate),
         }
 
-        return library
+        return provider
           .getSigner()
           .sendTransaction(newTxn)
           .then((response: TransactionResponse) => {
@@ -129,27 +131,26 @@ export default function StakingModal({
           </RowBetween>
           <RowBetween>
             <div>
-              <ThemedText.Black>
+              <ThemedText.DeprecatedBlack>
                 <Trans>Stake Token</Trans>
                 {':'}
-              </ThemedText.Black>
+              </ThemedText.DeprecatedBlack>
             </div>
             <RowFixed>
-              <ThemedText.Black>#{tokenId}</ThemedText.Black>
+              <ThemedText.DeprecatedBlack>#{tokenId}</ThemedText.DeprecatedBlack>
             </RowFixed>
           </RowBetween>
           <RowBetween>
             <div>
-              <ThemedText.Black>
+              <ThemedText.DeprecatedBlack>
                 <Trans>Estimated Earning</Trans>
                 {':'}
-              </ThemedText.Black>
+              </ThemedText.DeprecatedBlack>
             </div>
             <RowFixed>
-              <ThemedText.Black>
-                {tokenRate}
-                <Trans>{{ rewardToken }} / day</Trans>
-              </ThemedText.Black>
+              <ThemedText.DeprecatedBlack>
+                {tokenRate} {rewardTokenName} /<Trans> day</Trans>
+              </ThemedText.DeprecatedBlack>
             </RowFixed>
           </RowBetween>
           <RowBetween>
@@ -165,9 +166,9 @@ export default function StakingModal({
             <ThemedText.LargeHeader>
               <Trans>Stake Token</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
+            <ThemedText.BodyPrimary fontSize={20}>
               <Trans>#{tokenId}</Trans>
-            </ThemedText.Body>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </LoadingView>
       )}
@@ -177,9 +178,9 @@ export default function StakingModal({
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
-              <Trans>Staked {tokenId} </Trans>
-            </ThemedText.Body>
+            <ThemedText.BodyPrimary fontSize={20}>
+              <Trans>Staked </Trans> {tokenId}
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </SubmittedView>
       )}

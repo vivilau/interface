@@ -1,15 +1,15 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trans } from '@lingui/macro'
-import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useWeb3React } from '@web3-react/core'
+import { useCurrency } from 'hooks/Tokens'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 import { numFixed } from 'utils/numberHelper'
 
 import { useStakingContract } from '../../hooks/useContract'
 import { StakingInfo, useClaimNum } from '../../state/stake/hooks'
-import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
+import { TransactionType } from '../../state/transactions/types'
 import { CloseIcon, ThemedText } from '../../theme'
 import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
@@ -29,12 +29,13 @@ interface StakingModalProps {
 }
 
 export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
   const claimRewards = useClaimNum()
   const rewards = numFixed(claimRewards, 18)
   // console.error('rewards', rewards)
   // monitor call to help UI loading state
   const rewardToken = stakingInfo.rewardToken
+  const rewardTokenName = useCurrency(rewardToken)?.symbol
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
@@ -72,10 +73,10 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     error = <Trans>Connect Wallet</Trans>
   }
   if (!claimRewards || claimRewards.eq('0')) {
-    error = error ?? <Trans>No unclaimed {{ rewardToken }} </Trans>
+    error = error ?? <Trans>No unclaimed {rewardTokenName} </Trans>
   }
   if (attempting) {
-    error = error ?? <Trans>Claming... </Trans>
+    error = error ?? <Trans>Claming...</Trans>
   }
 
   return (
@@ -90,12 +91,12 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           </RowBetween>
           {claimRewards ? (
             <RowBetween>
-              <ThemedText.Body>
-                <Trans>Unclaimed {{ rewardToken }}</Trans>
+              <ThemedText.BodyPrimary>
+                <Trans>Unclaimed {rewardTokenName}</Trans>
                 {':'}
-              </ThemedText.Body>
+              </ThemedText.BodyPrimary>
               <RowFixed>
-                <ThemedText.Body>{rewards}</ThemedText.Body>
+                <ThemedText.BodyPrimary>{rewards}</ThemedText.BodyPrimary>
               </RowFixed>
             </RowBetween>
           ) : undefined}
@@ -110,11 +111,11 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.Body fontSize={20}>
+            <ThemedText.BodyPrimary fontSize={20}>
               <Trans>
-                Claiming {rewards} {{ rewardToken }}
+                Claiming {rewards} {rewardTokenName}
               </Trans>
-            </ThemedText.Body>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </LoadingView>
       )}
@@ -124,9 +125,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
-              <Trans>Claimed {{ rewardToken }}!</Trans>
-            </ThemedText.Body>
+            <ThemedText.BodyPrimary fontSize={20}>
+              <Trans>Claimed {rewardTokenName}!</Trans>
+            </ThemedText.BodyPrimary>
           </AutoColumn>
         </SubmittedView>
       )}

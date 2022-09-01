@@ -9,6 +9,9 @@ export function RedirectPathToSwapOnly() {
   const location = useLocation()
   return <Navigate to={{ ...location, pathname: '/swap' }} replace />
 }
+export function RedirectPathToGame() {
+  return <Navigate to={{ pathname: 'https://game.runbit.org/' }} />
+}
 
 // Redirects from the /swap/:outputCurrency path to the /swap?outputCurrency=:outputCurrency format
 export function RedirectToSwap() {
