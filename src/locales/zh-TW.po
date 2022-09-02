@@ -1890,7 +1890,7 @@ msgstr "選擇操作"
 
 #: src/components/CurrencyInputPanel/SwapCurrencyInputPanel.tsx
 msgid "Select token"
-msgstr "選擇令牌"
+msgstr "選擇代幣"
 
 #: src/pages/AddLiquidity/index.tsx
 msgid "Selected Range"
